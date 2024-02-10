@@ -1,0 +1,137 @@
+/* Style the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0b35b3;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the header */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #ff0000;
+}
+
+/* Style the form container */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #a327c9;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style labels */
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Style input elements */
+input[type="text"],
+select,
+input[type="number"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+/* Style the prompt textarea */
+textarea {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    resize: vertical; /* Allow vertical resizing */
+    max-height: 200px; /* Set a maximum height for the textarea */
+    border: 1px solid #ccc;
+    overflow-y: auto; /* Show a vertical scrollbar if needed */
+}
+
+/* Style the image container */
+.image-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Style generated prompt */
+h2 {
+    margin-top: 20px;
+    color: #333;
+}
+
+/* Style paragraph */
+p {
+    margin-bottom: 20px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Style the "Generate" button to be larger */
+input[type="button"],
+button#randomGenerate {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 15px 30px; /* Increase padding for larger width and height */
+    font-size: 24px; /* Increase font size */
+    border-radius: 5px;
+    margin-top: 20px; /* Add some margin for spacing */
+}
+
+/* Style the "Generate" button */
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    padding: 20px 40px; /* Increase padding for a larger button */
+    font-size: 24px; /* Increase font size for larger text */
+    font-weight: bold; /* Make the text bold */
+    border-radius: 5px;
+    width: 500px;
+    margin: 0 auto; /* Center-align the button horizontally */
+    display: block; /* Ensure the button takes full width */
+    margin-top: 20px;
+}
+
+/* Style the "Generate" button to be larger */
+input[type="button"],
+button#generateButton {
+    background-color: #099c15;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    padding: 15px 30px; /* Increase padding for larger width and height */
+    font-size: 24px; /* Increase font size */
+    border-radius: 5px;
+    margin-top: 20px; /* Add some margin for spacing */
+}
+/* Style the "Generate" button to be larger */
+input[type="button"],
+button#mintbutton {
+    background-color: #ff1919;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    padding: 15px 30px; /* Increase padding for larger width and height */
+    font-size: 24px; /* Increase font size */
+    border-radius: 5px;
+    margin-top: 20px; /* Add some margin for spacing */
+}
+
+
+
+
+
+
