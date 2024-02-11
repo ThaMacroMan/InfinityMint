@@ -43,6 +43,7 @@
 }
 
 .button {
+    min-width: 400px;
     display: flex;
     align-items: center; /* Vertically center the text */
     justify-content: center; /* Horizontally center the text */
@@ -60,15 +61,20 @@
   background-color: #17aba2; /* Change hover background color */
 }
 
+.label-container {
+    display: flex;
+    justify-content: center;
+  }
+
+
 .label {
-    width: 100px; /* Adjust as needed */
-    display: inline-block;
-    text-align: right;
+    width: 125px; /* Adjust as needed */
+    text-align: center;
     margin-right: 10px; /* Spacing between label and select */
   }
   
   .select {
-    width: 200px; /* Adjust as needed */
+    width: 250px; /* Adjust as needed */
     display: inline-block;
   }
   
@@ -103,37 +109,115 @@
     text-shadow: 10 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* Example styles for tag-like appearance */
-.tag {
+.info-container {
+    display: flex;
+    justify-content: center; /* Center the tags horizontally */
+
+  }
+  
+  .tag {
+
     text-align: center;
-    min-width: 90px;
-    max-height: 75px;
-    padding: 0.25rem 0.5rem;
+    margin-top: 10px;
+    margin-right: 10px; /* Adjust spacing between tags */
+    margin-bottom: 10px; /* Adjust vertical spacing between tags */
+    padding: 0.25rem 0.25rem;
     background-color: #dd61f6;
+    border: 3px solid #000000;
     border-radius: 0.618rem;
-    font-size: 0.7rem; /* Adjust font size as needed */
+    font-size: 1rem;
     font-weight: bold;
     color: #000000;
-}
-/* Example styles for tag-like appearance */
-.tag2 {
-    text-align: center;
-    min-width: 90px;
-    max-height: 125px;
-    padding: 0.25rem 0.5rem;
-    background-color: #dd61f6;
-    border-radius: 0.618rem;
-    font-size: 0.7rem; /* Adjust font size as needed */
-    font-weight: bold;
-    color: #000000;
-}
+  }
+
 
 .field {
     text-align: center;
-    min-width: 90px; /* Set all fields to take up full width */
+    min-width: 100px; /* Set all fields to take up full width */
     background-color: #dfdfdf;
     border-radius: 0.618rem; /* Light grey background */
     padding: 0.5rem;
     max-width: 300px;
     max-height: 75px; /* Adjust padding as needed */
 }
+
+.spinner-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }  
+  
+  .spinner {
+    border: 10px solid #ffffff ;
+    border-top: 10px solid #000000;
+    border-radius: 50%;
+    width: 450px;
+    height: 450px;
+    animation: spin 1.236s ease-in-out infinite;
+  }
+  
+
+  .spinner-message {
+    text-align: center;
+    color: #ffffff;
+    font-size: large;
+    margin-top: 10px;
+    border: 3px solid #000000;
+    background-color: #dd00f3;
+    border-radius: .618rem;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .info-container {
+    display: flex;
+  }
+  
+  .parameters-box,
+  .prompt-box {
+    flex: 1;
+    padding: 10px;
+    background-color: #dd61f6;
+    border-radius: 10px;
+    border: 3px solid #000000;
+  }
+  
+
+  .text-xl {
+    font-size: 2.5rem; /* Increase font size */
+    margin-top: 1rem;
+    margin-bottom: .5rem; /* Increase top margin */
+  }
+  
+  .textarea {
+    border: 3px solid #000000; /* Add a 3px black border */
+  }
+  .creation-container {
+    display: flex;
+    flex-direction: column;
+    border: 10px solid #000000;
+    justify-content: flex-start;
+  }
+.tag2 {
+    width: 100%; /* Make the header span the full width */
+    text-align: center; /* Center the text */
+    margin-top: 10px;
+    margin-bottom: 10px; /* Adjust vertical spacing */
+    padding: 0.25rem 0.25rem;
+    background-color: #7a61f6;
+    border: 3px solid #000000;
+    border-radius: 0.618rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000000;
+    }
+      
+  

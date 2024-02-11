@@ -5,7 +5,7 @@ import { CardanoWallet } from '@meshsdk/react';
 import axios from 'axios';
 import { Transaction } from '@meshsdk/core';
 
-
+import Spinner from '../components/Spinner'; // Import the spinner component
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -19,6 +19,7 @@ const Home: NextPage = () => {
   const [selectedModel, setSelectedModel] = useState("dall-e-2");
   const [selectedSize, setSelectedSize] = useState("256x256");
   const [selectedQuality, setSelectedQuality] = useState("standard");
+  const [isLoading, setIsLoading] = useState(false); // State to manage loading state
 
 
 
@@ -126,13 +127,20 @@ const Home: NextPage = () => {
       formData.append('model', modelSelect.value);
 
       console.log('Sending image generation request...');
+          // Set loading state to true when generating image
+      setIsLoading(true);
       const response = await axios.post('http://localhost:5001/dalle3_api', formData);
 
       if (response.status === 200) {
         console.log('Images generated:', response.data.image_urls);
         // Set the generated images in state
         setGeneratedImages(response.data.image_urls);
-
+        // For example, simulate image generation using setTimeout
+        setTimeout(() => {
+          // Set loading state to false when image generation is complete
+          setIsLoading(false);
+          // Perform additional actions after image generation
+        });
         // Convert wallet metadata into chunks
         const walletMetadata = response.data.image_urls.join(','); // Replace this with your actual wallet metadata string
         const chunks: string[] = [];
@@ -166,7 +174,7 @@ const Home: NextPage = () => {
       const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
         'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
-        '1000000'
+        '5000000'
       );
         // Assuming this code block is within a JSX context
         // Assuming this code block is within a JSX context
@@ -199,7 +207,7 @@ const Home: NextPage = () => {
         // Add additional metadata properties
         metadataObj['Era'] = ['V1.0: Wildcat Genesis Era']; // Explicitly define Era as string[]
         metadataObj['Text'] = ['Powered by Catsky AI and Sick City']; // Explicitly define Text as string[]
-
+        metadataObj['Settings'] = [selectedModel, selectedSize, selectedQuality]
         // Set metadata with aggregated URLs, prompt, and additional metadata strings
         tx.setMetadata(metadataKey, metadataObj);
 
@@ -249,7 +257,7 @@ const Home: NextPage = () => {
           {connected && <></>}
 
           <div className="text-center">
-            <h1 className="text-2xl font-pixel mb-3">Infinity Mint V1.0</h1>
+            <h1 className="text-xl font-pixel mb-3">Infinity Mint V1.0</h1>
             <h2 className="text-1xl font-pixel mb-4">Powered by <span id="gradient-text">Catsky AI</span></h2>
           </div>
 
@@ -270,13 +278,12 @@ const Home: NextPage = () => {
               type="button"
               id="randomGenerate"
               onClick={getRandomPrompt}
-              style={{ margin: "0 auto", display: "block", borderRadius: "0.618rem" }}
             >
-              Generate a prompt
+              Generate Prompt
             </button>
 
-            <div className="mb-3 flex items-center mt-4">
-              <label htmlFor="model" className="label tag">AI Model:</label>
+            <div className="mb-3 flex items-center mt-4 tag">
+              <label htmlFor="model" className="label tag">Model</label>
               <select
                 className="select select-bordered w-full field"
                 name="model"
@@ -288,15 +295,15 @@ const Home: NextPage = () => {
               </select>
             </div>
 
-            <div className="mb-3 flex items-center mt-4">
-              <label htmlFor="size" className="label tag">Image Size:</label>
+            <div className="mb-3 flex items-center mt-4 tag">
+              <label htmlFor="size" className="label tag">Size</label>
               <select className="select select-bordered w-full field" name="size" id="size">
                 {/* Add options for image size here */}
               </select>
             </div>
 
-            <div className="mb-3 flex items-center mt-4">
-              <label htmlFor="quality" className="label tag">Image Quality:</label>
+            <div className="mb-3 flex items-center mt-4 tag">
+              <label htmlFor="quality" className="label tag">Quality</label>
               <select className="select select-bordered w-full field" name="quality" id="quality">
                 <option value="standard">Standard</option>
                 <option value="hd">HD</option>
@@ -307,7 +314,6 @@ const Home: NextPage = () => {
               type="button"
               onClick={generateImage}
               className="button my-4 mt-4 rounded"
-              style={{ borderRadius: "0.618rem" }}
             >
               Generate
             </button>
@@ -316,7 +322,6 @@ const Home: NextPage = () => {
               type="button"
               onClick={processTransaction}
               className="button my-4 mt-4 rounded"
-              style={{ borderRadius: "0.618rem" }}
             >
               Mint
             </button>
@@ -324,8 +329,16 @@ const Home: NextPage = () => {
         </div>
 
         {/* "Your Creation" Section */}
-        <div className="creation-container" style={{ flex: 1, border: '20px solid white', padding: '10px', margin: '10px', borderRadius: '.618rem' }}>
-          <h2 className="text-xl font-pixel mb-3 text-center text">Your Creation Lives here:</h2>
+        
+        <div className="creation-container" style={{ flex: 1, padding: '10px', margin: '10px', borderRadius: '.618rem', position: 'relative' }}>
+          <h2 className="tag2">Your Creation:</h2>
+          {/* Loading spinner inside the "Creation Container" */}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 z-10 spinner-container">
+              <Spinner message="Generating your creation..." />
+            </div>
+          )}
+
           {!!generatedImages && generatedImages.length > 0 && (
             <div>
               {generatedImages.map((imageUrl, imageIndex) => (
@@ -336,6 +349,25 @@ const Home: NextPage = () => {
                     className="w-full h-auto"
                     onClick={() => saveImage(imageUrl)}
                   />
+                  <div className="info-container">
+                    {/* AI Model tag */}
+                    <div className="tag">
+                      <p>Model: {selectedModel}</p>
+                    </div>
+                    {/* Image Size tag */}
+                    <div className="tag">
+                      <p>Size: {selectedSize}</p>
+                    </div>
+                    {/* Image Quality tag */}
+                    <div className="tag">
+                      <p>Quality: {selectedQuality}</p>
+                    </div>
+                  </div>
+                            {/* Prompt */}
+            <div className="prompt-box">
+
+              <p>{prompt}</p>
+            </div>
                 </div>
                 
               ))}
