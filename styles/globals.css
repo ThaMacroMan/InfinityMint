@@ -1,0 +1,139 @@
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.font-pixel {
+    font-family: 'Pixel Font', sans-serif; /* Use a pixelated font or any other desired font */
+}
+
+
+
+.textarea, .select, .input {
+  @apply border-gray-300 focus:border-green-500;
+}
+
+/* Custom styles */
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  min-width: 50rem;
+  padding: 1.5rem;
+  background-color: #0672ba;
+  border-radius: 0.618rem;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem;
+  border-width: 1px;
+  border-radius: 0.618rem;
+}
+
+
+.flex-container {
+  min-width: 50rem;
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+}
+
+.button {
+    display: flex;
+    align-items: center; /* Vertically center the text */
+    justify-content: center; /* Horizontally center the text */
+    border-radius: 0.618rem;
+    padding: 0.75rem 2rem; /* Increase padding to make buttons wider */
+    background-color: #1ecfc1;
+    color: #000000;
+    font-size: 1.25rem; /* Increase font size */
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    border: 3px solid #000000; /* Add border */
+  }
+
+.button:hover {
+  background-color: #17aba2; /* Change hover background color */
+}
+
+.label {
+    width: 100px; /* Adjust as needed */
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px; /* Spacing between label and select */
+  }
+  
+  .select {
+    width: 200px; /* Adjust as needed */
+    display: inline-block;
+  }
+  
+  .flex-container {
+    display: flex;
+    align-items: center; /* This will vertically align your items */
+    justify-content: space-between; /* This will add space between your items */
+  }
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border-width: 1px;
+  border-radius: 0.618rem;
+}
+
+.generated-image {
+  margin-top: 1.25rem;
+}
+
+.generated-image img {
+  max-width: 100%;
+  margin-bottom: 0.625rem;
+}
+
+#gradient-text {
+    background: linear-gradient(45deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    font-style: italic;
+    text-shadow: 10 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Example styles for tag-like appearance */
+.tag {
+    text-align: center;
+    min-width: 90px;
+    max-height: 75px;
+    padding: 0.25rem 0.5rem;
+    background-color: #dd61f6;
+    border-radius: 0.618rem;
+    font-size: 0.7rem; /* Adjust font size as needed */
+    font-weight: bold;
+    color: #000000;
+}
+/* Example styles for tag-like appearance */
+.tag2 {
+    text-align: center;
+    min-width: 90px;
+    max-height: 125px;
+    padding: 0.25rem 0.5rem;
+    background-color: #dd61f6;
+    border-radius: 0.618rem;
+    font-size: 0.7rem; /* Adjust font size as needed */
+    font-weight: bold;
+    color: #000000;
+}
+
+.field {
+    text-align: center;
+    min-width: 90px; /* Set all fields to take up full width */
+    background-color: #dfdfdf;
+    border-radius: 0.618rem; /* Light grey background */
+    padding: 0.5rem;
+    max-width: 300px;
+    max-height: 75px; /* Adjust padding as needed */
+}
