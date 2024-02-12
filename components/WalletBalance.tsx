@@ -1,6 +1,6 @@
 import React from 'react';
 import { useWallet } from '@meshsdk/react';
-import { AssetName } from '../types/types';
+import { AssetName } from '../styles/types/types';
 import { useTokenCheck } from '../hooks/TokenCheck';
 
 const MIN_ASSET_VALUES: Record<AssetName, number> = {

@@ -20,7 +20,7 @@ const Home: NextPage = () => {
   const [selectedSize, setSelectedSize] = useState("256x256");
   const [selectedQuality, setSelectedQuality] = useState("standard");
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
-
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
 
   // Update these states in the `updateOptions` and corresponding onChange handlers
@@ -237,6 +237,16 @@ const Home: NextPage = () => {
     updateOptions();
   }, []);
 
+  useEffect(() => {
+    const updateCursor = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', updateCursor);
+
+    return () => {
+      window.removeEventListener('mousemove', updateCursor);
+    };
+  }, []);
   const saveImage = async (imageUrl: string) => {
     try {
         // Open the image in a new tab
@@ -248,151 +258,160 @@ const Home: NextPage = () => {
 
 
   return (
-    <div className="bg-blue-700 p-10 min-h-screen flex items-center justify-center">
-      <div className="flex bg-black shadow-lg rounded-lg p-5" style={{ width: '100%', flexDirection: 'row' }}>
-        
-        {/* Form Section */}
-        <div className="form-container" style={{ flex: 1 }}>
-          <CardanoWallet isDark={true} />
-          {connected && <></>}
+    <>
+      <div className="small" style={{
+        position: 'fixed',
+        left: `${cursorPos.x}px`,
+        top: `${cursorPos.y}px`,
+        zIndex: 9999,
+        pointerEvents: 'none', // Ensures the cursor doesn't interfere with other mouse events
+        // Add more styles for your small cursor here
+      }} />
+      <div className="big" style={{
+        position: 'fixed',
+        left: `${cursorPos.x}px`,
+        top: `${cursorPos.y}px`,
+        zIndex: 9998,
+        pointerEvents: 'none',
+        // Add more styles for your big cursor here
+      }} />
+      <div className="bg-blue-700 pixeltext">
+        <div className="flex p-4">
+          {/* Form Section */}
+          <div className="form header">
+            <CardanoWallet isDark={true} />
+            {connected && <></>}
 
-          <div className="text-center">
-            <h1 className="text-xl font-pixel mb-3">Infinity Mint V1.0</h1>
-            <h2 className="text-1xl font-pixel mb-4">Powered by <span id="gradient-text">Catsky AI</span></h2>
+            <div className="text-center">
+              <h1 className="text-2xl header">Infinity Mint<span id="gradient-text"> V1.0</span></h1>
+              <h2 className="text-1xl header"><span id="gradient-text">Powered by Catsky AI</span></h2>
+            </div>
+
+            <form className="flex flex-col">
+              <textarea
+                className="textarea"
+                name="prompt"
+                id="prompt"
+                defaultValue={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                onInput={autoExpand}
+                rows={4}
+                placeholder="What will you create?"
+              ></textarea>
+              <br />
+              <button
+                className="button bold-text animated-gradient"
+                type="button"
+                id="randomGenerate"
+                onClick={getRandomPrompt}
+              >
+                Generate Prompt
+              </button>
+
+              <div className="flex tag">
+                <label htmlFor="model" className=" tag">Model</label>
+                <select
+                  className="select field"
+                  name="model"
+                  id="model"
+                  onChange={updateOptions}
+                >
+                  <option value="dall-e-2">DALL·E-2</option>
+                  <option value="dall-e-3">DALL·E-3</option>
+                </select>
+              </div>
+
+              <div className="flex tag">
+                <label htmlFor="size" className=" tag">Size</label>
+                <select className="select field" 
+                  name="size" 
+                  id="size">
+                  {/* Add options for image size here */}
+                </select>
+              </div>
+
+              <div className=" flex tag">
+                <label htmlFor="quality" className=" tag">Quality</label>
+                <select className="select field" 
+                  name="quality" 
+                  id="quality">
+                  <option value="standard">Standard</option>
+                  <option value="hd">HD</option>
+                </select>
+              </div>
+
+              <button
+                type="button"
+                onClick={generateImage}
+                className="button bold-text animated-gradient"
+              >
+              Generate
+              </button>
+
+              <button
+                type="button"
+                onClick={processTransaction}
+                className="button bold-text animated-gradient2 pixeltext"
+              >
+                Mint on Cardano
+              </button>
+            </form>
           </div>
 
-          <form className="flex flex-col items-center">
-            <textarea
-              className="textarea textarea-bordered w-full mb-3"
-              name="prompt"
-              id="prompt"
-              defaultValue={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              onInput={autoExpand}
-              rows={4}
-              placeholder="What will you create?"
-            ></textarea>
-            <br />
-            <button
-              className="button mb-4"
-              type="button"
-              id="randomGenerate"
-              onClick={getRandomPrompt}
-            >
-              Generate Prompt
-            </button>
+          {/* "Your Creation" Section */}
+          
+          <div className="creation-container" >
+            <h2 className="tag animated-gradient2 ">Your Creation:</h2>
+            {/* Loading spinner inside the "Creation Container" */}
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 z-10 spinner-container">
+                <Spinner message="Generating your creation..." />
+              </div>
+            )}
 
-            <div className="mb-3 flex items-center mt-4 tag">
-              <label htmlFor="model" className="label tag">Model</label>
-              <select
-                className="select select-bordered w-full field"
-                name="model"
-                id="model"
-                onChange={updateOptions}
-              >
-                <option value="dall-e-2">DALL·E-2</option>
-                <option value="dall-e-3">DALL·E-3</option>
-              </select>
-            </div>
-
-            <div className="mb-3 flex items-center mt-4 tag">
-              <label htmlFor="size" className="label tag">Size</label>
-              <select className="select select-bordered w-full field" name="size" id="size">
-                {/* Add options for image size here */}
-              </select>
-            </div>
-
-            <div className="mb-3 flex items-center mt-4 tag">
-              <label htmlFor="quality" className="label tag">Quality</label>
-              <select className="select select-bordered w-full field" name="quality" id="quality">
-                <option value="standard">Standard</option>
-                <option value="hd">HD</option>
-              </select>
-            </div>
-
-            <button
-              type="button"
-              onClick={generateImage}
-              className="button my-4 mt-4 rounded"
-            >
-              Generate
-            </button>
-
-            <button
-              type="button"
-              onClick={processTransaction}
-              className="button my-4 mt-4 rounded"
-            >
-              Mint
-            </button>
-          </form>
-        </div>
-
-        {/* "Your Creation" Section */}
-        
-        <div className="creation-container" style={{ flex: 1, padding: '10px', margin: '10px', borderRadius: '.618rem', position: 'relative' }}>
-          <h2 className="tag2">Your Creation:</h2>
-          {/* Loading spinner inside the "Creation Container" */}
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-75 z-10 spinner-container">
-              <Spinner message="Generating your creation..." />
-            </div>
-          )}
-
-          {!!generatedImages && generatedImages.length > 0 && (
-            <div>
-              {generatedImages.map((imageUrl, imageIndex) => (
-                <div key={`generated-image-${imageIndex}`} className="relative">
-                  <img
-                    src={imageUrl}
-                    alt={`Generated Image ${imageIndex + 1}`}
-                    className="w-full h-auto"
-                    onClick={() => saveImage(imageUrl)}
-                  />
-                  <div className="info-container">
-                    {/* AI Model tag */}
-                    <div className="tag">
-                      <p>Model: {selectedModel}</p>
+            {!!generatedImages && generatedImages.length > 0 && (
+              <div>
+                {generatedImages.map((imageUrl, imageIndex) => (
+                  <div key={`generated-image-${imageIndex}`}>
+                    <img
+                      src={imageUrl}
+                      alt={`Generated Image ${imageIndex + 1}`}
+                      className="width80 mx-auto imageborder"
+                      onClick={() => saveImage(imageUrl)}
+                    />
+                    <div className="info-container">
+                      {/* AI Model tag */}
+                      <div className="tag">
+                        <p>Model: {selectedModel}</p>
+                      </div>
+                      {/* Image Size tag */}
+                      <div className="tag">
+                        <p>Size: {selectedSize}</p>
+                      </div>
+                      {/* Image Quality tag */}
+                      <div className="tag">
+                        <p>Quality: {selectedQuality}</p>
+                      </div>
                     </div>
-                    {/* Image Size tag */}
-                    <div className="tag">
-                      <p>Size: {selectedSize}</p>
-                    </div>
-                    {/* Image Quality tag */}
-                    <div className="tag">
-                      <p>Quality: {selectedQuality}</p>
-                    </div>
+                              {/* Prompt */}
+              <div className="prompt-box">
+
+                <p>{prompt}</p>
+              </div>
                   </div>
-                            {/* Prompt */}
-            <div className="prompt-box">
-
-              <p>{prompt}</p>
-            </div>
-                </div>
-                
-              ))}
-            </div>
-          )}
+                  
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+
+   </>
+    );
+  }
 export default Home;
-{/* 
-<div className="mb-3">
-    <label htmlFor="n" className="label">Number of Images (1-10 for DALL·E-2):</label>
-    <input
-        type="number"
-        defaultValue="1"
-        name="n"
-        id="n"
-        min="1"
-        max="10"
-        className="input input-bordered w-full"
-    />
-</div>
-{/*}*/}
+
 
 
 
