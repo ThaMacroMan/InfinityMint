@@ -5,7 +5,7 @@ from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"Access-Control-Allow-Origin": "http://localhost:3000, https://oaidalleapiprodscus.blob.core.windows.net"}})
+CORS(app, resources={r"/*": {"Access-Control-Allow-Origin": "http://localhost:3000, /api/, https://oaidalleapiprodscus.blob.core.windows.net"}})
 
 
 openai_api_key = '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'

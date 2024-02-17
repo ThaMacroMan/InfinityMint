@@ -107,7 +107,7 @@ const Home: NextPage = () => {
 
   const getRandomPrompt = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/generate-random-prompt');
+      const response = await axios.get('/api/generate-random-prompt');
       const randomPrompt = response.data;
       console.log('Random prompt UnChunked:', randomPrompt);
 
@@ -134,7 +134,7 @@ const Home: NextPage = () => {
       console.log('Sending image generation request...');
           // Set loading state to true when generating image
       setIsLoading(true);
-      const response = await axios.post('http://localhost:5001/dalle3_api', formData);
+      const response = await axios.post('/api/dalle3_api', formData);
 
       if (response.status === 200) {
         console.log('Images generated:', response.data.image_urls);
@@ -216,7 +216,8 @@ const Home: NextPage = () => {
       const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
         'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
-        price.toString()
+        '2000000'
+        //price.toString()
       );
         // Assuming this code block is within a JSX context
         // Define the type of metadataObj
