@@ -5,7 +5,7 @@ import { useWallet } from '@meshsdk/react';
 const POLICY_ID_NAMES: { [key: string]: string } = {
   "b77791d20054db4fa9726a58854b8c02550277c8683286ec5a353b89": "CatNip NFT",
   "6f5d880ec1746a32afc1f4fb53ad7ec1e214f49f53f1175c424b1200": "OG NFT",
-  "9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921": "$Catsky"
+  "9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921": "$CATSKY"
 };
 
 export const useTokenCheck = () => {

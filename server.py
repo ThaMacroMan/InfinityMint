@@ -53,7 +53,8 @@ def dalle3():
                     quality=quality,
                     n=n,
                 )
-
+                # Summarize the given prompt
+                summarized_prompt = summarize_prompt(prompt)
                 # Extract and store all image URLs in the list
                 image_urls = [image_data.url for image_data in response.data]
 
@@ -61,11 +62,10 @@ def dalle3():
                 logger.info(f"Images generated with URLs: {', '.join(image_urls)}")
 
                 # Return the image URLs as JSON
-                return jsonify({'image_urls': image_urls})
+                return jsonify({'image_urls': image_urls, 'summarized_prompt': summarized_prompt})
             except Exception as e:
                 # Log any exceptions
                 logger.error(f'Failed to generate image: {str(e)}', exc_info=True)
-
                 return jsonify({'error': f'Failed to generate image: {str(e)}'}), 500
 
     elif request.method == 'GET':
@@ -74,6 +74,29 @@ def dalle3():
         return jsonify({'message': 'This is a GET request response'})
 
     return jsonify({'error': 'Invalid request'}), 400
+# WORKING HERE. CANNOT FIGURE OUT HOW TO RETURN BOTH IMAGE AND PROMPT FROM SECOND FUNCTION BELOW
+# I THINK I JUST GOTTA INTEGRATE BELOW INTO ABOVE AND RETURN
+def summarize_prompt(prompt):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo-0125",
+            max_tokens= 50,
+            temperature=0.5,
+            messages=[
+                {"role": "system", "content": "Summarize the given prompt into a short epic name."},
+                {"role": "system", "content": "Only include the name itself in the output. Ensure no text or quotes in the image. Max 50 tokens"},
+                {"role": "system", "content": "Example Name: Crystal World: Orbiting Alien Planet"},
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        summarized_prompt = response.choices[0].message.content
+        print(summarized_prompt)
+        return summarized_prompt
+
+    except Exception as e:
+        logger.error(f'Failed to summarize prompt: {str(e)}', exc_info=True)
+        return "Failed to summarize prompt."
 
 @app.route('/generate-random-prompt', methods=['GET', 'POST'])
 def generate_random_prompt():
@@ -81,19 +104,18 @@ def generate_random_prompt():
         # Call GPT-3.5 to generate a random prompt
         response = client.chat.completions.create(
         model="gpt-3.5-turbo-0125",
-        max_tokens= 150,
-        temperature=1.5,
+        max_tokens= 70,
+        temperature=.5,
         messages=[
-            {"role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits. Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 150 tokens."},
-            {"role": "user", "content": "Make me a dalle prompt that is random and creates nature-esque images."}
+            {"role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits"},
+            {"role": "system", "content": "Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 70 tokens"},
+            {"role": "system", "content": "Example prompt: a surreal cyberpunk cityscape with neon lights, flying cars, and towering skyscrapers reflecting a digital sunset"},
+            {"role": "user", "content": "Make me a dalle prompt that is random and futuristic."}
         ]
         )
-
         # Extract the generated prompt
         random_prompt = response.choices[0].message.content
         print(random_prompt)
-
-
         return random_prompt
 
     except Exception as e:
