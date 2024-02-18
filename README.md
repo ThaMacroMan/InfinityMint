@@ -2,6 +2,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+# in meshjs folder: npm run dev
+# in meshjs folder: python server.py
+
+#i did fuck up the api endpoints tho lol
+
+
 First, run the development server:
 
 ```bash

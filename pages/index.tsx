@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
-import axios from 'axios';
 import { Transaction } from '@meshsdk/core';
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; // Import the spinner component
 import logo from '../pages/styles/catsky-logo.png'; // Adjust the path to where your logo is located
 import { useTokenCheck } from '../hooks/TokenCheck'; // Import the custom hook
 
+import { OpenAI } from "openai";
 
-
+export const openAI = new OpenAI({apiKey: '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', dangerouslyAllowBrowser: true});
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -104,10 +104,10 @@ const Home: NextPage = () => {
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
   };
-
+/* USING PYTHON SERVER
   const getRandomPrompt = async () => {
     try {
-      const response = await axios.get('/api/generate-random-prompt');
+      const response = await axios.get('http://localhost:5001/generate-random-prompt');
       const randomPrompt = response.data;
       console.log('Random prompt UnChunked:', randomPrompt);
 
@@ -116,9 +116,61 @@ const Home: NextPage = () => {
       console.error('Error fetching random prompt:', error);
     }
   };
+*/
+
+  const getRandomPrompt = async () => {
+    try {
+      
+      const response = await openAI.chat.completions.create ({
+        model: "gpt-3.5-turbo-0125",
+        max_tokens: 70,
+        temperature: 0.5,
+        messages: [
+          {"role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits"},
+          {"role": "system", "content": "Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 70 tokens"},
+          {"role": "system", "content": "Example prompt: a surreal cyberpunk cityscape with neon lights, flying cars, and towering skyscrapers reflecting a digital sunset"},
+          {"role": "user", "content": "Make me a dalle prompt that is random and futuristic."}
+        ]
+      }, 
+    );
+      const randomPrompt = response.choices[0].message.content;
+      console.log(response.choices[0].message.content);      
+      if (randomPrompt !== null) {
+        setPrompt(randomPrompt);
+      }
+    } catch (error) {
+      console.error('Error generating random prompt:', error);
+    }
+  };
+
+  const summarizePrompt = async() => {
+    try{
+      const response = await openAI.chat.completions.create({
+        model:"gpt-3.5-turbo-0125",
+        max_tokens: 50,
+        temperature:0.5,
+        messages:[
+            {"role": "system", "content": "Summarize the given prompt into a short epic name."},
+            {"role": "system", "content": "Only include the name itself in the output. Ensure no text or quotes in the image. Max 50 tokens"},
+            {"role": "system", "content": "Example Name: Crystal World: Orbiting Alien Planet"},
+            {"role": "user", "content": prompt}
+        ]
+      }
+    );
+      const summary= response.choices[0].message.content;
+      console.log(response.choices[0].message.content)
+      if (summary !== null) {
+        setPromptSummary(summary);
+      }
+    } catch (error) {
+      console.error('Error generating summarized prompt:', error);
+    }
+  };
+  
 
   const generateImage = async () => {
     try {
+      //const image_urls = []  
       const formData = new FormData();
       const modelSelect = document.getElementById("model") as HTMLSelectElement;
       const sizeSelect = document.getElementById("size") as HTMLSelectElement;
@@ -134,52 +186,51 @@ const Home: NextPage = () => {
       console.log('Sending image generation request...');
           // Set loading state to true when generating image
       setIsLoading(true);
-      const response = await axios.post('/api/dalle3_api', formData);
 
-      if (response.status === 200) {
-        console.log('Images generated:', response.data.image_urls);
-        console.log('summarized Prompt:', response.data.summarized_prompt)
-        
-        setGeneratedPrompt(prompt);
+      const response = await openAI.images.generate({
+        model: modelSelect.value,
+        prompt: prompt,
+        size: sizeSelect.value as "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792",
+        quality: qualitySelect.value as "standard" | "hd"
+      });
 
-        //const [promptSummary, setPromptSummary] = useState<string>("");
-        setPromptSummary(response.data.summarized_prompt)
+      const image_urls: string[] = response.data.map(image_data => image_data.url ?? '');
+      
+      setGeneratedImages(image_urls);   
 
-        // Set the generated images in state
-        setGeneratedImages(response.data.image_urls);
-        // For example, simulate image generation using setTimeout
-        setTimeout(() => {
-          // Set loading state to false when image generation is complete
-          setIsLoading(false);
-          // Perform additional actions after image generation
-        });
-        // Convert wallet metadata into chunks
-        const walletMetadata = response.data.image_urls.join(','); // Replace this with your actual wallet metadata string
-        const chunks: string[] = [];
-        for (let i = 0; i < walletMetadata.length; i += 64) {
-          chunks.push(walletMetadata.substring(i, i + 64));
-        } 
-        setChunkedMetadata(chunks); 
+      setGeneratedPrompt(prompt);
 
-        console.log('Chunked Image URL (1):', chunks);
-        // Fetch the generated images after generating
+      summarizePrompt();
+      // For example, simulate image generation using setTimeout
+      setTimeout(() => {
+        // Set loading state to false when image generation is complete
+        setIsLoading(false);
+        // Perform additional actions after image generation
+      });
 
-        const pChunks: string[] = [];
-        for (let i = 0; i < prompt.length; i += 64) {
-          pChunks.push(prompt.substring(i, i + 64));
-        }
+      // Convert wallet metadata into chunks
+      const walletMetadata = image_urls.join(','); 
+      const chunks: string[] = [];
+      for (let i = 0; i < walletMetadata.length; i += 64) {
+        chunks.push(walletMetadata.substring(i, i + 64));
+      } 
+      setChunkedMetadata(chunks); 
 
-        setChunkedPrompt(pChunks); // Assuming setChunkedPrompt is your state setter for the chunked prompt
-        console.log("Chunked Prompt (1)", pChunks);
+      console.log('Chunked Image URL (1):', chunks);
+      // Fetch the generated images after generating
 
-      } else {
-        console.error('Failed to generate images:', response.data.error);
+      const pChunks: string[] = [];
+      for (let i = 0; i < prompt.length; i += 64) {
+        pChunks.push(prompt.substring(i, i + 64));
       }
-    } catch (error) {
-      console.error('Error generating images:', error);
-    }
-  };
 
+      setChunkedPrompt(pChunks); // Assuming setChunkedPrompt is your state setter for the chunked prompt
+      console.log("Chunked Prompt (1)", pChunks);
+
+  } catch (error) {
+    console.error('Failed to generate images:', error);
+}
+};
 
   useEffect(() => {
     console.log(catskyBalance);
