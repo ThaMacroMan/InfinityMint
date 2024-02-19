@@ -3,96 +3,133 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @import url('https://fonts.cdnfonts.com/css/public-pixel');
 
 @font-face {
     font-family: 'Public-Pixel';
     src: url(PublicPixel-eZPz6.ttf);
 } 
-.header{
-    font-family: Public-Pixel;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.header2{
+.pixelfont{
   font-family: Public-Pixel;
-  margin-bottom: 10px;
 }
 
-/* Custom styles */
-.container {
-  display: flex;
-  justify-content: center;
-  
+.pixelfont2{
+  font-family: Public-Pixel;
+  position: absolute; /* Position the title absolutely */
+  top: 1rem; /* Position the title at the top */
+  transform: translateX(-50%); /* Center the title horizontally */
+  left: 50%; /* Move the title to the horizontal center */
+  font-size: 1.5rem;
+  color: #ffffff;
+  max-width: 100%; /* Set a maximum width for the title */
+  text-align: center; /* Center the text within its container */
 }
-.form-container {
 
-    text-align: center;
-    max-height: 50rem;
-    display: flex;
-    justify-content: center; /* Horizontally center */
-    align-items: center; /* Vertically center * /* Center inline elements */
-    min-width: 700px;
+.header {
+  background-color: black;
+  color: white;
+  padding: .75rem;
+  text-align: center;
+  align-items: center;
+  font-family: 'Public-Pixel';
+  justify-content: space-evenly;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .5); /* Add shadow effect */
 }
+#gradient-text {
+  background: repeating-linear-gradient(to right, red, orange, yellow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-style: italic;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3); /* Modified shadow */
+}
+
 .form {
-  width: 600px;
-  min-height: 31rem;
+/* Add this to make form items aligned horizontally */
+  flex-direction: column; /* Align items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center;
   background-color: #2406ba;
   border-radius: 0.618rem;
-  border:5px solid #000000;
-  padding: 5px;
-  margin: 5px;
+  border: 5px solid #000000;
+  padding: .5rem;
+  margin: .5rem;
+  min-height: vh;
+  width: vw;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
-  flex-grow: 1;
 }
 
 .creation-container {
   position: relative; /* Ensure non-static positioning context */
-  min-height: 31rem;
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
+  justify-content: center;
   border: 5px solid #000000;
-  justify-content: flex-start;
-  padding: 5px;
-  margin: 5px;
+  padding: 1rem;
+  margin: .5rem;
   border-radius: .618rem; 
-  background-color: #2406ba;
+  background-color: #392bff;
+  background-image: url('cardano-ada-logo.png'); /* Enclose URL in quotes */
+  background-size: 3%; /* Adjust background size if necessary */
+  background-position: center; /* Adjust background position if necessary */
   width: 100%; /* Make the container expand to fit the available space */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  animation: flow 30s alternate infinite;
+}
+
+
+/* Adjust the width of the image as needed */
+.imageborder {
+  width: 100%; /* Set the width to 100% */
+  max-width: 50rem; /* Example max-width */
+  height: auto; /* Maintain aspect ratio */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 }
 
 .textarea {
-  width: 100%;
-  min-height: 3rem;
-  padding: 0.75rem;
-  border-width: 1px;
-  border-radius: 0.618rem;
-  font-family: Public-Pixel;
-}
-
-/* Define styles for the enabled button */
-.button {
-  min-width: 400px;
-  margin-top: 3px;
+  width: calc(100% - 2rem); /* Full width minus padding/margin */
+  min-height: 27vh; /* Minimum height before expanding */
+  max-height: 300px; /* Maximum height before scrolling */
+  overflow-y: auto; /* Allow vertical scroll inside textarea */
   display: flex;
   text-align: center;
-  align-items: center; /* Vertically center the text */
-  justify-content: center; /* Horizontally center the text */
+  justify-content: center;
+  padding: .25rem;
+  margin: 1rem;
+  border-width: 3px;
   border-radius: 0.618rem;
-  padding: 0.15rem; /* Increase padding to make buttons wider */
-  font-size: .75rem; /* Increase font size */
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  border: 3px solid #000000; /* Add border */
   font-family: Public-Pixel;
+  font-size: .8rem;
+  width: 93%; /* Set the width to 100% */
+}
+.info-popup {
+font-family: Public-Pixel;
+font-size: .8rem;
+margin-left:1.2rem;
+margin-right: 1.2rem;
+width: vw;
 }
 
-/* Define styles for the disabled button */
+.button {
+  margin: 1rem;
+  justify-content: center;
+  display: flex;
+  width: 93%; /* Set the width to 100% */
+  border-radius: 0.618rem;
+  padding: 1rem; /* Increase padding to make buttons wider */
+  font-size: 1rem; /* Increase font size */
+  cursor: pointer;
+  color: #ffffff;
+  border: 3px solid #000000; /* Add border */
+  font-family: Public-Pixel;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+
+}
+
 .button:disabled {
-  opacity: 0.5; /* Reduce opacity to indicate disabled state */
+  opacity: 0.3; /* Reduce opacity to indicate disabled state */
   cursor: not-allowed; /* Change cursor to indicate non-interactive */
   background-color: #585858; /* Change background color when disabled */
   color: #666666; /* Change text color when disabled */
@@ -100,120 +137,125 @@
 }
 
 
+.widebutton {
+  display: flex;
+  margin-left: 3rem;
+  justify-content: center;
+  display: flex;
+  border-radius: 0.618rem;
+  padding-left: 1rem;
+  font-size: 1rem; /* Increase font size */
+  cursor: pointer;
+  border: 3px solid #000000; /* Add border */
+  font-family: Public-Pixel;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
+}
+.animated-gradient {
+  background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
+  background-size: 400% auto; /* Double the background size to make the gradient flow */
+  animation: flow 2.618s linear infinite ; /* Apply the animation */
+}   
 
-.label {
-    width: 125px; /* Adjust as needed */
-    text-align: center;
-    margin-right: 10px; /* Spacing between label and select */
-    font-family: Public-Pixel
+@keyframes flow2 {
+  0% {
+      background-position: 0% 100%;
   }
-  
-  
-  .flex-container {
-    display: flex;
-    align-items: center; /* This will vertically align your items */
-    justify-content: space-between; /* This will add space between your items */
-    padding-right: 1rem;
-    padding-top: .1rem;
-
+  100% {
+      background-position: 0% 0%;
   }
-
-#gradient-text {
-    background: repeating-linear-gradient(to right, red, orange, yellow);
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
-    font-style: italic;
-    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3); /* Modified shadow */
 }
 
-.info-container {
-    display: flex;
-    justify-content: center; /* Center the tags horizontally */
-
-
-  }
-  
-  .tag {
-    display: flex; /* Add this if .tag is a flex container */
-    align-items: center; /* Center content vertically if .tag is a flex container */
-    justify-content: center; /* Center content horizontally if .tag is a flex container */
-    width: 150px;
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-bottom: 10px; /* Adjust vertical spacing between tags */
-    padding: 0.15rem 0.15rem;
-    background-color: #ff00f7;
-    border: 3px solid #000000;
-    border-radius: 0.618rem;
-    font-size: .25rem;
-    font-weight: bold;
-    color: #000000;
-    font-family: 'Public-Pixel', sans-serif; /* Ensure fallback fonts are specified */
-    text-align: center; /* This will center the text horizontally */
-  }
-  
-
-.tag2 {
+.tag {
   display: flex;
-  min-width: 400px; /* Make the header span the full width */
-  text-align: center;
-  height: 55px;
-  justify-content: center; /* Center the text */
-  align-items: center;
-  background-color: #7a61f6;
-  border: 3px solid #000000;
-  border-radius: 0.618rem;
-  margin-top: 3px;
-  font-weight: bold;
-  color: #000000;
-  font-family: Public-Pixel;
-  }
-
-.tag3 {
-  text-align: center;
-  margin-bottom: 5px; /* Adjust vertical spacing between tags */
+  align-items: center; /* Center text vertically */
+  background-color: #2b00ff;
   border: 3px solid #000000;
   border-radius: 0.618rem;
   font-size: 1rem;
-  font-weight: bold;
-  color: #000000;
-  font-family: Public-Pixel;
+  margin: .25rem;
+  padding: .25rem;
+  color: #ffffff;
+  justify-content: space-between;
+  max-width: fit-content;
+  font-family: 'Public-Pixel', sans-serif; /* Ensure fallback fonts are specified */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 }
-.dropdown-container {
-  flex-grow: 1; /* Allow the container to grow and fill the space */
+ 
+.tag2 {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   display: flex;
-  justify-content: center; /* Center the dropdown within this container */
-  height: 50px;
-  
+  justify-content: space-between; /* or space-around or space-evenly */
+  width: 93%;
+  padding: .3rem;
+  background-color: #2b00ff;
+  border: 3px solid #000000;
+  border-radius: 0.618rem;
+  font-family: Public-Pixel;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  }
 
-}
-.dropdown {
-  position: absolute; /* Position the dropdown */
-  width: 100%; /* Set a width */
-  text-align: center;
-  /* ... other styles ... */
-}
+  .tag3 {
+    display: flex;
+    justify-content: center; /* Center the tags horizontally */
+    align-items: center; /* Center the tags vertically */
+    margin-top: 1rem;
+  }
+  
+  .tag3 .tag {
+    display: flex; /* Ensure tags are displayed as flex items */
+    align-items: center; /* Center tag content vertically */
+    background-color: #2b00ff;
+    border: 3px solid #000000;
+    border-radius: 0.618rem;
+    font-size: 1rem;
+    margin: 0.25rem;
+    padding: 0.25rem;
+    color: #ffffff;
+    font-family: 'Public-Pixel', sans-serif;
+  }
 
 .field {
-  justify-content: center;
-  align-items: center;
+  display: flex;
   text-align: center;
-  width: 250px; /* Set all fields to take up full width */
-  background-color: #cdcdcd;
+  background-color: #b9b9b9;
   border: 3px solid black;
   border-radius: 0.618rem; /* Light grey background */
-  padding: 1px;
-  margin-left: 30px;
-  margin-bottom: 3px;
-  margin-top: 3px;
-  max-height: 100px; /* Adjust padding as needed */
-  font-size: .5rem;
+  font-size: 1rem;
+  width: 13rem;
   font-family: Public-Pixel;
 }
 
+.spinner {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  animation: spin 2s linear infinite, flow 2.618s linear infinite; /* Add both animations */
+}
+
+.spinner-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 30rem;
+  min-height: 30rem;
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-family: Public-Pixel;
+  background: linear-gradient(to right, #ff00f7, #0000ff, #ff0000, #ff00f7, #0000ff);
+  background-size: 400% auto;
+  animation: flow 2.618s linear infinite;
+}
 .spinner-container {
   position: absolute;
   top: 50%;
@@ -221,131 +263,37 @@
   transform: translate(-50%, -50%);
 }
 
-
-  
-  .spinner {
-    background: linear-gradient(to left,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
-    background-size: 400% auto; /* Double the background size to make the gradient flow */
-    animation: flow 2.618s linear infinite ; /* Apply the animation */
-    border-radius: 50%;
-    min-width: 450px;
-    min-height: 450px;
-
-  }
-  
-
-  .spinner-message {
-    position: absolute; /* Absolutely position the message inside the spinner */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Center the message */
-    min-width: 400px; /* The width of the message circle */
-    min-height: 400px; /* The height of the message circle, equal to width */
-    border-radius: 50%; /* Makes the message box round */
-    text-align: center;
-    display: flex; /* Ensures the text inside the message is centered */
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
-    color: #ffffff;
-    font-size: large;
-
-    background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
-    background-size: 400% auto; /* Double the background size to make the gradient flow */
-    animation: flow 2.618s linear infinite ; /* Apply the animation */
-    /* ... other styles ... */
-  }
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  
-  .info-container {
-    display: flex;
-  }
-  
-
-  .prompt-box {
-    /* Remove display: flex */
-    padding: 5px;
-    text-align: center;
-    /* Remove align-items and justify-content */
-    background-color: #ff00f7;
-    border-radius: .618rem;
-    border: 3px solid #000000;
-    font-size: .5rem;
-    font-family: Public-Pixel;
-    width: fit-content;
-    margin: 0 auto; /* Center horizontally */
-  }
-  
-  .grid-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Adjust this as needed for your design */
-    align-items: stretch; /* This will ensure that both the form and creation containers have the same height */
-    gap: 16px; /* Optional: If you want some space between your columns */
-  }
-  
-
-  .text-xl {
-    font-size: 2.5rem; /* Increase font size */
-    margin-top: 1rem;
-    margin-bottom: .5rem; /* Increase top margin */
-  }
-  .text-sm {
-    font-size: 0.5rem/* 14px */;
-    line-height: .75rem/* 20px */;
+.adalogo {
+  width: 40rem; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
 }
-  
-  .textarea {
-    border: 3px solid #000000; /* Add a 3px black border */
-    font-size: .15rem;
-    padding: .25rem;
- }
 
-
-
-  .bold-text {
-      font-weight: bold;
-    }
-    
-
-  .imageborder{
-      border: 3px solid black;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes flow {
-    0% {
-        background-position: 0% 50%;
-    }
-    100% {
-        background-position: 100% 50%;
-    }
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
+
       
-.animated-gradient {
-    background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
-    background-size: 400% auto; /* Double the background size to make the gradient flow */
-    animation: flow 2.618s linear infinite ; /* Apply the animation */
-}   
- 
-@keyframes flow2 {
-    0% {
-        background-position: 0% 100%;
-    }
-    100% {
-        background-position: 0% 0%;
-    }
-}
 
 .animated-gradient2 {
-    background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
-    background-size: auto 200%; /* Allow the gradient to expand along the vertical axis */
-    animation: flow2 1.618s linear infinite; /* Apply the animation */
+  background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
+  background-size: auto 200%; /* Allow the gradient to expand along the vertical axis */
+  animation: flow2 1.618s linear infinite; /* Apply the animation */
 }
-
+/*cursor settings*/
 body{
     background-color: #0242B5;
     cursor: none;
@@ -389,94 +337,4 @@ body{
               }
           }
 
-/* styles.css or your global CSS file */
-@keyframes fadeIn {
-  0%, 95% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.bg-primary,
-.bg-dark,
-.bg-darker,
-.bg-darkest {
-  .mr-wallet-button {
-    color: white;
-  }
-}
-
-.pill {
-  display: inline-block;
-  border-radius: 10px;
-  padding: 2px 6px;
-  line-height: 1.25;
-  margin-left: 10px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.pill-enabled {
-  background-color: white;
-  color: green;
-  border: 1px solid green;
-}
-
-.pill-disabled {
-  background-color: white;
-  color: red;
-  border: 1px solid red;
-}
-
-.bar-graph-animation {
-  transition: width 0.5s ease-out;
-}
-
-.bg-pattern-primary {
-  background-image: url('/images/bg-pattern-primary.png');
-  background-repeat: repeat; /* This will make the image repeat */
-  background-position: center center; /* This starts the pattern from the center */
-  background-color: rgb(3 65 192)
-}
-
-.wrap-progress-bar {
-  width: 100%;
-  height: 10px;
-  background-color: rgb(229, 231, 235);
-  border: 1px solid rgb(229, 231, 235);
-}
-
-.progress-bar {
-  height: 8px;
-  background-color: rgb(17 24 39);
-}
-
-/* Adjust the height of the bar */
-.bar-container .border {
-  height: 30px; /* Set a smaller height */
-  justify-content: center;
-  align-items: center;
-  display: flex; /* Ensures that content doesn't flow outside the bar */
-}
-
-.text-bar{
-  font-size: .10rem;
-  z-index: 10;
-}
-
-.bg-green-complete {
-  background-color: green; /* Set the color of the completed bar to green */
-}
-
-.text-bar {
-  position: relative; /* Ensure positioning context */
-  z-index: 1; /* Set a higher z-index to ensure it appears in front of the bar color */
-}
-/* Add this to your CSS file */
-.logo-class {
-  height: 40px; /* Or whatever height aligns well with your component */
-  width: auto; /* Maintain aspect ratio */
-  margin-right: 10px; /* Add some space between the logo and the component */
-}
+  

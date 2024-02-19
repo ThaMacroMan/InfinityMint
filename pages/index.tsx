@@ -5,11 +5,13 @@ import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; // Import the spinner component
-import logo from '../pages/styles/catsky-logo.png'; // Adjust the path to where your logo is located
+import SpinnerStyle from './styles/SpinnerStyle.module.css'
+import logo from '../pages/styles/catsky-logo-white.png';
+import adalogo from '../pages/styles/cardano-ada-logo.png'; // Adjust the path to where your logo is located
 import { useTokenCheck } from '../hooks/TokenCheck'; // Import the custom hook
-
+import ErrorPopup from '../components/ErrorPopup';
 import { OpenAI } from "openai";
-
+//import darkSynthAudio from '../darkSynthAudio.mp3';
 export const openAI = new OpenAI({apiKey: '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', dangerouslyAllowBrowser: true});
 
 const Home: NextPage = () => {
@@ -20,22 +22,23 @@ const Home: NextPage = () => {
   const [chunkedPrompt, setChunkedPrompt] = useState<string[]>([]);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
   const [generatedPrompt, setGeneratedPrompt] = useState<string>(''); // State variable to store the generated prompt
-
+  const [error, setError] = useState<string | null>(null);
   const [chunkedMetadata, setChunkedMetadata] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState("dall-e-2");
   const [selectedSize, setSelectedSize] = useState("512x512");
   const [selectedQuality, setSelectedQuality] = useState("standard");
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  
+  const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
 
   const [mintingPrice, setMintingPrice] = useState<number>(8); // Default to the initial price
   // Call the custom hook to get the data
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
   
-  
   const catskyBalance = catskyAssetSummary["$CATSKY"] || 0;
 
-
+  const [showInfo, setShowInfo] = useState<boolean>(false);
 
 
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -104,23 +107,14 @@ const Home: NextPage = () => {
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
   };
-/* USING PYTHON SERVER
-  const getRandomPrompt = async () => {
-    try {
-      const response = await axios.get('http://localhost:5001/generate-random-prompt');
-      const randomPrompt = response.data;
-      console.log('Random prompt UnChunked:', randomPrompt);
-
-      setPrompt(randomPrompt); // Update the prompt state
-    } catch (error) {
-      console.error('Error fetching random prompt:', error);
-    }
-  };
-*/
 
   const getRandomPrompt = async () => {
     try {
-      
+      const audio = new Audio("/darkSynthAudio.MP3");
+      const playSound = () => {
+        audio.play();
+      };
+      playSound();  
       const response = await openAI.chat.completions.create ({
         model: "gpt-3.5-turbo-0125",
         max_tokens: 70,
@@ -199,6 +193,7 @@ const Home: NextPage = () => {
       setGeneratedImages(image_urls);   
 
       setGeneratedPrompt(prompt);
+        // Function to play sound when the button is clicked
 
       summarizePrompt();
       // For example, simulate image generation using setTimeout
@@ -229,8 +224,9 @@ const Home: NextPage = () => {
 
   } catch (error) {
     console.error('Failed to generate images:', error);
-}
-};
+    setError('Not enough ADA!')
+  }
+  };
 
   useEffect(() => {
     console.log(catskyBalance);
@@ -242,33 +238,30 @@ const Home: NextPage = () => {
 
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
-      if (catskyBalance >= 10000000000) {
-        return 3000000; // 10 billion CATSKY tokens
-      } else if (catskyBalance >= 7000000000) {
-        return 4000000; // 7 billion CATSKY tokens
-      } else if (catskyBalance >= 5000000000) {
-        return 5000000; // 5 billion CATSKY tokens
+      if (catskyBalance >= 5000000000) {
+        return 4690000; // 5 billion CATSKY tokens
       } else if (catskyBalance >= 3000000000) {
-        return 6000000; // 3 billion CATSKY tokens
+        return 5690000; // 3 billion CATSKY tokens
       } else if (catskyBalance >= 1000000000) {
-        return 7000000; // 1 billion CATSKY tokens
+        return 6690000; // 1 billion CATSKY tokens
+      } else if (catskyBalance >= 500000000) {
+        return 7690000; // 500M CATSKY tokens
       } else {
-        return 8000000; // Default initial price when no CATSKY tokens are held
+        return 8690000; // Default initial price when no CATSKY tokens are held
       }
     };
 
     const processTransaction = async () => {
       const price = calculateMintingPrice(catskyBalance);
       console.log('mint price:', price);
-
       console.log('Chunked image URL (2):', chunkedMetadata )
       console.log('Chunked Prompt (2):', chunkedPrompt);
 
       const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
         'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
-        '2000000'
-        //price.toString()
+        
+        price.toString()
       );
         // Assuming this code block is within a JSX context
         // Define the type of metadataObj
@@ -323,6 +316,7 @@ const Home: NextPage = () => {
           const txHash = await wallet.submitTx(signedTx);
           console.log('Transaction hash:', txHash);
       } catch (error) {
+        setError(' Not enough ADA!')
           console.error('Error processing transaction:', error);
       }
   };
@@ -355,6 +349,9 @@ const Home: NextPage = () => {
     }
   };  
 
+   // Function to toggle the info pop-up
+   const toggleInfo = () => setShowInfo(!showInfo);
+
 
   return (
     <>
@@ -374,29 +371,37 @@ const Home: NextPage = () => {
         pointerEvents: 'none',
         // Add more styles for your big cursor here
       }} />
-      <div className="pixeltext">
-        <div className="flex-container" >
-      <h1 className="header ml-6">Infinity Mint <span id="gradient-text">V1.0</span></h1>              
-      <h3 className="header"><span id="gradient-text">Powered by Catsky AI</span></h3>
-      <a href="https://catsky.io/" target="_blank" rel="noopener noreferrer" style={{ cursor: 'pointer' }}>
-                  <img src={logo.src} alt="Logo" className="h-8 mr-2" />
-                </a>
+
+      <div className="header flex"> 
+      <h1>Infinity Mint <span id="gradient-text">V1.0</span></h1>              
+      <h1><span id="gradient-text">Powered by Catsky AI</span></h1>
+      <a href="https://catsky.io/" rel="noopener noreferrer" style={{ cursor: 'pointer' }}>
+          <img src={logo.src} alt="Logo" className="h-10" />
+      </a>
       </div>
+      
         <div className="flex">
           {/* Form Section */}
           <div className="form">
-            <div className="header " style={{ position: 'relative', zIndex: 1000 }}>
-              <div style={{ position: 'relative', zIndex: 1000 }}>
-                <CardanoWallet isDark={true}  />
+            <div className="pixelfont" style={{ zIndex: 1000 }}>
+              <div className="flex"> {/* Add a flex container */}
+                <CardanoWallet isDark={true} />
+                <div>
+                  <h1 className="widebutton gradient-text" onClick={toggleInfo}>Info:</h1>
+                  {showInfo && (
+                    <div className="widebutton">
+                      <button onClick={toggleInfo}>Close</button>
+                    </div>
+                  )}
+                </div>
               </div>
-
             </div>
-            <div className="header">
+            <div className="">
               {connected}
               <WalletBalance />
             </div>
 
-            <form className="flex flex-col">
+            <form>
 
               <textarea
                 className="textarea"
@@ -405,23 +410,21 @@ const Home: NextPage = () => {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 onInput={autoExpand}
-                rows={3}
-                placeholder="What will you create? Write it here:"
-              ></textarea>
 
+                placeholder="What will you create? Dream Infinite:"
+                ></textarea>
 
               <button
-                className="button bold-text animated-gradient"
+                className="button animated-gradient"
                 type="button"
                 id="randomGenerate"
-                onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clicked
-
-
+                onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clickex
               >
                 Generate Prompt
               </button>
-
-              <div className="flex tag2">
+              
+              <div/>
+              <div className="tag2">
                 <label htmlFor="model" className="tag">Model</label>
                 <div className="dropdown-container">
                 <select
@@ -436,7 +439,17 @@ const Home: NextPage = () => {
                 </div>
               </div>
 
-              <div className="flex tag2">
+
+              <div>
+                <div className="" onClick={toggleInfo}></div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p><span id="gradient-text"> Models:</span> Dalle 2 and 3 are the current OpenAI Image Genearation Models. Dalle3 is significantly better, but slower</p>
+                    </div>
+                  )}
+              </div>
+
+              <div className="tag2">
                 <label htmlFor="size" className="tag">Size</label>
                 <div className="dropdown-container">
                 <select className="field" 
@@ -445,8 +458,16 @@ const Home: NextPage = () => {
                 </select>
                 </div>
               </div>
+              <div>
+                <div className="" onClick={toggleInfo}></div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p><span id="gradient-text"> Size:</span> The image size in Pixels X Pixels</p>
+                    </div>
+                  )}
+              </div>
 
-              <div className=" flex tag2">
+              <div className="tag2">
                 <label htmlFor="quality" className="tag">Quality</label>
                 <div className="dropdown-container">
                 <select className="field" 
@@ -458,13 +479,19 @@ const Home: NextPage = () => {
                 </select>
                 </div>
               </div>
-
+              <div>
+                <div className="" onClick={toggleInfo}></div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p><span id="gradient-text"> Qualtiy:</span> Dalle 3 has 2 quality options to try</p>
+                    </div>
+                  )}
+              </div>
               <button
                 type="button"
                 onClick={generateImage}
-                className="button bold-text animated-gradient"
+                className="button animated-gradient"
                 disabled={!prompt.trim()|| isLoading} // Disable if prompt is empty or contains only whitespace
-
               >
               Generate Art
               </button>
@@ -472,24 +499,38 @@ const Home: NextPage = () => {
               <button
                 type="button"
                 onClick={processTransaction}
-                className={`button bold-text animated-gradient2 pixeltext ${(!connected || isLoading || !generatedImages || generatedImages.length === 0) ? 'disabled-button' : ''}`}
-                disabled={!connected || isLoading || !generatedImages || generatedImages.length === 0} // Disable button based on conditions
-
+                className={`button animated-gradient2 ${(!connected || isLoading || !generatedImages || generatedImages.length === 0) ? 'disabled-button' : ''}`}
+                disabled={!connected || isLoading || !generatedImages || generatedImages.length === 0} // Disable button based on condition
               >
-                Mint on Cardano: $ {mintingPrice.toString()} ADA
+                Mint on Cardano: ${mintingPrice.toString()} ADA
+                {error && <ErrorPopup message={error} />}
               </button>
+              <div>
+                <div className="" onClick={toggleInfo}></div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p><span id="gradient-text"> Discounts:</span> Hold $CATSKY for minting discounts!</p>
+                      <p><span id="gradient-text"> 0.5 B    =</span> 7.69 ADA or 1 ADA or 11% Discount</p>
+                      <p><span id="gradient-text"> 1.0 B    =</span> 6.69 ADA or 2 ADA or 22% Discount</p>
+                      <p><span id="gradient-text"> 3.0 B    =</span> 5.69 ADA or 3 ADA or 34% Discount</p>
+                      <p><span id="gradient-text"> 5.0 B    =</span> 4.69 ADA or 4 ADA or 46%s Discount</p>
+                    </div>
+                  )}
+              </div>
             </form>
           </div>
 
           {/* "Your Creation" Section */}
-          
           <div className="creation-container" >
-            <label className="tag3 animated-gradient2">{promptSummary}</label>
+
+            <label className="pixelfont2 mr-2 mb-4">{promptSummary}</label>
             {/* Loading spinner inside the "Creation Container" */}
             {isLoading && (
-              <div className="spinner-container">
-                <Spinner message="Generating your creation..." />
-              </div>
+
+            <div className="spinner-container">
+             <Spinner message="Generating your creation..." />
+            </div>
+
             )}
 
             {!!generatedImages && generatedImages.length > 0 && (
@@ -502,35 +543,24 @@ const Home: NextPage = () => {
                       className="mx-auto imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
-                    <div className="info-container">
-                      {/* AI Model tag */}
-                      <div className="tag">
-                        <p>Model: {selectedModel}</p>
-                      </div>
-                      {/* Image Size tag */}
-                      <div className="tag">
-                        <p>Size: {selectedSize}</p>
-                      </div>
-                      {/* Image Quality tag */}
-                      <div className="tag">
-                        <p>Quality: {selectedQuality}</p>
-                      </div>
-                                  {/* Prompt summary */}
+                    <div className="tag3">
+                      <div className="tag">Model: {selectedModel}</div>
+                      <div className="tag">Size: {selectedSize}</div>
+                      <div className="tag">Quality: {selectedQuality}</div>
+                      {/* Add more tags as needed */}
                     </div>
-                              {/* Prompt */}
-              <div className="prompt-box">
-                <p>{generatedPrompt}</p>
-              </div>
+                                {/* Prompt */}
+                  <div className="tag3">
+                    <div className="tag">Prompt: {generatedPrompt}</div>
                   </div>
+                </div>
                   
                 ))}
               </div>
             )}
           </div>
-        </div>
       </div>
-
-   </>
+    </>
     );
   }
 export default Home;
