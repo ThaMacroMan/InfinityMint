@@ -12,7 +12,6 @@ import { useTokenCheck } from '../hooks/TokenCheck'; // Import the custom hook
 import ErrorPopup from '../components/ErrorPopup';
 import { OpenAI } from "openai";
 //import darkSynthAudio from '../darkSynthAudio.mp3';
-export const openAI = new OpenAI({apiKey: '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', dangerouslyAllowBrowser: true});
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -111,122 +110,112 @@ const Home: NextPage = () => {
   const getRandomPrompt = async () => {
     try {
       const audio = new Audio("/darkSynthAudio.MP3");
-      const playSound = () => {
-        audio.play();
-      };
-      playSound();  
-      const response = await openAI.chat.completions.create ({
-        model: "gpt-3.5-turbo-0125",
-        max_tokens: 70,
-        temperature: 0.5,
-        messages: [
-          {"role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits"},
-          {"role": "system", "content": "Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 70 tokens"},
-          {"role": "system", "content": "Example prompt: a surreal cyberpunk cityscape with neon lights, flying cars, and towering skyscrapers reflecting a digital sunset"},
-          {"role": "user", "content": "Make me a dalle prompt that is random and futuristic."}
-        ]
-      }, 
-    );
-      const randomPrompt = response.choices[0].message.content;
-      console.log(response.choices[0].message.content);      
+      audio.play();
+  
+      // Call your internal API endpoint instead of OpenAI's API directly
+      const response = await fetch('/api/getRandomPrompt');
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const randomPrompt = data.prompt;
+      console.log(randomPrompt);
+  
       if (randomPrompt !== null) {
         setPrompt(randomPrompt);
       }
     } catch (error) {
       console.error('Error generating random prompt:', error);
     }
-  };
+  }
 
-  const summarizePrompt = async() => {
-    try{
-      const response = await openAI.chat.completions.create({
-        model:"gpt-3.5-turbo-0125",
-        max_tokens: 50,
-        temperature:0.5,
-        messages:[
-            {"role": "system", "content": "Summarize the given prompt into a short epic name."},
-            {"role": "system", "content": "Only include the name itself in the output. Ensure no text or quotes in the image. Max 50 tokens"},
-            {"role": "system", "content": "Example Name: Crystal World: Orbiting Alien Planet"},
-            {"role": "user", "content": prompt}
-        ]
+  const summarizePrompt = async (prompt: string) => {
+    try {
+      const response = await fetch('/api/summarizePrompt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
-      const summary= response.choices[0].message.content;
-      console.log(response.choices[0].message.content)
-      if (summary !== null) {
-        setPromptSummary(summary);
-      }
+  
+      const data = await response.json();
+      const summary = data.summary;
+      console.log(summary);
+  
+      return summary;
     } catch (error) {
       console.error('Error generating summarized prompt:', error);
+      throw error;
     }
   };
+  
   
 
   const generateImage = async () => {
     try {
-      //const image_urls = []  
-      const formData = new FormData();
-      const modelSelect = document.getElementById("model") as HTMLSelectElement;
-      const sizeSelect = document.getElementById("size") as HTMLSelectElement;
-      const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
-      const nInput = document.getElementById("n") as HTMLInputElement;
-
-      formData.append('prompt', prompt);
-      formData.append('size', sizeSelect.value);
-      formData.append('quality', qualitySelect.value);
-      formData.append('model', modelSelect.value);
-      //formData.append('n', nInput.value);
-
-      console.log('Sending image generation request...');
-          // Set loading state to true when generating image
-      setIsLoading(true);
-
-      const response = await openAI.images.generate({
-        model: modelSelect.value,
-        prompt: prompt,
-        size: sizeSelect.value as "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792",
-        quality: qualitySelect.value as "standard" | "hd"
+      setIsLoading(true); // Set loading state to true when generating image
+  
+      const response = await fetch('/api/generateImage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          size: selectedSize,
+          quality: selectedQuality,
+          model: selectedModel,
+        }),
       });
-
-      const image_urls: string[] = response.data.map(image_data => image_data.url ?? '');
-      
-      setGeneratedImages(image_urls);   
-
-      setGeneratedPrompt(prompt);
-        // Function to play sound when the button is clicked
-
-      summarizePrompt();
-      // For example, simulate image generation using setTimeout
-      setTimeout(() => {
-        // Set loading state to false when image generation is complete
-        setIsLoading(false);
-        // Perform additional actions after image generation
-      });
-
-      // Convert wallet metadata into chunks
-      const walletMetadata = image_urls.join(','); 
-      const chunks: string[] = [];
-      for (let i = 0; i < walletMetadata.length; i += 64) {
-        chunks.push(walletMetadata.substring(i, i + 64));
-      } 
-      setChunkedMetadata(chunks); 
-
-      console.log('Chunked Image URL (1):', chunks);
-      // Fetch the generated images after generating
-
-      const pChunks: string[] = [];
-      for (let i = 0; i < prompt.length; i += 64) {
-        pChunks.push(prompt.substring(i, i + 64));
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      setChunkedPrompt(pChunks); // Assuming setChunkedPrompt is your state setter for the chunked prompt
-      console.log("Chunked Prompt (1)", pChunks);
-
-  } catch (error) {
-    console.error('Failed to generate images:', error);
-    setError('Not enough ADA!')
-  }
+  
+      const data = await response.json();
+      const imageUrls = data.imageUrls;
+      
+      setGeneratedImages(imageUrls);
+      setGeneratedPrompt(prompt);
+  
+      // Get summary for the prompt
+      const promptSummary = await summarizePrompt(prompt);
+      setPromptSummary(promptSummary);
+  
+      // Chunking image URLs for metadata
+      const chunkedMetadata = chunkData(imageUrls.join(','), 64);
+      setChunkedMetadata(chunkedMetadata);
+  
+      // Chunking prompt for metadata
+      const chunkedPromptData = chunkData(prompt, 64);
+      setChunkedPrompt(chunkedPromptData);
+  
+      setIsLoading(false); // Set loading state to false when image generation is complete
+  
+    } catch (error) {
+      console.error('Failed to generate images:', error);
+      setError('An error occurred while generating images');
+      setIsLoading(false); // Ensure loading state is reset even on error
+    }
   };
+  
+  // Function to chunk data into specified size
+  const chunkData = (data: string, size: number) => {
+    const chunks = [];
+    for (let i = 0; i < data.length; i += size) {
+      chunks.push(data.substring(i, i + size));
+    }
+    return chunks;
+  };
+  
+  
 
   useEffect(() => {
     console.log(catskyBalance);

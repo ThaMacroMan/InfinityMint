@@ -5,6 +5,7 @@
 
 @import url('https://fonts.cdnfonts.com/css/public-pixel');
 
+
 @font-face {
     font-family: 'Public-Pixel';
     src: url(PublicPixel-eZPz6.ttf);
@@ -78,6 +79,19 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
   animation: flow 30s alternate infinite;
   cursor: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .form,
+  .creation-container {
+    width: 100%;
+    display: block; /* Ensure block-level display */
+    clear: both; /* Clear any floating elements */
+  }
+
+  .creation-container {
+    margin-top: 20px; /* Adjust margin as needed */
+  }
 }
 
 
@@ -234,15 +248,49 @@ width: vw;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  animation: spin;
 }
 
-.spinner-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+
+  
+  .spinner {
+    background: linear-gradient(to left,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
+    background-size: 400% auto; /* Double the background size to make the gradient flow */
+    animation: flow 2.618s linear infinite ; /* Apply the animation */
+    min-width: 450px;
+    min-height: 450px;
+
+
+  }
+  
+
+  .spinner-message {
+    position: absolute; /* Absolutely position the message inside the spinner */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the message */
+    min-width: 400px; /* The width of the message circle */
+    min-height: 400px; /* The height of the message circle, equal to width */
+    text-align: center;
+    display: flex; /* Ensures the text inside the message is centered */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    color: #ffffff;
+    font-size: large;
+
+    font-family: Public-Pixel;
+    background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
+    background-size: 400% auto; /* Double the background size to make the gradient flow */
+    animation: flow 2.618s linear infinite ; /* Apply the animation */
+    /* ... other styles ... */
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
 .adalogo {
   width: 40rem; /* Adjust the width as needed */
