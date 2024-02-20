@@ -77,6 +77,7 @@
   width: 100%; /* Make the container expand to fit the available space */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
   animation: flow 30s alternate infinite;
+  cursor: auto;
 }
 
 
@@ -276,5 +277,5 @@ width: vw;
 /*cursor settings*/
 body{
     background-color: #2b00ff;
-    cursor: none;
+    cursor: auto;
 } 
