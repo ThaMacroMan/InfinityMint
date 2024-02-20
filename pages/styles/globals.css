@@ -1,10 +1,8 @@
-/* Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @import url('https://fonts.cdnfonts.com/css/public-pixel');
-
 
 @font-face {
     font-family: 'Public-Pixel';
@@ -39,6 +37,7 @@
 }
 #gradient-text {
   background: repeating-linear-gradient(to right, red, orange, yellow);
+  background-clip: content-box;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
@@ -81,20 +80,30 @@
   cursor: auto;
 }
 
+
+/* Media query for smaller screens */
 @media screen and (max-width: 768px) {
   .form,
   .creation-container {
-    width: 100%;
-    display: block; /* Ensure block-level display */
-    clear: both; /* Clear any floating elements */
-  }
-
-  .creation-container {
-    margin-top: 20px; /* Adjust margin as needed */
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    width: 90%; /* Adjust width to fit mobile screen */
+    margin: 1rem auto; /* Add margin for spacing */
   }
 }
 
-
+/* Media query for larger screens */
+@media screen and (min-width: 769px) {
+  .wrapper {
+    display: flex; /* Ensure wrapper uses flex layout */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    justify-content: space-between; /* Space items evenly */
+  }
+  .form,
+  .creation-container {
+    width: calc(50% - 1rem); /* Adjust width to fit side by side with margin */
+    margin: 0.5rem; /* Add margin for spacing */
+  }
+}
 /* Adjust the width of the image as needed */
 .imageborder {
   width: 100%; /* Set the width to 100% */

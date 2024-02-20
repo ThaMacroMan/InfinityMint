@@ -15,6 +15,7 @@
     "@meshsdk/core": "^1.5.11-beta.3",
     "@meshsdk/react": "^1.1.10-beta.3",
     "axios": "^1.6.7",
+    "core-js": "^3.36.0",
     "dotenv": "^16.4.5",
     "flowbite": "^2.2.1",
     "flowbite-react": "^0.7.2",
@@ -24,7 +25,9 @@
     "postcss-nesting": "^12.0.2",
     "react": "^18",
     "react-dom": "^18",
-    "twin.macro": "^3.4.1"
+    "tailwind": "^4.0.0",
+    "twin.macro": "^3.4.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

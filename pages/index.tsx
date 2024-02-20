@@ -344,32 +344,40 @@ const Home: NextPage = () => {
 
   return (
     <>
-
-      
       <div className="header flex"> 
-      <h1>Infinity Mint <span id="gradient-text">V1.0</span></h1>              
-      <h1><span id="gradient-text">Powered by Catsky AI</span></h1>
-      <a href="https://catsky.io/" rel="noopener noreferrer" style={{ cursor: 'pointer' }}>
+        <h1>
+          Infinity Mint <span id="gradient-text">V1.0</span>
+        </h1>   
+
+        <h1>
+          <span id="gradient-text">Powered by Catsky AI</span>
+        </h1>
+        <a 
+          href="https://catsky.io/" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ cursor: 'pointer' }}
+        >
           <img src={logo.src} alt="Logo" className="h-10" />
-      </a>
+        </a>
       </div>
       
-        <div className="flex">
-          {/* Form Section */}
-          <div className="form">
-            <div className="pixelfont" style={{ zIndex: 1000 }}>
-              <div className="flex"> {/* Add a flex container */}
-                <CardanoWallet isDark={true} />
-                <div>
-                  <h1 className="widebutton gradient-text" onClick={toggleInfo}>Info:</h1>
-                  {showInfo && (
-                    <div className="widebutton">
-                      <button onClick={toggleInfo}>Close</button>
-                    </div>
-                  )}
-                </div>
+      <div className="wrapper">
+        {/* Form Section */}
+        <div className="form">
+          <div className="pixelfont" style={{ zIndex: 1000 }}>
+            <div className="flex"> 
+              <CardanoWallet isDark={true} />
+              <div>
+                <h1 className="widebutton gradient-text" onClick={toggleInfo}>Info:</h1>
+                {showInfo && (
+                  <div className="widebutton">
+                    <button onClick={toggleInfo}>Close</button>
+                  </div>
+                )}
               </div>
             </div>
+          </div>
             <div className="">
               {connected}
               <WalletBalance />
