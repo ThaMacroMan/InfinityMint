@@ -228,34 +228,14 @@ width: vw;
   font-family: Public-Pixel;
 }
 
-.spinner {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  position: relative;
-  overflow: hidden;
-  animation: spin 2s linear infinite, flow 2.618s linear infinite; /* Add both animations */
-}
-
-.spinner-message {
+.spinner-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 30rem;
-  min-height: 30rem;
-  border-radius: 50%;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 1.75rem;
-  font-family: Public-Pixel;
-  background: linear-gradient(to right, #ff00f7, #0000ff, #ff0000, #ff00f7, #0000ff);
-  background-size: 400% auto;
-  animation: flow 2.618s linear infinite;
+  animation: spin;
 }
+
 .spinner-container {
   position: absolute;
   top: 50%;
@@ -295,46 +275,6 @@ width: vw;
 }
 /*cursor settings*/
 body{
-    background-color: #0242B5;
+    background-color: #2b00ff;
     cursor: none;
-  }
-  .small{
-    width: 6px;
-    height: 6px;
-    border: 2px solid #000000;
-    border-radius: 50%;
-  }
-  .big{
-    width: 50px;
-    height: 50px;
-    background-color: white;
-    border-radius: 50%;
-    margin-bottom: 20rem;
-    animation-name: stretch;
-              animation-duration: 2.0s;
-              animation-timing-function: ease-out;
-              animation-direction: alternate;
-              animation-iteration-count: infinite;
-              animation-play-state: running;
-  }
-  
-  
-  @keyframes stretch {
-              0% {
-                 
-                  opacity: 0.2;
-                  background-color: #1a56db;
-                  border-radius: 100%;
-              }
-    
-              50% {
-                  background-color: orange;
-              }
-    
-              100% {
-                  transform: scale(2.0);
-                  background-color: red;
-              }
-          }
-
-  
+} 

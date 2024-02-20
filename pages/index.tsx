@@ -355,23 +355,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="small" style={{
-        position: 'fixed',
-        left: `${cursorPos.x}px`,
-        top: `${cursorPos.y}px`,
-        zIndex: 9999,
-        pointerEvents: 'none', // Ensures the cursor doesn't interfere with other mouse events
-        // Add more styles for your small cursor here
-      }} />
-      <div className="big" style={{
-        position: 'fixed',
-        left: `${cursorPos.x}px`,
-        top: `${cursorPos.y}px`,
-        zIndex: 9998,
-        pointerEvents: 'none',
-        // Add more styles for your big cursor here
-      }} />
 
+      
       <div className="header flex"> 
       <h1>Infinity Mint <span id="gradient-text">V1.0</span></h1>              
       <h1><span id="gradient-text">Powered by Catsky AI</span></h1>
