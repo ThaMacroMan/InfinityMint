@@ -146,6 +146,7 @@
     width: calc(70% - 1rem); /* Adjust width to fit side by side with margin */
     margin: 0.5rem; /* Add margin for spacing */
   }
+
   
 }
 /* Adjust the width of the image as needed */
@@ -306,15 +307,12 @@ width: vw;
   transform: translate(-50%, -50%);
 }
 
-  .spinner {
-
-
-  }
   
   .spinner-message {
     position: absolute; /* Absolutely position the message inside the spinner */
     top: 50%;
     left: 50%;
+    border-radius: 5.618rem;
     transform: translate(-50%, -50%); /* Center the message */
     text-align: center;
     display: flex; /* Ensures the text inside the message is centered */

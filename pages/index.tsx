@@ -47,7 +47,7 @@ const Home: NextPage = () => {
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
   
-
+  
   const updateOptions = () => {
     const modelSelect = document.getElementById("model") as HTMLSelectElement;
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
@@ -109,6 +109,7 @@ const Home: NextPage = () => {
 
   const getRandomPrompt = async () => {
     try {
+      setIsLoading(true); // Set loading state to true
       //const audio = new Audio("/darkSynthAudio.MP3");
       //audio.play();
   
@@ -125,9 +126,12 @@ const Home: NextPage = () => {
   
       if (randomPrompt !== null) {
         setPrompt(randomPrompt);
+        setIsLoading(false); // Reset loading state
       }
     } catch (error) {
+      setIsLoading(false); // Ensure loading state is reset even on error
       console.error('Error generating random prompt:', error);
+      
     }
   }
 
@@ -399,6 +403,7 @@ const Home: NextPage = () => {
                 className="button animated-gradient"
                 type="button"
                 id="randomGenerate"
+                disabled={isLoading} // Disable the button when loading
                 onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clickex
               >
                <span id="gradient-text"> Generate Prompt</span>
@@ -414,8 +419,9 @@ const Home: NextPage = () => {
                   id="model"
                   onChange={updateOptions}
                 >
-                  <option value="dall-e-2">DALL·E-2</option>
                   <option value="dall-e-3">DALL·E-3</option>
+                  <option value="dall-e-2">DALL·E-2</option>
+                  
                 </select>
                 </div>
               </div>
@@ -445,7 +451,7 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Size:</span> The image size in Pixels X Pixels</p>
+                      <p><span id="gradient-text"> Size:</span> The image size in Width(Pixels) X Height(Pixels)</p>
                     </div>
                   )}
               </div>
@@ -485,7 +491,7 @@ const Home: NextPage = () => {
                 className={`button animated-gradient2 ${(!connected || isLoading || !generatedImages || generatedImages.length === 0) ? 'disabled-button' : ''}`}
                 disabled={!connected || isLoading || !generatedImages || generatedImages.length === 0} // Disable button based on condition
               >
-                Mint on Cardano: ${mintingPrice.toString()} ADA
+                Mint on Cardano: ₳{mintingPrice.toString()} 
                 {error && <ErrorPopup message={error} />}
               </button>
               <div>
@@ -493,10 +499,10 @@ const Home: NextPage = () => {
                   {showInfo && (
                     <div className="info-popup">
                       <p><span id="gradient-text"> Discounts:</span> Hold $CATSKY for minting discounts!</p>
-                      <p><span id="gradient-text"> 0.5 B    =</span> 7.69 ADA or 1 ADA or 11% Discount</p>
-                      <p><span id="gradient-text"> 1.0 B    =</span> 6.69 ADA or 2 ADA or 22% Discount</p>
-                      <p><span id="gradient-text"> 3.0 B    =</span> 5.69 ADA or 3 ADA or 34% Discount</p>
-                      <p><span id="gradient-text"> 5.0 B    =</span> 4.69 ADA or 4 ADA or 46%s Discount</p>
+                      <p><span id="gradient-text"> 0.5 B =</span> ₳1 ADA or 11% Discount</p>
+                      <p><span id="gradient-text"> 1.0 B =</span> ₳2 ADA or 22% Discount</p>
+                      <p><span id="gradient-text"> 3.0 B =</span> ₳3 ADA or 34% Discount</p>
+                      <p><span id="gradient-text"> 5.0 B =</span> ₳4 ADA or 46% Discount</p>
                     </div>
                   )}
               </div>
@@ -506,7 +512,15 @@ const Home: NextPage = () => {
           {/* "Your Creation" Section */}
           <div className="creation-container" >
 
-            <label className="pixelfont2 mr-2 mb-4" id="gradient-text">{promptSummary}</label>
+            <label className="prompt-summary pixelfont2 " id="gradient-text">{promptSummary}</label>
+            <br>  
+            </br>
+            <br>  
+            </br>
+            <br>  
+            </br>
+            <br>  
+            </br>
 
             {/* Loading spinner inside the "Creation Container" */}
             {isLoading && (
