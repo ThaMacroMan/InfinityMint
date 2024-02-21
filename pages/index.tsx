@@ -3,15 +3,21 @@ import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
+import { useTokenCheck } from '../hooks/TokenCheck'; 
+
 import WalletBalance from '../components/WalletBalance';
-import Spinner from '../components/Spinner'; // Import the spinner component
-import SpinnerStyle from './styles/SpinnerStyle.module.css'
-import logo from '../pages/styles/catsky-logo-white.png';
-import adalogo from '../pages/styles/cardano-ada-logo.png'; // Adjust the path to where your logo is located
-import { useTokenCheck } from '../hooks/TokenCheck'; // Import the custom hook
+import Spinner from '../components/Spinner'; 
 import ErrorPopup from '../components/ErrorPopup';
-import { OpenAI } from "openai";
+import DownloadImage from '../components/DownloadImage';
+
+
+import logo from '../pages/styles/catsky-logo-white.png';
+import jpglogo from '../pages/styles/jpglogo.png'
+import tokenlogo from '../pages/styles/tokenlogo.png'
+import chartlogo from '../pages/styles/chartlogo.png'
+
 //import darkSynthAudio from '../darkSynthAudio.mp3';
+
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -59,9 +65,9 @@ const Home: NextPage = () => {
   
     if (selectedModel === "dall-e-2") {
       const sizeOptions = [
-        { value: "256x256", label: "Small (256x256)" },
-        { value: "512x512", label: "Medium (512x512)" },
-        { value: "1024x1024", label: "Large (1024x1024)" },
+        { value: "256x256", label: "Small" },
+        { value: "512x512", label: "Medium" },
+        { value: "1024x1024", label: "Large" },
       ];
       sizeOptions.forEach((optionData) => {
         const option = document.createElement("option");
@@ -77,9 +83,9 @@ const Home: NextPage = () => {
       qualitySelect.appendChild(qualityOption);
     } else if (selectedModel === "dall-e-3") {
       const sizeOptions = [
-        { value: "1024x1024", label: "Large (1024x1024)" },
-        { value: "1792x1024", label: "Wide (1792x1024)" },
-        { value: "1024x1792", label: "Tall (1024x1792)" },
+        { value: "1024x1024", label: "Square" },
+        { value: "1792x1024", label: "Landscape" },
+        { value: "1024x1792", label: "Portrait" },
       ];
       sizeOptions.forEach((optionData) => {
         const option = document.createElement("option");
@@ -344,6 +350,7 @@ const Home: NextPage = () => {
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
 
+  
 
   return (
     <>
@@ -363,8 +370,31 @@ const Home: NextPage = () => {
         >
           <img src={logo.src} alt="Logo" className="h-10" />
         </a>
+        <a 
+          href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ cursor: 'pointer' }}
+        >
+          <img src={jpglogo.src} alt="Logo" className="h-10" />
+        </a>
+        <a 
+          href="https://app.dexhunter.io/swap?tokenIdSell=&tokenIdBuy=9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ cursor: 'pointer' }}
+        >
+          <img src={tokenlogo.src} alt="Logo" className="h-10" />
+        </a>
+        <a 
+          href="https://www.taptools.io/charts/token?pairID=0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style={{ cursor: 'pointer' }}
+        >
+          <img src={chartlogo.src} alt="Logo" className="h-10" />
+        </a>
       </div>
-      
       <div className="wrapper">
         {/* Form Section */}
         <div className="form">
@@ -448,7 +478,13 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Size:</span> The image size in Width(Pixels) X Height(Pixels)</p>
+                      <p><span id="gradient-text"> Small = </span> 256x256</p>
+                      <p><span id="gradient-text"> Medium =</span> 512x512</p>
+                      <p><span id="gradient-text"> Large = </span> 1024x1024</p>
+                      <p><span id="gradient-text"> Square = </span> 1024x1024</p>
+                      <p><span id="gradient-text"> Landscape = </span> 1792x1024</p>
+                      <p><span id="gradient-text"> Portrait = </span> 1024x1792</p>
+
                     </div>
                   )}
               </div>
@@ -517,8 +553,7 @@ const Home: NextPage = () => {
             </br>
             <br>  
             </br>
-            <br>  
-            </br>
+
 
             {/* Loading spinner inside the "Creation Container" */}
             {isLoading && (
@@ -526,7 +561,6 @@ const Home: NextPage = () => {
             <div className="spinner-container">
              <Spinner message="Generating your creation..." />
             </div>
-
             )}
 
             {!!generatedImages && generatedImages.length > 0 && (
@@ -539,6 +573,9 @@ const Home: NextPage = () => {
                       className="mx-auto imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
+                    <div className="button animated-gradient3 mx-auto">
+                      <DownloadImage imageUrl={imageUrl} />
+                    </div>
                     <div className="tag3">
                       <div className="tag">Model: {selectedModel}</div>
                       <div className="tag">Size: {selectedSize}</div>
@@ -560,7 +597,4 @@ const Home: NextPage = () => {
     );
   }
 export default Home;
-
-
-
 

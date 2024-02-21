@@ -56,7 +56,8 @@
   padding: .5rem;
   margin: .5rem;
   min-height: 92vh;
-  width: vw;
+  min-width: 20vw;
+
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
 }
@@ -132,7 +133,7 @@
 }
 
 /* Media query for larger screens */
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 1150px) {
   .wrapper {
     display: flex; /* Ensure wrapper uses flex layout */
     flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
@@ -140,11 +141,13 @@
   }
   .form {
     width: calc(30% - 1rem); /* Adjust width to fit side by side with margin */
-    margin: 0.5rem; /* Add margin for spacing */
+    margin: 0.5rem;
+
   }
   .creation-container {
     width: calc(70% - 1rem); /* Adjust width to fit side by side with margin */
-    margin: 0.5rem; /* Add margin for spacing */
+    margin: 0.5rem;
+
   }
 
   
@@ -160,13 +163,12 @@
 
 .textarea {
   width: calc(100% - 2rem); /* Full width minus padding/margin */
-
   overflow-y: auto; /* Allow vertical scroll inside textarea */
   display: flex;
   text-align: center;
   justify-content: center;
   padding-top: 1rem;
-  margin: 1rem;
+  margin: .3rem;
   border-width: 3px;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
@@ -183,7 +185,9 @@ width: vw;
 }
 
 .button {
-  margin: 1rem;
+  margin: .3rem;
+  margin-top: .75rem;
+  margin-bottom: .75rem;
   justify-content: center;
   display: flex;
   width: 93%; /* Set the width to 100% */
@@ -214,7 +218,7 @@ width: vw;
   align-items: center; /* Vertically center the content */
   display: flex;
   border-radius: 0.618rem;
-  font-size: 1rem; /* Increase font size */
+  font-size: .75rem; /* Increase font size */
   cursor: pointer;
   border: 3px solid #000000; /* Add border */
   font-family: Public-Pixel;
@@ -244,7 +248,7 @@ width: vw;
   background-color: #2b00ff;
   border: 3px solid #000000;
   border-radius: 0.618rem;
-  font-size: 1rem;
+  font-size: .75rem;
   margin: .25rem;
   padding: .25rem;
   color: #ffffff;
@@ -255,14 +259,16 @@ width: vw;
 }
  
 .tag2 {
-  margin-top: 1rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin: .3rem ;
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+  align-items: center; /* Center the buttons vertically */
   display: flex;
   justify-content: space-between; /* or space-around or space-evenly */
   width: 93%;
   padding: .3rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
   background-color: #2b00ff;
   border: 3px solid #000000;
   border-radius: 0.618rem;
@@ -299,6 +305,7 @@ width: vw;
   font-size: .7rem;
   width: fit-content;
   font-family: Public-Pixel;
+  padding: .1rem;
 }
 
 .spinner-container {
@@ -366,6 +373,14 @@ width: vw;
   background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
   background-size: auto 200%; /* Allow the gradient to expand along the vertical axis */
   animation: flow2 1.618s linear infinite; /* Apply the animation */
+}
+.animated-gradient3 {
+  background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
+  background-size: auto 200%; /* Allow the gradient to expand along the vertical axis */
+  animation: flow2 1.618s linear infinite; /* Apply the animation */
+  width:25vw;
+  margin-left: auto; /* Center horizontally */
+  margin-right: auto; /* Center horizontally */
 }
 /*cursor settings*/
 body{
