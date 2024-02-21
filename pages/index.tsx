@@ -24,12 +24,12 @@ const Home: NextPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [chunkedMetadata, setChunkedMetadata] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState("dall-e-2");
-  const [selectedSize, setSelectedSize] = useState("512x512");
+  const [selectedSize, setSelectedSize] = useState("256x256");
   const [selectedQuality, setSelectedQuality] = useState("standard");
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   
-  const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
+  //const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
 
   const [mintingPrice, setMintingPrice] = useState<number>(8); // Default to the initial price
   // Call the custom hook to get the data
@@ -52,65 +52,65 @@ const Home: NextPage = () => {
     const modelSelect = document.getElementById("model") as HTMLSelectElement;
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
     const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
-    //const nInput = document.getElementById("n") as HTMLInputElement;
-
     const selectedModel = modelSelect.value;
-
-    setSelectedModel(modelSelect.value);
+  
     sizeSelect.innerHTML = "";
     qualitySelect.innerHTML = "";
   
-
     if (selectedModel === "dall-e-2") {
-      const sizeOptions = ["256x256", "512x512", "1024x1024"];
-      sizeOptions.forEach((optionValue) => {
+      const sizeOptions = [
+        { value: "256x256", label: "Small (256x256)" },
+        { value: "512x512", label: "Medium (512x512)" },
+        { value: "1024x1024", label: "Large (1024x1024)" },
+      ];
+      sizeOptions.forEach((optionData) => {
         const option = document.createElement("option");
-        option.value = optionValue;
-        option.textContent = optionValue;
+        option.value = optionData.value;
+        option.textContent = optionData.label;
         sizeSelect.appendChild(option);
       });
-      
-      //Add for additional Image gens
-      //nInput.removeAttribute("disabled");
-      //nInput.max = "10";
-
+  
       // For DALL·E-2, set quality to "standard"
       const qualityOption = document.createElement("option");
       qualityOption.value = "standard";
       qualityOption.textContent = "Standard";
       qualitySelect.appendChild(qualityOption);
     } else if (selectedModel === "dall-e-3") {
-      const sizeOptions = ["1024x1024", "1024x1792", "1792x1024"];
-      sizeOptions.forEach((optionValue) => {
+      const sizeOptions = [
+        { value: "1024x1024", label: "Large (1024x1024)" },
+        { value: "1792x1024", label: "Wide (1792x1024)" },
+        { value: "1024x1792", label: "Tall (1024x1792)" },
+      ];
+      sizeOptions.forEach((optionData) => {
         const option = document.createElement("option");
-        option.value = optionValue;
-        option.textContent = optionValue;
+        option.value = optionData.value;
+        option.textContent = optionData.label;
         sizeSelect.appendChild(option);
       });
-
-      //nInput.setAttribute("disabled", "disabled");
-      //nInput.value = "1";
-
+  
       // For DALL·E-3, set quality options to both "standard" and "high"
       const standardOption = document.createElement("option");
       standardOption.value = "standard";
       standardOption.textContent = "Standard";
       qualitySelect.appendChild(standardOption);
-
+  
       const highOption = document.createElement("option");
       highOption.value = "hd";
       highOption.textContent = "HD";
       qualitySelect.appendChild(highOption);
     }
-      // Update size and quality based on the new selections
+  
+    // Update size and quality based on the new selections
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
+    setSelectedModel(modelSelect.value);
   };
+  
 
   const getRandomPrompt = async () => {
     try {
-      const audio = new Audio("/darkSynthAudio.MP3");
-      audio.play();
+      //const audio = new Audio("/darkSynthAudio.MP3");
+      //audio.play();
   
       // Call your internal API endpoint instead of OpenAI's API directly
       const response = await fetch('/api/getRandomPrompt');
@@ -156,17 +156,16 @@ const Home: NextPage = () => {
     }
   };
   
-  
-
   const generateImage = async () => {
     try {
       setIsLoading(true); // Set loading state to true when generating image
-  
+      console.log(selectedModel,selectedModel,selectedQuality);
       const response = await fetch('/api/generateImage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+
         body: JSON.stringify({
           prompt,
           size: selectedSize,
@@ -367,12 +366,12 @@ const Home: NextPage = () => {
         <div className="form">
           <div className="pixelfont" style={{ zIndex: 1000 }}>
             <div className="flex"> 
-              <CardanoWallet isDark={true} />
+              <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
-                <h1 className="widebutton gradient-text" onClick={toggleInfo}>Info:</h1>
+                <h1 className="infobutton" onClick={toggleInfo}>Info:</h1>
                 {showInfo && (
                   <div className="widebutton">
-                    <button onClick={toggleInfo}>Close</button>
+                    <button onClick={toggleInfo}></button>
                   </div>
                 )}
               </div>
@@ -402,7 +401,7 @@ const Home: NextPage = () => {
                 id="randomGenerate"
                 onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clickex
               >
-                Generate Prompt
+               <span id="gradient-text"> Generate Prompt</span>
               </button>
               
               <div/>
@@ -436,7 +435,9 @@ const Home: NextPage = () => {
                 <div className="dropdown-container">
                 <select className="field" 
                   name="size" 
-                  id="size">
+                  id="size"
+                  onChange={(e) => setSelectedSize(e.target.value)} // Add this line
+                  >
                 </select>
                 </div>
               </div>
@@ -475,7 +476,7 @@ const Home: NextPage = () => {
                 className="button animated-gradient"
                 disabled={!prompt.trim()|| isLoading} // Disable if prompt is empty or contains only whitespace
               >
-              Generate Art
+               <span id="gradient-text"> Generate Art</span>
               </button>
 
               <button
@@ -505,7 +506,8 @@ const Home: NextPage = () => {
           {/* "Your Creation" Section */}
           <div className="creation-container" >
 
-            <label className="pixelfont2 mr-2 mb-4">{promptSummary}</label>
+            <label className="pixelfont2 mr-2 mb-4" id="gradient-text">{promptSummary}</label>
+
             {/* Loading spinner inside the "Creation Container" */}
             {isLoading && (
 

@@ -13,7 +13,7 @@ const WalletBalance: React.FC = () => {
   const catskyBalance = catskyAssetSummary["$CATSKY"] || 0;
 
   return (
-          <div className="text-sm form  bg-gray-200">
+          <div className="text-sm tag2">
               <span className="pixelfont" id ="gradient-text" >Catsky Balance: </span>
               <span className="pixelfont">{(catskyBalance || 0).toLocaleString()}</span>
           </div>

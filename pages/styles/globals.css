@@ -42,7 +42,7 @@
   -webkit-text-fill-color: transparent;
   font-weight: bold;
   font-style: italic;
-  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3); /* Modified shadow */
+
 }
 
 .form {
@@ -83,12 +83,52 @@
 
 /* Media query for smaller screens */
 @media screen and (max-width: 768px) {
+  
   .form,
   .creation-container {
     flex-direction: column; /* Stack items vertically on smaller screens */
-    width: 90%; /* Adjust width to fit mobile screen */
+    width: 98%; /* Adjust width to fit mobile screen */
     margin: 1rem auto; /* Add margin for spacing */
+    min-height: 25rem;
   }
+    /* Adjust font size for pixel fonts */
+    .pixelfont,
+    .pixelfont2 {
+      font-size: 0.5rem !important;
+    }
+  
+    /* Adjust font size for header */
+    .header {
+      font-size: 0.6rem; /* Decrease font size for header */
+    }
+  
+    /* Adjust font size for other elements */
+    .textarea,
+    .button,
+    .widebutton,
+    .tag,
+    .tag2,
+    .tag3 .tag,
+    .field,
+    .info-popup 
+    .wallet 
+    .form {
+      font-size: 0.5rem !important;
+    }
+    
+    .spinner-message {
+      font-size: medium;
+    }
+  
+    .adalogo {
+      width: 30rem;
+    }
+  
+    .imageborder {
+      max-width: 40rem;
+    }
+  
+  
 }
 
 /* Media query for larger screens */
@@ -98,11 +138,15 @@
     flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
     justify-content: space-between; /* Space items evenly */
   }
-  .form,
-  .creation-container {
-    width: calc(50% - 1rem); /* Adjust width to fit side by side with margin */
+  .form {
+    width: calc(30% - 1rem); /* Adjust width to fit side by side with margin */
     margin: 0.5rem; /* Add margin for spacing */
   }
+  .creation-container {
+    width: calc(70% - 1rem); /* Adjust width to fit side by side with margin */
+    margin: 0.5rem; /* Add margin for spacing */
+  }
+  
 }
 /* Adjust the width of the image as needed */
 .imageborder {
@@ -131,8 +175,9 @@
 .info-popup {
 font-family: Public-Pixel;
 font-size: .8rem;
-margin-left:1.2rem;
-margin-right: 1.2rem;
+margin-left:2rem;
+margin-right: 2rem;
+color: #ffffff;
 width: vw;
 }
 
@@ -161,18 +206,19 @@ width: vw;
 }
 
 
-.widebutton {
+.infobutton {
   display: flex;
-  margin-left: 3rem;
+  margin-left: .75rem;
+  padding: .75rem;
   justify-content: center;
   display: flex;
   border-radius: 0.618rem;
-  padding-left: 1rem;
-  font-size: 1rem; /* Increase font size */
+  font-size: .75rem; /* Increase font size */
   cursor: pointer;
   border: 3px solid #000000; /* Add border */
   font-family: Public-Pixel;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  color:#ffffff
+
 
 }
 .animated-gradient {
@@ -210,6 +256,7 @@ width: vw;
   margin-top: 1rem;
   margin-left: 1rem;
   margin-right: 1rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between; /* or space-around or space-evenly */
   width: 93%;
@@ -247,8 +294,8 @@ width: vw;
   background-color: #b9b9b9;
   border: 3px solid black;
   border-radius: 0.618rem; /* Light grey background */
-  font-size: 1rem;
-  width: 13rem;
+  font-size: .7rem;
+  width: fit-content;
   font-family: Public-Pixel;
 }
 
@@ -259,39 +306,30 @@ width: vw;
   transform: translate(-50%, -50%);
 }
 
-
-  
   .spinner {
-    background: linear-gradient(to left,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
-    background-size: 400% auto; /* Double the background size to make the gradient flow */
-    animation: flow 2.618s linear infinite ; /* Apply the animation */
-    min-width: 450px;
-    min-height: 450px;
 
 
   }
   
-
   .spinner-message {
     position: absolute; /* Absolutely position the message inside the spinner */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* Center the message */
-    min-width: 400px; /* The width of the message circle */
-    min-height: 400px; /* The height of the message circle, equal to width */
     text-align: center;
     display: flex; /* Ensures the text inside the message is centered */
     align-items: center; /* Center content vertically */
     justify-content: center; /* Center content horizontally */
     color: #ffffff;
     font-size: large;
-
     font-family: Public-Pixel;
-    background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
+    background: linear-gradient(to left,  #ff00f7, #0000ff,#c50303, #ff00f7 ,#0000ff); /* Define the gradient */
     background-size: 400% auto; /* Double the background size to make the gradient flow */
     animation: flow 2.618s linear infinite ; /* Apply the animation */
-    /* ... other styles ... */
+    min-width: 20vw;
+    min-height: 20vh;
   }
+
   @keyframes spin {
     0% {
       transform: rotate(0deg);
