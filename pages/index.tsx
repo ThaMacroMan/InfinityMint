@@ -372,12 +372,8 @@ const Home: NextPage = () => {
             <div className="flex"> 
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
-                <h1 className="infobutton" onClick={toggleInfo}>Info:</h1>
-                {showInfo && (
-                  <div className="widebutton">
-                    <button onClick={toggleInfo}></button>
-                  </div>
-                )}
+                <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
+                {showInfo}
               </div>
             </div>
           </div>
@@ -393,6 +389,7 @@ const Home: NextPage = () => {
                 name="prompt"
                 id="prompt"
                 value={prompt}
+                rows={6}
                 onChange={(e) => setPrompt(e.target.value)}
                 onInput={autoExpand}
 
@@ -491,18 +488,19 @@ const Home: NextPage = () => {
                 className={`button animated-gradient2 ${(!connected || isLoading || !generatedImages || generatedImages.length === 0) ? 'disabled-button' : ''}`}
                 disabled={!connected || isLoading || !generatedImages || generatedImages.length === 0} // Disable button based on condition
               >
-                Mint on Cardano: ₳{mintingPrice.toString()} 
+                Mint on Cardano: ₳ {mintingPrice.toString()} 
                 {error && <ErrorPopup message={error} />}
               </button>
               <div>
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Discounts:</span> Hold $CATSKY for minting discounts!</p>
-                      <p><span id="gradient-text"> 0.5 B =</span> ₳1 ADA or 11% Discount</p>
-                      <p><span id="gradient-text"> 1.0 B =</span> ₳2 ADA or 22% Discount</p>
-                      <p><span id="gradient-text"> 3.0 B =</span> ₳3 ADA or 34% Discount</p>
-                      <p><span id="gradient-text"> 5.0 B =</span> ₳4 ADA or 46% Discount</p>
+                      <p><span id="gradient-texts"></span> Hold $CATSKY when minting!</p>
+                      <br></br>
+                      <p><span id="gradient-text"> 0.5 B = ₳ 1 ADA</span> an 11% Discount</p>
+                      <p><span id="gradient-text"> 1.0 B = ₳ 2 ADA</span> an 22% Discount!</p>
+                      <p><span id="gradient-text"> 3.0 B = ₳ 3 ADA</span> an 34% Discount!!</p>
+                      <p><span id="gradient-text"> 5.0 B = ₳ 4 ADA</span> an 46% Discount!!!</p>
                     </div>
                   )}
               </div>

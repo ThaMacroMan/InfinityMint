@@ -55,7 +55,7 @@
   border: 5px solid #000000;
   padding: .5rem;
   margin: .5rem;
-  min-height: vh;
+  min-height: 92vh;
   width: vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
@@ -125,7 +125,7 @@
     }
   
     .imageborder {
-      max-width: 40rem;
+      max-width: 50vh;
     }
   
   
@@ -151,32 +151,32 @@
 }
 /* Adjust the width of the image as needed */
 .imageborder {
-  width: 100%; /* Set the width to 100% */
-  max-width: 50rem; /* Example max-width */
-  height: auto; /* Maintain aspect ratio */
+  max-height: 70vh;
+  min-height: 30vw;
+  max-width: 70vw;
+  min-width: 30vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 }
 
 .textarea {
   width: calc(100% - 2rem); /* Full width minus padding/margin */
-  min-height: 27vh; /* Minimum height before expanding */
-  max-height: 300px; /* Maximum height before scrolling */
+
   overflow-y: auto; /* Allow vertical scroll inside textarea */
   display: flex;
   text-align: center;
   justify-content: center;
-  padding: .25rem;
+  padding-top: 1rem;
   margin: 1rem;
   border-width: 3px;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
-  font-size: .8rem;
+  font-size: 1rem;
   width: 93%; /* Set the width to 100% */
 }
 .info-popup {
 font-family: Public-Pixel;
-font-size: .8rem;
-margin-left:2rem;
+font-size: .84rem;
+margin-left: 2rem;
 margin-right: 2rem;
 color: #ffffff;
 width: vw;
@@ -209,18 +209,19 @@ width: vw;
 
 .infobutton {
   display: flex;
-  margin-left: .75rem;
+  margin-left: 1rem;
   padding: .75rem;
-  justify-content: center;
+  align-items: center; /* Vertically center the content */
   display: flex;
   border-radius: 0.618rem;
-  font-size: .75rem; /* Increase font size */
+  font-size: 1rem; /* Increase font size */
   cursor: pointer;
   border: 3px solid #000000; /* Add border */
   font-family: Public-Pixel;
-  color:#ffffff
-
-
+  color:#ffffff;
+  background-color:#c50303;
+  height: 60px;
+  max-width: 400px;
 }
 .animated-gradient {
   background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
@@ -360,7 +361,6 @@ width: vw;
   }
 }
 
-      
 
 .animated-gradient2 {
   background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
