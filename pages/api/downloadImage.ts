@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    console.log("API FILE");
     const imageUrl = req.query.imageUrl as string; // Assuming imageUrl is passed as a query parameter
     const response = await fetch(imageUrl);
 

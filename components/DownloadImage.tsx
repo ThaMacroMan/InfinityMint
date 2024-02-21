@@ -17,10 +17,11 @@ const DownloadImage: React.FC<DownloadImageButtonProps> = ({ imageUrl }) => {
         return response.blob();
       })
       .then((blob) => {
+        console.log('Components file: Image blob:', blob); // Log the blob object
         // Create a temporary anchor element
         const anchor = document.createElement('a');
         anchor.href = window.URL.createObjectURL(blob);
-        anchor.download = 'image.jpg';
+        anchor.download = 'image.png';
         document.body.appendChild(anchor);
 
         // Trigger the download
@@ -28,6 +29,7 @@ const DownloadImage: React.FC<DownloadImageButtonProps> = ({ imageUrl }) => {
 
         // Clean up
         document.body.removeChild(anchor);
+        console.log('Image downloaded successfully');
       })
       .catch((error) => {
         console.error('Error downloading image:', error);

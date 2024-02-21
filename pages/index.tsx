@@ -192,6 +192,7 @@ const Home: NextPage = () => {
       const imageUrls = data.imageUrls;
       
       setGeneratedImages(imageUrls);
+      console.log(imageUrls);
       setGeneratedPrompt(prompt);
   
       // Get summary for the prompt
@@ -567,6 +568,7 @@ const Home: NextPage = () => {
               <div>
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
+
                     <img
                       src={imageUrl}
                       alt={`Generated Image ${imageIndex + 1}`}
@@ -597,4 +599,5 @@ const Home: NextPage = () => {
     );
   }
 export default Home;
+
 
