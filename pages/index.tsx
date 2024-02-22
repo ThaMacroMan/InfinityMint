@@ -34,7 +34,18 @@ const Home: NextPage = () => {
   const [selectedQuality, setSelectedQuality] = useState("standard");
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  
+  const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
+
+  //const GENERATIONS_MADE_KEY = "generationsMade";
+
+  //const [generationsAllowed, setGenerationsAllowed] = useState<number>(0);
+  //const [generationsMade, setGenerationsMade] = useState<number>(0);
+  const CATSKY_PER_GENERATION = 1000;
+
+
+
+
+
   //const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
 
   const [mintingPrice, setMintingPrice] = useState<number>(8); // Default to the initial price
@@ -142,6 +153,7 @@ const Home: NextPage = () => {
   }
 
   const summarizePrompt = async (prompt: string) => {
+    
     try {
       const response = await fetch('/api/summarizePrompt', {
         method: 'POST',
@@ -167,6 +179,11 @@ const Home: NextPage = () => {
   };
   
   const generateImage = async () => {
+  //  if (generationsMade < generationsAllowed) {
+  //    setGenerationsMade(prevGenerationsMade => prevGenerationsMade + 1);
+  //    if (typeof window !== 'undefined') {
+  //      localStorage.setItem(GENERATIONS_MADE_KEY, (generationsMade + 1).toString());
+  //    }
     try {
       setIsLoading(true); // Set loading state to true when generating image
       console.log(selectedModel,selectedModel,selectedQuality);
@@ -175,15 +192,16 @@ const Home: NextPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-
+        
         body: JSON.stringify({
-          prompt,
+          prompt: `${prompt} In Style: '${selectedStyle}'`, // Include the selected style in the prompt
           size: selectedSize,
           quality: selectedQuality,
           model: selectedModel,
         }),
       });
-  
+      console.log(selectedStyle);
+      console.log(prompt);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -206,7 +224,8 @@ const Home: NextPage = () => {
       // Chunking prompt for metadata
       const chunkedPromptData = chunkData(prompt, 64);
       setChunkedPrompt(chunkedPromptData);
-  
+
+
       setIsLoading(false); // Set loading state to false when image generation is complete
   
     } catch (error) {
@@ -214,6 +233,7 @@ const Home: NextPage = () => {
       setError('An error occurred while generating images');
       setIsLoading(false); // Ensure loading state is reset even on error
     }
+//  }
   };
   
   // Function to chunk data into specified size
@@ -225,15 +245,28 @@ const Home: NextPage = () => {
     return chunks;
   };
   
+  const handleStyleSelection = (style: string) => {
+    setSelectedStyle(style);
+  };
   
+/*
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedGenerationsMade = localStorage.getItem(GENERATIONS_MADE_KEY);
+      const generationsMadeFromStorage = storedGenerationsMade ? parseInt(storedGenerationsMade, 10) : 0;
+      setGenerationsMade(generationsMadeFromStorage);
+    }
+  }, []);
 
   useEffect(() => {
-    console.log(catskyBalance);
-    const calculatedMintingPrice = calculateMintingPrice(catskyBalance);
-    const firstDigitMintingPrice = calculatedMintingPrice / 1000000; // Extracting the first digit
-    setMintingPrice(firstDigitMintingPrice);
+    if (catskyBalance >= CATSKY_PER_GENERATION) {
+      const generations = Math.floor(catskyBalance / CATSKY_PER_GENERATION);
+      setGenerationsAllowed(generations);
+    } else {
+      setGenerationsAllowed(0);
+    }
   }, [catskyBalance]);
-  
+  */
 
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
@@ -324,9 +357,6 @@ const Home: NextPage = () => {
     updateOptions();
   }, []);
 
-  const clearPrompt = () => {
-    setPrompt('');
-  };
 
 
   useEffect(() => {
@@ -412,6 +442,11 @@ const Home: NextPage = () => {
               {connected}
               <WalletBalance />
             </div>
+            <div className= "tag">
+
+            Hold&nbsp; <a href="https://app.dexhunter.io/swap?tokenIdSell=&tokenIdBuy=9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" target="_blank" rel="noopener noreferrer"> 100M $CATSKY to Generate</a>
+
+              </div>
 
             <form>
 
@@ -426,6 +461,8 @@ const Home: NextPage = () => {
 
                 placeholder="What will you create? Dream Infinite:"
                 ></textarea>
+                
+
 
               <button
                 className="button animated-gradient"
@@ -438,6 +475,34 @@ const Home: NextPage = () => {
               </button>
               
               <div/>
+              {/*
+              <div className="tag2">
+              <label htmlFor="model" className="tag">Style</label>
+              <div className="dropdown-container">
+                <select 
+                className="field"
+                name="style"
+                id="style" 
+                onChange={(e) => handleStyleSelection(e.target.value)}>
+                  
+                <option value="">Select</option>
+                  <option value="Surrealism">Surrealism</option>
+                  <option value="Renaissance">Renaissance</option>
+                  <option value="Impressionism">Impressionism</option>
+                  <option value="Cubism">Cubism</option>
+                  <option value="Minimalism">Minimalism</option>
+                  <option value="Pop art">Pop art</option>
+                  <option value="Abstract">Abstract</option>
+                  <option value="Art Deco">Art Deco</option>
+                  <option value="Contemporary">Contemporary</option>
+                  <option value="Digital art">Digital art</option>
+                  <option value="Graffiti">Graffiti</option>
+                  <option value="Light painting">Light painting</option>
+                  <option value="Futurism">Futurism</option>
+                </select>
+              </div>
+            </div>
+            */}
               <div className="tag2">
                 <label htmlFor="model" className="tag">Model</label>
                 <div className="dropdown-container">
@@ -511,13 +576,19 @@ const Home: NextPage = () => {
                   )}
               </div>
               <button
-                type="button"
-                onClick={generateImage}
-                className="button animated-gradient"
-                disabled={!prompt.trim()|| isLoading} // Disable if prompt is empty or contains only whitespace
-              >
-               <span id="gradient-text"> Generate Art</span>
-              </button>
+
+            type="button"
+            onClick={generateImage}
+            className={`button animated-gradient ${
+            !connected || isLoading ||  catskyBalance < 100000000
+                ? 'disabled-button'
+                : ''
+                }`}
+            disabled={!connected || isLoading  || catskyBalance < 100000000}
+            >
+            Generate Art 
+
+            </button>
 
               <button
                 type="button"
