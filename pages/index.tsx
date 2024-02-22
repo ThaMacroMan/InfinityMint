@@ -48,7 +48,7 @@ const Home: NextPage = () => {
 
   //const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
 
-  const [mintingPrice, setMintingPrice] = useState<number>(8); // Default to the initial price
+  const [mintingPrice, setMintingPrice] = useState<number>(8.69); // Default to the initial price
   // Call the custom hook to get the data
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
   
@@ -267,6 +267,12 @@ const Home: NextPage = () => {
     }
   }, [catskyBalance]);
   */
+  useEffect(() => {
+    console.log(catskyBalance);
+    const calculatedMintingPrice = calculateMintingPrice(catskyBalance);
+    const firstDigitMintingPrice = calculatedMintingPrice / 1000000; // Extracting the first digit
+    setMintingPrice(firstDigitMintingPrice);
+  }, [catskyBalance]);
 
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
