@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
+    "@dexhunterio/swaps": "^0.0.96",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@meshsdk/core": "^1.5.11-beta.3",

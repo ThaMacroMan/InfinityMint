@@ -3,6 +3,13 @@ import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
+
+import '@dexhunterio/swaps/lib/assets/style.css'
+import Swap from '@dexhunterio/swaps'
+
+
+
+
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 
 import WalletBalance from '../components/WalletBalance';
@@ -35,6 +42,9 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
+
+
+
 
   //const GENERATIONS_MADE_KEY = "generationsMade";
 
@@ -415,14 +425,7 @@ const Home: NextPage = () => {
         >
           <img src={jpglogo.src} alt="Logo" className="h-10" />
         </a>
-        <a 
-          href="https://app.dexhunter.io/swap?tokenIdSell=&tokenIdBuy=9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          style={{ cursor: 'pointer' }}
-        >
-          <img src={tokenlogo.src} alt="Logo" className="h-10" />
-        </a>
+
         <a 
           href="https://www.taptools.io/charts/token?pairID=0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
           target="_blank" 
@@ -430,16 +433,19 @@ const Home: NextPage = () => {
           style={{ cursor: 'pointer' }}
         >
           <img src={chartlogo.src} alt="Logo" className="h-10" />
+
         </a>
       </div>
       <div className="wrapper">
         {/* Form Section */}
         <div className="form">
           <div className="pixelfont" style={{ zIndex: 1000 }}>
-            <div className="flex"> 
+            
+            <div className="flex tag2"> 
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
                 <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
+
                 {showInfo}
               </div>
             </div>
@@ -450,7 +456,7 @@ const Home: NextPage = () => {
             </div>
             <div className= "tag">
 
-            Hold&nbsp; <a href="https://app.dexhunter.io/swap?tokenIdSell=&tokenIdBuy=9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" target="_blank" rel="noopener noreferrer"> 100M $CATSKY to Generate</a>
+            Hold 100M $CATSKY to Generate
 
               </div>
 
@@ -640,7 +646,16 @@ const Home: NextPage = () => {
              <Spinner message="Generating your creation..." />
             </div>
             )}
-
+              <Swap
+                orderTypes={["SWAP","LIMIT"]}
+                defaultToken="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59"
+                colors={{"background":"#0E0F12","containers":"#191B23","subText":"#88919E","mainText":"#FFFFFF","buttonText":"#FFFFFF","accent":"#007DFF"}}
+                theme="dark"
+                width="450"
+                partnerCode="catskyai61646472317179766566647937643264396477726e63616e74687772787861656d357a757474636332687839386568717a7672346c786c736330386e753970766630706865386d6778646776757465783678636474787176633868736563616e7164766a307674da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                partnerName="CatskyAI"
+                displayType="WIDGET"
+              />
             {!!generatedImages && generatedImages.length > 0 && (
               <div>
                 {generatedImages.map((imageUrl, imageIndex) => (
@@ -665,6 +680,7 @@ const Home: NextPage = () => {
                   <div className="tag3">
                     <div className="tag">Prompt: {generatedPrompt}</div>
                   </div>
+
                 </div>
                   
                 ))}
@@ -676,5 +692,6 @@ const Home: NextPage = () => {
     );
   }
 export default Home;
+
 
 

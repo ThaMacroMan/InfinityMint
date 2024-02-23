@@ -46,18 +46,17 @@
 }
 
 .form {
-/* Add this to make form items aligned horizontally */
+
   flex-direction: column; /* Align items vertically */
   align-items: center; /* Center items horizontally */
   justify-content: center;
   background-color: #2406ba;
   border-radius: 0.618rem;
   border: 5px solid #000000;
-  padding: .5rem;
   margin: .5rem;
   min-height: 92vh;
-  min-width: 20vw;
 
+  width: fit-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
 }
@@ -83,7 +82,7 @@
 
 
 /* Media query for smaller screens */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 924px) {
   
   .form,
   .creation-container {
@@ -114,7 +113,7 @@
     .info-popup 
     .wallet 
     .form {
-      font-size: 0.5rem !important;
+      font-size: 0.65rem !important;
     }
     
     .spinner-message {
@@ -133,7 +132,7 @@
 }
 
 /* Media query for larger screens */
-@media screen and (min-width: 1150px) {
+@media screen and (min-width: 924px) {
   .wrapper {
     display: flex; /* Ensure wrapper uses flex layout */
     flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
@@ -162,18 +161,14 @@
 }
 
 .textarea {
-  width: calc(100% - 2rem); /* Full width minus padding/margin */
-  overflow-y: auto; /* Allow vertical scroll inside textarea */
   display: flex;
-  text-align: center;
-  justify-content: center;
-  padding-top: 1rem;
+  padding-top: .5rem;
   margin: .3rem;
   border-width: 3px;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
-  font-size: 1rem;
-  width: 93%; /* Set the width to 100% */
+  font-size: .95rem;
+  width: 97.5%
 }
 .info-popup {
 font-family: Public-Pixel;
@@ -190,7 +185,7 @@ width: vw;
   margin-bottom: .75rem;
   justify-content: center;
   display: flex;
-  width: 93%; /* Set the width to 100% */
+  width: 97.5%; /* Set the width to 100% */
   border-radius: 0.618rem;
   padding: 1rem; /* Increase padding to make buttons wider */
   font-size: 1rem; /* Increase font size */
@@ -253,7 +248,6 @@ width: vw;
   padding: .25rem;
   color: #ffffff;
   justify-content: space-between;
-  max-width: fit-content;
   font-family: 'Public-Pixel', sans-serif; /* Ensure fallback fonts are specified */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 }
@@ -265,10 +259,10 @@ width: vw;
   align-items: center; /* Center the buttons vertically */
   display: flex;
   justify-content: space-between; /* or space-around or space-evenly */
-  width: 93%;
+  width: 97.5%;
   padding: .3rem;
-  padding-top: .5rem;
-  padding-bottom: .5rem;
+  padding-top: .25rem;
+  padding-bottom: .25rem;
   background-color: #2b00ff;
   border: 3px solid #000000;
   border-radius: 0.618rem;
