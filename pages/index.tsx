@@ -441,7 +441,7 @@ const Home: NextPage = () => {
         <div className="form">
           <div className="pixelfont" style={{ zIndex: 1000 }}>
             
-            <div className="flex tag2"> 
+            <div className="flex tag"> 
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
                 <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
@@ -456,9 +456,9 @@ const Home: NextPage = () => {
             </div>
             <div className= "tag">
 
-            Hold 100M $CATSKY to Generate
+            Hold 100M $CATSKY for HD (Dalle 3)
 
-              </div>
+            </div>
 
             <form>
 
@@ -474,8 +474,6 @@ const Home: NextPage = () => {
                 placeholder="What will you create? Dream Infinite:"
                 ></textarea>
                 
-
-
               <button
                 className="button animated-gradient"
                 type="button"
@@ -487,7 +485,7 @@ const Home: NextPage = () => {
               </button>
               
               <div/>
-              {/*
+
               <div className="tag2">
               <label htmlFor="model" className="tag">Style</label>
               <div className="dropdown-container">
@@ -514,7 +512,7 @@ const Home: NextPage = () => {
                 </select>
               </div>
             </div>
-            */}
+
               <div className="tag2">
                 <label htmlFor="model" className="tag">Model</label>
                 <div className="dropdown-container">
@@ -524,8 +522,10 @@ const Home: NextPage = () => {
                   id="model"
                   onChange={updateOptions}
                 >
-                  <option value="dall-e-3">DALL·E-3</option>
                   <option value="dall-e-2">DALL·E-2</option>
+                  {connected && catskyBalance >= 100000000 && (
+                  <option value="dall-e-3">DALL·E-3</option>
+                  )}
                   
                 </select>
                 </div>
@@ -592,11 +592,11 @@ const Home: NextPage = () => {
             type="button"
             onClick={generateImage}
             className={`button animated-gradient ${
-            !connected || isLoading ||  catskyBalance < 100000000
+             isLoading ||  catskyBalance < 100000000
                 ? 'disabled-button'
                 : ''
                 }`}
-            disabled={!connected || isLoading  || catskyBalance < 100000000}
+            disabled={ isLoading }
             >
             Generate Art 
 
@@ -629,19 +629,8 @@ const Home: NextPage = () => {
 
           {/* "Your Creation" Section */}
           <div className="creation-container" >
-
-            <label className="prompt-summary pixelfont2 " id="gradient-text">{promptSummary}</label>
-            <br>  
-            </br>
-            <br>  
-            </br>
-            <br>  
-            </br>
-
-
-            {/* Loading spinner inside the "Creation Container" */}
+            <label className="pixelfont2 " id="gradient-text">{promptSummary}</label>
             {isLoading && (
-
             <div className="spinner-container">
              <Spinner message="Generating your creation..." />
             </div>
@@ -660,11 +649,10 @@ const Home: NextPage = () => {
               <div>
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
-
                     <img
                       src={imageUrl}
                       alt={`Generated Image ${imageIndex + 1}`}
-                      className="mx-auto imageborder"
+                      className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
                     <div className="button animated-gradient3 mx-auto">
@@ -674,15 +662,12 @@ const Home: NextPage = () => {
                       <div className="tag">Model: {selectedModel}</div>
                       <div className="tag">Size: {selectedSize}</div>
                       <div className="tag">Quality: {selectedQuality}</div>
-                      {/* Add more tags as needed */}
                     </div>
                                 {/* Prompt */}
                   <div className="tag3">
                     <div className="tag">Prompt: {generatedPrompt}</div>
                   </div>
-
                 </div>
-                  
                 ))}
               </div>
             )}

@@ -14,7 +14,7 @@ const WalletBalance: React.FC = () => {
 
   return (
           <div className="tag2">
-              <span className="pixelfont " id ="gradient-text" >Catsky Balance: </span>
+              <span className="pixelfont" id ="gradient-text" >Catsky Balance: </span>
               <span className="pixelfont text-white">{(catskyBalance || 0).toLocaleString()}</span>
           </div>
   );

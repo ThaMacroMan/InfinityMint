@@ -15,12 +15,10 @@
 
 .pixelfont2{
   font-family: Public-Pixel;
-  position: absolute; /* Position the title absolutely */
-  top: 1rem; /* Position the title at the top */
-  transform: translateX(-50%); /* Center the title horizontally */
-  left: 50%; /* Move the title to the horizontal center */
+  position: absolute; /* Position the title absolutely */ 
+  top: 1px;
+  align-self: center;
   font-size: 1.5rem;
-  color: #ffffff;
   max-width: 100%; /* Set a maximum width for the title */
   text-align: center; /* Center the text within its container */
 }
@@ -46,7 +44,6 @@
 }
 
 .form {
-
   flex-direction: column; /* Align items vertically */
   align-items: center; /* Center items horizontally */
   justify-content: center;
@@ -55,8 +52,7 @@
   border: 5px solid #000000;
   margin: .5rem;
   min-height: 92vh;
-
-  width: fit-content;
+  width: 20vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
 }
@@ -157,7 +153,7 @@
   min-height: 30vw;
   max-width: 70vw;
   min-width: 30vw;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1); /* Add shadow effect */
 }
 
 .textarea {
@@ -181,8 +177,8 @@ width: vw;
 
 .button {
   margin: .3rem;
-  margin-top: .75rem;
-  margin-bottom: .75rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
   justify-content: center;
   display: flex;
   width: 97.5%; /* Set the width to 100% */
@@ -194,6 +190,8 @@ width: vw;
   border: 3px solid #000000; /* Add border */
   font-family: Public-Pixel;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  margin-left: auto; /* Center the tag horizontally */
+  margin-right: auto; /* Center the tag horizontally */
 
 }
 
@@ -253,13 +251,12 @@ width: vw;
 }
  
 .tag2 {
-  margin: .3rem ;
-  margin-top: .75rem;
-  margin-bottom: .75rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
   align-items: center; /* Center the buttons vertically */
   display: flex;
   justify-content: space-between; /* or space-around or space-evenly */
-  width: 97.5%;
+  width: 98%;
   padding: .3rem;
   padding-top: .25rem;
   padding-bottom: .25rem;
@@ -268,7 +265,9 @@ width: vw;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
-  }
+  margin-left: auto; /* Center the tag horizontally */
+  margin-right: auto; /* Center the tag horizontally */
+}
 
   .tag3 {
     display: flex;
@@ -381,3 +380,8 @@ body{
     background-color: #2b00ff;
     cursor: auto;
 } 
+
+.prompt-summary{
+  margin-bottom: 3rem;
+
+}
