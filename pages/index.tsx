@@ -349,7 +349,7 @@ const updateOptions = () => {
       setSelectedQuality("standard");
       updateOptions();
     }
-  }, [connected]);
+  }, [connected]); 
 
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
@@ -746,3 +746,4 @@ export default Home;
 
 
 
+//reupload to aws
