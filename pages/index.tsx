@@ -3,12 +3,8 @@ import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
-
 import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
-
-
-
 
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 
@@ -43,19 +39,11 @@ const Home: NextPage = () => {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
 
-
-
-
   //const GENERATIONS_MADE_KEY = "generationsMade";
 
   //const [generationsAllowed, setGenerationsAllowed] = useState<number>(0);
   //const [generationsMade, setGenerationsMade] = useState<number>(0);
   const CATSKY_PER_GENERATION = 1000;
-
-
-
-
-
   //const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
 
   const [mintingPrice, setMintingPrice] = useState<number>(8.69); // Default to the initial price
@@ -63,6 +51,11 @@ const Home: NextPage = () => {
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
   
   const catskyBalance = catskyAssetSummary["$CATSKY"] || 0;
+  const catnipBalance = catskyAssetSummary["CatNip NFT"] || 0;
+  const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
+  const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
+
+
 
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
@@ -74,65 +67,87 @@ const Home: NextPage = () => {
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
   
-  
-  const updateOptions = () => {
-    const modelSelect = document.getElementById("model") as HTMLSelectElement;
-    const sizeSelect = document.getElementById("size") as HTMLSelectElement;
-    const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
-    const selectedModel = modelSelect.value;
-  
-    sizeSelect.innerHTML = "";
-    qualitySelect.innerHTML = "";
-  
-    if (selectedModel === "dall-e-2") {
-      const sizeOptions = [
-        { value: "256x256", label: "Small" },
-        { value: "512x512", label: "Medium" },
-        { value: "1024x1024", label: "Large" },
-      ];
-      sizeOptions.forEach((optionData) => {
-        const option = document.createElement("option");
-        option.value = optionData.value;
-        option.textContent = optionData.label;
-        sizeSelect.appendChild(option);
-      });
-  
-      // For DALL·E-2, set quality to "standard"
-      const qualityOption = document.createElement("option");
-      qualityOption.value = "standard";
-      qualityOption.textContent = "Standard";
-      qualitySelect.appendChild(qualityOption);
-    } else if (selectedModel === "dall-e-3") {
-      const sizeOptions = [
-        { value: "1024x1024", label: "Square" },
-        { value: "1792x1024", label: "Landscape" },
-        { value: "1024x1792", label: "Portrait" },
-      ];
-      sizeOptions.forEach((optionData) => {
-        const option = document.createElement("option");
-        option.value = optionData.value;
-        option.textContent = optionData.label;
-        sizeSelect.appendChild(option);
-      });
-  
-      // For DALL·E-3, set quality options to both "standard" and "high"
+// Inside the updateOptions function
+const updateOptions = () => {
+  const modelSelect = document.getElementById("model") as HTMLSelectElement;
+  const sizeSelect = document.getElementById("size") as HTMLSelectElement;
+  const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
+  const selectedModel = modelSelect.value;
+
+  sizeSelect.innerHTML = "";
+  qualitySelect.innerHTML = "";
+
+  if (selectedModel === "dall-e-2") {
+    // Add size options for DALL·E-2
+    const sizeOptions = [
+      { value: "256x256", label: "Small" },
+      { value: "512x512", label: "Medium" },
+      { value: "1024x1024", label: "Large" },
+    ];
+    sizeOptions.forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      sizeSelect.appendChild(option);
+    });
+
+    // Add quality options for DALL·E-2
+    const qualityOption = document.createElement("option");
+    qualityOption.value = "standard";
+    qualityOption.textContent = "Standard";
+    qualitySelect.appendChild(qualityOption);
+  } else if (selectedModel === "dall-e-3") {
+    // Add size options for DALL·E-3
+    const sizeOptions = [
+      { value: "1024x1024", label: "Square" },
+    ];
+    sizeOptions.forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      sizeSelect.appendChild(option);
+    });
+
+
+
+    // Add quality options for DALL·E-3 if user has CatNip
+    if (catnipBalance >= 3 || ognftBalance >= 1 || inifinitymintsBalance >=10) {
+      const landscapeOption = document.createElement("option");
+      landscapeOption.value = "1792x1024";
+      landscapeOption.textContent = "Landscape";
+      sizeSelect.appendChild(landscapeOption);
+
+      const portraitOption = document.createElement("option");
+      portraitOption.value = "1024x1792";
+      portraitOption.textContent = "Portrait";
+      sizeSelect.appendChild(portraitOption);
+
       const standardOption = document.createElement("option");
       standardOption.value = "standard";
       standardOption.textContent = "Standard";
       qualitySelect.appendChild(standardOption);
-  
-      const highOption = document.createElement("option");
-      highOption.value = "hd";
-      highOption.textContent = "HD";
-      qualitySelect.appendChild(highOption);
+
+      const hdOption = document.createElement("option");
+      hdOption.value = "hd";
+      hdOption.textContent = "HD";
+      qualitySelect.appendChild(hdOption);
+    } else {
+      const disabledOption = document.createElement("option");
+      disabledOption.value = "";
+      disabledOption.textContent = "Select";
+      sizeSelect.appendChild(disabledOption);
+
+      // Quality options are disabled if CatNip is not available
+      qualitySelect.disabled = true;
     }
-  
-    // Update size and quality based on the new selections
-    setSelectedSize(sizeSelect.value);
-    setSelectedQuality(qualitySelect.value);
-    setSelectedModel(modelSelect.value);
-  };
-  
+  }
+
+  // Update size and quality based on the new selections
+  setSelectedSize(sizeSelect.value);
+  setSelectedQuality(qualitySelect.value);
+  setSelectedModel(modelSelect.value);
+};
+
 
   const getRandomPrompt = async () => {
     try {
@@ -245,6 +260,45 @@ const Home: NextPage = () => {
     }
 //  }
   };
+/*
+  const generateStableDiffusionImage = async () => {
+    try {
+      setIsLoading(true); 
+      const response = await fetch('/api/generateStableDiffusionImage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text_prompts: `${prompt} In Style: '${selectedStyle}'`,
+          cfg_scale: 7, // Example configuration
+          height: 1024,
+          width: 1024,
+          steps: 30,
+          samples: 1,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const imageUrls = data.artifacts.map(artifact => `data:image/png;base64,${artifact.base64}`);
+      
+      setGeneratedImages(imageUrls);
+      setGeneratedPrompt(prompt);
+  
+      // Rest of your logic here
+  
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Failed to generate images:', error);
+      setError('An error occurred while generating images');
+      setIsLoading(false);
+    }
+  };
+  */
   
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
@@ -278,11 +332,24 @@ const Home: NextPage = () => {
   }, [catskyBalance]);
   */
   useEffect(() => {
-    console.log(catskyBalance);
+    console.log("$CATSKY",catskyBalance);
+    console.log("CatNip",catnipBalance);
+    console.log("OG-NFT",ognftBalance);
+    console.log("Era I",inifinitymintsBalance);
     const calculatedMintingPrice = calculateMintingPrice(catskyBalance);
     const firstDigitMintingPrice = calculatedMintingPrice / 1000000; // Extracting the first digit
     setMintingPrice(firstDigitMintingPrice);
   }, [catskyBalance]);
+
+  useEffect(() => {
+    if (!connected) {
+      // Reset selected options when wallet is disconnected
+      setSelectedModel("dall-e-2");
+      setSelectedSize("256x256");
+      setSelectedQuality("standard");
+      updateOptions();
+    }
+  }, [connected]);
 
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
@@ -456,7 +523,7 @@ const Home: NextPage = () => {
             </div>
             <div className= "tag">
 
-            Hold 100M $CATSKY for HD (Dalle 3)
+            Hold 100M $CATSKY for HD Model
 
             </div>
 
@@ -522,9 +589,9 @@ const Home: NextPage = () => {
                   id="model"
                   onChange={updateOptions}
                 >
-                  <option value="dall-e-2">DALL·E-2</option>
+                  <option value="dall-e-2">Regular</option>
                   {connected && catskyBalance >= 100000000 && (
-                  <option value="dall-e-3">DALL·E-3</option>
+                  <option value="dall-e-3">Upgraded</option>
                   )}
                   
                 </select>
@@ -598,8 +665,7 @@ const Home: NextPage = () => {
                 }`}
             disabled={ isLoading }
             >
-            Generate Art 
-
+            <span id="gradient-text">Generate Art </span>
             </button>
 
               <button

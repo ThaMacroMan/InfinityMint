@@ -13,6 +13,11 @@
   font-family: Public-Pixel;
 }
 
+.pixelfont3{
+  font-family: Public-Pixel;
+  font-size: .6rem;
+}
+
 .pixelfont2{
   font-family: Public-Pixel;
   position: absolute; /* Position the title absolutely */ 
@@ -384,4 +389,13 @@ body{
 .prompt-summary{
   margin-bottom: 3rem;
 
+}
+.asset-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 3rem;
+}
+.asset-value {
+  font-size: 1rem; /* Adjust the font size as needed */
 }
