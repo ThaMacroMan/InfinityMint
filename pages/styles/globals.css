@@ -81,6 +81,24 @@
   cursor: auto;
 }
 
+.error-popup {
+  font-family: Public-Pixel;
+  font-size: 1.5rem;
+  display: flex; /* Change position to display */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  background-color: #ffcccc;
+  padding: 10px;
+  border: 1px solid #ff0000;
+  border-radius: 5px;
+  z-index: 1000;
+  cursor: pointer; /* Add this line to set the cursor to pointer */
+
+
+
+}
+
+
 
 /* Media query for smaller screens */
 @media screen and (max-width: 924px) {

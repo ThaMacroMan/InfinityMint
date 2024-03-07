@@ -10,7 +10,7 @@ import { useTokenCheck } from '../hooks/TokenCheck';
 
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
-import ErrorPopup from '../components/ErrorPopup';
+import APIErrorPopup from '../components/APIErrorPopup';
 import DownloadImage from '../components/DownloadImage';
 
 
@@ -20,6 +20,7 @@ import tokenlogo from '../pages/styles/tokenlogo.png'
 import chartlogo from '../pages/styles/chartlogo.png'
 
 //import darkSynthAudio from '../darkSynthAudio.mp3';
+
 
 
 const Home: NextPage = () => {
@@ -38,7 +39,9 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
+  const [userImageURL, setUserImageURL] = useState<string | null>(null); // State to store the uploaded user image URL
 
+  
   //const GENERATIONS_MADE_KEY = "generationsMade";
 
   //const [generationsAllowed, setGenerationsAllowed] = useState<number>(0);
@@ -55,10 +58,7 @@ const Home: NextPage = () => {
   const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
   const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
 
-
-
   const [showInfo, setShowInfo] = useState<boolean>(false);
-
 
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 
@@ -159,6 +159,8 @@ const updateOptions = () => {
       const response = await fetch('/api/getRandomPrompt');
   
       if (!response.ok) {
+        setError('Ran out of AI Powa! Tell MacroMan in Catsky Discord!');
+        setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   
@@ -228,6 +230,8 @@ const updateOptions = () => {
       console.log(selectedStyle);
       console.log(prompt);
       if (!response.ok) {
+        setError('Ran out of AI Powa! Tell MacroMan in Catsky AI Discord!');
+        setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   
@@ -255,7 +259,6 @@ const updateOptions = () => {
   
     } catch (error) {
       console.error('Failed to generate images:', error);
-      setError('An error occurred while generating images');
       setIsLoading(false); // Ensure loading state is reset even on error
     }
 //  }
@@ -351,6 +354,16 @@ const updateOptions = () => {
     }
   }, [connected]); 
 
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setUserImageURL(imageURL);
+    }
+  };
+
+
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
       if (catskyBalance >= 5000000000) {
@@ -431,7 +444,7 @@ const updateOptions = () => {
           const txHash = await wallet.submitTx(signedTx);
           console.log('Transaction hash:', txHash);
       } catch (error) {
-        setError(' Not enough ADA!')
+        setError(' Not enough ADA in your wallet! Add ADA and try again!')
           console.error('Error processing transaction:', error);
       }
   };
@@ -469,6 +482,7 @@ const updateOptions = () => {
   return (
     <>
       <div className="header flex"> 
+
         <h1>
           Infinity Mint <span id="gradient-text">V1.0</span>
         </h1>   
@@ -675,7 +689,7 @@ const updateOptions = () => {
                 disabled={!connected || isLoading || !generatedImages || generatedImages.length === 0} // Disable button based on condition
               >
                 Mint on Cardano: ₳ {mintingPrice.toString()} 
-                {error && <ErrorPopup message={error} />}
+
               </button>
               <div>
                 <div className="" onClick={toggleInfo}></div>
@@ -696,6 +710,7 @@ const updateOptions = () => {
           {/* "Your Creation" Section */}
           <div className="creation-container" >
             <label className="pixelfont2 " id="gradient-text">{promptSummary}</label>
+            {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
             {isLoading && (
             <div className="spinner-container">
              <Spinner message="Generating your creation..." />
@@ -713,6 +728,7 @@ const updateOptions = () => {
               />
             {!!generatedImages && generatedImages.length > 0 && (
               <div>
+
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
                     <img
