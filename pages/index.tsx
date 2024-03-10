@@ -6,21 +6,28 @@ import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
 
-import { useTokenCheck } from '../hooks/TokenCheck'; 
 
+import { useTokenCheck } from '../hooks/TokenCheck'; 
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
 import APIErrorPopup from '../components/APIErrorPopup';
 import DownloadImage from '../components/DownloadImage';
+import ImageSlideshow from '../components/ImageSlideshow';
 
 
-import logo from '../pages/styles/catsky-logo-white.png';
+import logo from '../pages/styles/catsky-logo-white.png'
 import jpglogo from '../pages/styles/jpglogo.png'
 import tokenlogo from '../pages/styles/tokenlogo.png'
 import chartlogo from '../pages/styles/chartlogo.png'
+import matrix from '../pages/public/images/matrix.png'
+import square from '../pages/public/images/square.png'
+import square2 from '../pages/public/images/square2.png'
+import tall from '../pages/public/images/tall.png'
+import wide from '../pages/public/images/wide.png'
 
-//import darkSynthAudio from '../darkSynthAudio.mp3';
 
+
+//import Sound from '../pages/public/missingyou.mp3'
 
 
 const Home: NextPage = () => {
@@ -40,14 +47,14 @@ const Home: NextPage = () => {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
   const [userImageURL, setUserImageURL] = useState<string | null>(null); // State to store the uploaded user image URL
+  const [slideshowDisabled, setSlideshowDisabled] = useState(false);
 
-  
+
   //const GENERATIONS_MADE_KEY = "generationsMade";
 
   //const [generationsAllowed, setGenerationsAllowed] = useState<number>(0);
   //const [generationsMade, setGenerationsMade] = useState<number>(0);
   const CATSKY_PER_GENERATION = 1000;
-  //const darkSynthAudio = './darkSynthAudio.mp3'; // Adjust the path accordingly
 
   const [mintingPrice, setMintingPrice] = useState<number>(8.69); // Default to the initial price
   // Call the custom hook to get the data
@@ -66,7 +73,9 @@ const Home: NextPage = () => {
     textarea.style.height = 'inherit'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
-  
+
+
+
 // Inside the updateOptions function
 const updateOptions = () => {
   const modelSelect = document.getElementById("model") as HTMLSelectElement;
@@ -159,7 +168,7 @@ const updateOptions = () => {
       const response = await fetch('/api/getRandomPrompt');
   
       if (!response.ok) {
-        setError('Ran out of AI Powa! Tell MacroMan in Catsky Discord!');
+        setError('Requests with swears or nudity are rejected. If error continues, notify MacroMan');
         setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -206,6 +215,7 @@ const updateOptions = () => {
   };
   
   const generateImage = async () => {
+    setSlideshowDisabled(true); // Disable the slideshow when generating image
   //  if (generationsMade < generationsAllowed) {
   //    setGenerationsMade(prevGenerationsMade => prevGenerationsMade + 1);
   //    if (typeof window !== 'undefined') {
@@ -230,7 +240,7 @@ const updateOptions = () => {
       console.log(selectedStyle);
       console.log(prompt);
       if (!response.ok) {
-        setError('Ran out of AI Powa! Tell MacroMan in Catsky AI Discord!');
+        setError('Requests with swears or nudity are rejected. If error continues, notify MacroMan');
         setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -315,6 +325,7 @@ const updateOptions = () => {
   const handleStyleSelection = (style: string) => {
     setSelectedStyle(style);
   };
+
   
 /*
   useEffect(() => {
@@ -477,14 +488,19 @@ const updateOptions = () => {
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
 
-  
+
 
   return (
+    
     <>
+
+
+
       <div className="header flex"> 
 
         <h1>
           Infinity Mint <span id="gradient-text">V1.0</span>
+
         </h1>   
 
         <h1>
@@ -535,10 +551,8 @@ const updateOptions = () => {
               {connected}
               <WalletBalance />
             </div>
-            <div className= "tag">
-
-            Hold 100M $CATSKY for HD Model
-
+            <div className= "tag ">
+            <span id="gradient-text"> Hold 100M $CATSKY to Activate AI</span>
             </div>
 
             <form>
@@ -669,18 +683,16 @@ const updateOptions = () => {
                   )}
               </div>
               <button
-
-            type="button"
-            onClick={generateImage}
-            className={`button animated-gradient ${
-             isLoading ||  catskyBalance < 100000000
-                ? 'disabled-button'
-                : ''
+                type="button"
+                onClick={generateImage}
+                className={`button animated-gradient ${
+                  isLoading || catskyBalance < 100000000 || !connected || !prompt.trim() ? 'disabled-button' : ''
                 }`}
-            disabled={ isLoading }
-            >
-            <span id="gradient-text">Generate Art </span>
-            </button>
+                disabled={isLoading || catskyBalance < 100000000 || !connected || !prompt.trim()} // Disable the button if loading, balance is insufficient, not connected, or no prompt text
+              >
+                <span id="gradient-text">Generate Art</span>
+              </button>
+
 
               <button
                 type="button"
@@ -708,7 +720,11 @@ const updateOptions = () => {
           </div>
 
           {/* "Your Creation" Section */}
-          <div className="creation-container" >
+          <div className="creation-container" > 
+
+          {!slideshowDisabled && <ImageSlideshow images={[matrix, square, square2, wide, tall]} disabled={false} />}
+
+
             <label className="pixelfont2 " id="gradient-text">{promptSummary}</label>
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
             {isLoading && (
@@ -759,7 +775,3 @@ const updateOptions = () => {
     );
   }
 export default Home;
-
-
-
-//reupload to aws #2

@@ -311,6 +311,24 @@ width: vw;
     color: #ffffff;
     font-family: 'Public-Pixel', sans-serif;
   }
+  .tag4 {
+    display: flex;
+    align-items: center; /* Center text vertically */
+    background-color: #2b00ff;
+    border: 3px solid #000000;
+    border-radius: 0.618rem;
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-left: 7rem;
+    margin-right: 7rem;
+    padding: .25rem;
+    color: #ffffff;
+    justify-content: space-between;
+    font-family: 'Public-Pixel', sans-serif; /* Ensure fallback fonts are specified */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+    flex-direction: column; /* Display items vertically */
+  }
 
 .field {
   display: flex;

@@ -1,28 +1,38 @@
 // pages/api/getRandomPrompt.ts
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenAI } from 'openai';
 import dotenv from 'dotenv';
+import { spawn } from 'child_process'; // Import spawn from child_process
 dotenv.config();
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('Getting Random Prompt!')
-    if (process.env.OPENAI_API_KEY) {
+  console.log('Getting Random Prompt!');
+  if (process.env.OPENAI_API_KEY) {
     try {
+      // Play sound when the endpoint is called
+      const playSound = () => {
+        spawn('afplay', ['pages/styles/mixkit-futuristic-door-open-183.mp3', '-v', '0.']); 
+
+
+      };
+      
+      playSound(); // Call the function to play the sound
+
       const openAI = new OpenAI({
-        apiKey:process.env.OPENAI_API_KEY
+        apiKey: process.env.OPENAI_API_KEY
         //
       });
 
       const response = await openAI.chat.completions.create({
         model: "gpt-3.5-turbo-0125",
         max_tokens: 70,
-        temperature: 0.5,
+        temperature: 0.8,
         messages: [
-          {"role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits"},
-          {"role": "system", "content": "Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 70 tokens"},
-          {"role": "system", "content": "Example prompt: a surreal cyberpunk cityscape with neon lights, flying cars, and towering skyscrapers reflecting a digital sunset"},
-          {"role": "user", "content": "Make me a dalle prompt that is random and futuristic."}
+          { "role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits" },
+          { "role": "system", "content": "Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 70 tokens" },
+          { "role": "system", "content": "Example prompt: a surreal cyberpunk cityscape with neon lights, flying cars, and towering skyscrapers reflecting a digital sunset" },
+          { "role": "user", "content": "Make me a dalle prompt that is random and futuristic." }
         ]
       });
 

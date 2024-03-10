@@ -27,7 +27,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/api/dalle3_api.pi"
+    "pages/api/dalle3_api.pi",
+    "types"
   ],
   "exclude": [
     "node_modules"
