@@ -24,10 +24,30 @@ import square from '../pages/public/images/square.png'
 import square2 from '../pages/public/images/square2.png'
 import tall from '../pages/public/images/tall.png'
 import wide from '../pages/public/images/wide.png'
-
-
-
-//import Sound from '../pages/public/missingyou.mp3'
+import two from '../pages/public/images/two.png';
+import three from '../pages/public/images/three.png';
+import four from '../pages/public/images/four.png';
+import five from '../pages/public/images/five.png';
+import six from '../pages/public/images/six.png';
+import seven from '../pages/public/images/seven.png';
+import eight from '../pages/public/images/eight.png';
+import nine from '../pages/public/images/nine.png';
+import ten from '../pages/public/images/ten.png';
+import eleven from '../pages/public/images/eleven.png';
+import twelve from '../pages/public/images/twelve.png';
+import thirteen from '../pages/public/images/thirteen.png';
+import fourteen from '../pages/public/images/fourteen.png';
+import fifteen from '../pages/public/images/fifteen.png';
+import sixteen from '../pages/public/images/sixteen.png';
+import seventeen from '../pages/public/images/seventeen.png';
+import eighteen from '../pages/public/images/eighteen.png';
+import nineteen from '../pages/public/images/nineteen.png';
+import twenty from '../pages/public/images/twenty.png';
+import twentyone from '../pages/public/images/twentyone.png';
+import twentytwo from '../pages/public/images/twentytwo.png';
+import twentythree from '../pages/public/images/twentythree.png';
+import twentyfour from '../pages/public/images/twentyfour.png';
+import twentyfive from '../pages/public/images/twentyfive.png';
 
 
 const Home: NextPage = () => {
@@ -74,8 +94,6 @@ const Home: NextPage = () => {
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
 
-
-
 // Inside the updateOptions function
 const updateOptions = () => {
   const modelSelect = document.getElementById("model") as HTMLSelectElement;
@@ -100,13 +118,11 @@ const updateOptions = () => {
       sizeSelect.appendChild(option);
     });
 
-    // Add quality options for DALL·E-2
     const qualityOption = document.createElement("option");
     qualityOption.value = "standard";
     qualityOption.textContent = "Standard";
     qualitySelect.appendChild(qualityOption);
   } else if (selectedModel === "dall-e-3") {
-    // Add size options for DALL·E-3
     const sizeOptions = [
       { value: "1024x1024", label: "Square" },
     ];
@@ -117,7 +133,11 @@ const updateOptions = () => {
       sizeSelect.appendChild(option);
     });
 
-
+    // Always add a standard quality option for DALL·E-3
+    const standardOption = document.createElement("option");
+    standardOption.value = "standard";
+    standardOption.textContent = "Standard";
+    qualitySelect.appendChild(standardOption);
 
     // Add quality options for DALL·E-3 if user has CatNip
     if (catnipBalance >= 3 || ognftBalance >= 1 || inifinitymintsBalance >=10) {
@@ -142,7 +162,7 @@ const updateOptions = () => {
       qualitySelect.appendChild(hdOption);
     } else {
       const disabledOption = document.createElement("option");
-      disabledOption.value = "";
+      disabledOption.value = "standard";
       disabledOption.textContent = "Select";
       sizeSelect.appendChild(disabledOption);
 
@@ -455,7 +475,7 @@ const updateOptions = () => {
           const txHash = await wallet.submitTx(signedTx);
           console.log('Transaction hash:', txHash);
       } catch (error) {
-        setError(' Not enough ADA in your wallet! Add ADA and try again!')
+        setError('You do not have enough ADA or Cancelled')
           console.error('Error processing transaction:', error);
       }
   };
@@ -463,7 +483,6 @@ const updateOptions = () => {
   useEffect(() => {
     updateOptions();
   }, []);
-
 
 
   useEffect(() => {
@@ -493,8 +512,6 @@ const updateOptions = () => {
   return (
     
     <>
-
-
 
       <div className="header flex"> 
 
@@ -722,8 +739,17 @@ const updateOptions = () => {
           {/* "Your Creation" Section */}
           <div className="creation-container" > 
 
-          {!slideshowDisabled && <ImageSlideshow images={[matrix, square, square2, wide, tall]} disabled={false} />}
-
+          {!slideshowDisabled && 
+            <ImageSlideshow 
+            images={[
+              two, three, four, five, six, seven, eight, nine, ten,
+              eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty,
+              twentyone, twentytwo, twentythree, twentyfour, twentyfive,
+              square, square2, wide, tall, matrix
+            ]}  
+              disabled={false} 
+            />
+          }
 
             <label className="pixelfont2 " id="gradient-text">{promptSummary}</label>
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}

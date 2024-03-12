@@ -16,18 +16,13 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
     if (!disabled) {
       slideshowInterval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, 7000); // Change slides every 3 seconds
+      }, 5618); // Change slides every 3 seconds
     }
 
     return () => clearInterval(slideshowInterval);
   }, [images, disabled]);
 
-  const handleSlideshowClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault(); // Prevent default action (scrolling down)
-    if (toggleSlideshow) {
-      toggleSlideshow();
-    }
-  };
+
 
   if (disabled) {
     return null; // Don't render the slideshow if it's disabled
@@ -36,12 +31,11 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
   return (
     <div>
     <div className="tag4">
-    <span id="gradient-text"> Welcome to the Infinity Mint Powered by Catsky AI</span>
-      <br></br>
-      <p>Connect your wallet holding $CATSKY to enable AI</p>
+    <span id="gradient-text">Are you holding $CATSKY?</span>
+
     </div>
 
-    <div className="slideshow-container" onClick={handleSlideshowClick}>
+    <div className="slideshow-container">
 
       <div className="slides">
         {images.map((image, index) => (
@@ -63,14 +57,14 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
         }
         .slides {
           display: flex;
-          transition: transform 5s ease; /* Apply smooth transition */
+          transition: transform 2.618s ease; /* Apply smooth transition */
           transform: translateX(-${currentIndex * 100}%); /* Move slides horizontally */
         }
         .slide {
           flex: 0 0 auto;
           width: 100%; /* Ensure images take up full width */
           height: auto; /* Let the height adjust automatically */
-          max-height: 50rem; /* Limit maximum height */
+          max-height: 40rem; /* Limit maximum height */
           object-fit: contain; /* Maintain aspect ratio */
         }
         .active {
@@ -82,11 +76,10 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
     </div>
 
     <div className="tag4">
-      <p>With Infinity Mint you can generate images like these</p>
+      <span id="gradient-text"> Generate images and save them on the Cardano Blockchain</span>
       <br></br>
-      <span id="gradient-text"> The more Catsky AI Assets you hold the AI features you unlock</span>
-
-    </div>
+      <span id="gradient-text"> Hold CatNip NFTs for more features...</span>
+      </div>
     </div>
   );
 };
