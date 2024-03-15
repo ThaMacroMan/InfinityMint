@@ -18,6 +18,8 @@ import jpglogo from "../pages/styles/jpglogo.png";
 import tokenlogo from "../pages/styles/tokenlogo.png";
 import chartlogo from "../pages/styles/chartlogo.png";
 
+import axios from "axios";
+
 //import darkSynthAudio from '../darkSynthAudio.mp3';
 
 const Home: NextPage = () => {
@@ -362,7 +364,11 @@ const Home: NextPage = () => {
     const price = calculateMintingPrice(catskyBalance);
     console.log("mint price:", price);
     console.log("Chunked image URL (2):", chunkedMetadata);
-    console.log("Chunked Prompt (2):", chunkedPrompt);
+    console.log("Selected Model:", selectedModel);
+    console.log("Selected size:", selectedSize);
+    console.log("Selected quality:", selectedQuality);
+    console.log("Prompt:", prompt);
+    console.log("Title:", promptSummary);
 
     const tx = new Transaction({ initiator: wallet }).sendLovelace(
       "addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du",
@@ -453,54 +459,40 @@ const Home: NextPage = () => {
   // Function to toggle the info pop-up
   const toggleInfo = () => setShowInfo(!showInfo);
 
+  const uploadimgbb3 = async (image_file: any) => {
+    let body = new FormData();
+    body.set("key", "ae75e2db5fcc7aee370a8932cbac3f02"); //// DO NOT RELEASE THE KEY
+    body.append("image", image_file);
 
-   /////// AWS upload
-  const AWS = require('aws-sdk');
-  const fs = require('fs');
-  const s3 = new AWS.S3({
-    accessKeyId: 'your-access-key-id',
-    secretAccessKey: 'your-secret-access-key'
-  });
-  
-  
-  const uploadFile = (fileName:string, bucketName:string) => {
-    const fileContent = fs.readFileSync(fileName);
-  
-    const params = {
-      Bucket: bucketName,
-      Key: fileName,
-      Body: fileContent,
-    };
-  
-    s3.upload(params, (err, data) => {
-      if (err) {
-        console.error('Error uploading file:', err);
-      } else {
-        console.log(`File uploaded successfully. ${data.Location}`);
-      }
+    //return
+    const response = await axios({
+      method: "post",
+      url: "https://api.imgbb.com/1/upload",
+      data: body,
     });
+    return response;
   };
-  
-  // Usage
-  //uploadFile('test.jpeg', 'saturn2');
-
 
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event?.currentTarget?.files?.length == 1) {
       const image_file = event.currentTarget.files[0];
-      const image_url = URL.createObjectURL(image_file);
-      //const image_url = upload2s3(image_file);
-      uploadFile(image_url, 'saturn2');
-      setUploadedImage(image_url);
-      // Chunking image URLs for metadata
-      const chunkedMetadata = chunkData(image_url, 64);
-      setChunkedMetadata(chunkedMetadata);
-
-      // Chunking text
-      const chunkedPromptData = chunkData("TEST", 64);
-      setChunkedPrompt(chunkedPromptData);
-      setGeneratedImages([]);
+      uploadimgbb3(image_file).then((res) => {
+        console.log(res);
+        const image_data = res.data.data;
+        const image_url = image_data.display_url;
+        setUploadedImage(image_url);
+        setPromptSummary(image_data.image.name);
+        setSelectedModel("User Upload");
+        const model_size = `${image_data.width}x${image_data.height}`;
+        setSelectedSize(model_size);
+        setSelectedQuality("Undefined");
+        const chunkedMetadata = chunkData(image_url, 64);
+        setChunkedMetadata(chunkedMetadata);
+        const chunkedPromptData = chunkData("Uploaded", 64);
+        setChunkedPrompt(chunkedPromptData);
+        setGeneratedImages([]);
+      });
     }
   }
 
