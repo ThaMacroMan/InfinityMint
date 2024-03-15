@@ -453,11 +453,45 @@ const Home: NextPage = () => {
   // Function to toggle the info pop-up
   const toggleInfo = () => setShowInfo(!showInfo);
 
+
+   /////// AWS upload
+  const AWS = require('aws-sdk');
+  const fs = require('fs');
+  const s3 = new AWS.S3({
+    accessKeyId: 'your-access-key-id',
+    secretAccessKey: 'your-secret-access-key'
+  });
+  
+  
+  const uploadFile = (fileName:string, bucketName:string) => {
+    const fileContent = fs.readFileSync(fileName);
+  
+    const params = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: fileContent,
+    };
+  
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.error('Error uploading file:', err);
+      } else {
+        console.log(`File uploaded successfully. ${data.Location}`);
+      }
+    });
+  };
+  
+  // Usage
+  //uploadFile('test.jpeg', 'saturn2');
+
+
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event?.currentTarget?.files?.length == 1) {
       const image_file = event.currentTarget.files[0];
       const image_url = URL.createObjectURL(image_file);
+      //const image_url = upload2s3(image_file);
+      uploadFile(image_url, 'saturn2');
       setUploadedImage(image_url);
       // Chunking image URLs for metadata
       const chunkedMetadata = chunkData(image_url, 64);
@@ -696,7 +730,7 @@ const Home: NextPage = () => {
                 htmlFor="upload_button"
                 className={`button animated-gradient`}
               >
-                <span id="gradient-text">Upload Image</span>
+                <span id="gradient-text">{process.env.TOTO}Upload Image</span>
               </label>
               <input
                 className={`button animated-gradient`}
