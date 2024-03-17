@@ -498,11 +498,10 @@ const updateOptions = () => {
    const toggleInfo = () => setShowInfo(!showInfo);
 
 
-
  
    const uploadimgbb3 = async (image_file: any) => {
     let body = new FormData();
-    body.set("key", process.env.REACT_APP_IMGBB_API_KEY); //// DO NOT RELEASE THE KEY
+    body.set("key", process.env.REACT_APP_IMGBB_API_KEY|| '') //// DO NOT RELEASE THE KEY
     body.append("image", image_file);
 
     //return
