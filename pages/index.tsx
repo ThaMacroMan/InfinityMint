@@ -6,14 +6,13 @@ import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
 
-
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
 import APIErrorPopup from '../components/APIErrorPopup';
 import DownloadImage from '../components/DownloadImage';
 import ImageSlideshow from '../components/ImageSlideshow';
-
+import axios from "axios";
 
 import logo from '../pages/styles/catsky-logo-white.png'
 import jpglogo from '../pages/styles/jpglogo.png'
@@ -69,12 +68,10 @@ const Home: NextPage = () => {
   const [userImageURL, setUserImageURL] = useState<string | null>(null); // State to store the uploaded user image URL
   const [slideshowDisabled, setSlideshowDisabled] = useState(false);
 
-
   //const GENERATIONS_MADE_KEY = "generationsMade";
-
   //const [generationsAllowed, setGenerationsAllowed] = useState<number>(0);
   //const [generationsMade, setGenerationsMade] = useState<number>(0);
-  const CATSKY_PER_GENERATION = 1000;
+  //const CATSKY_PER_GENERATION = 1000;
 
   const [mintingPrice, setMintingPrice] = useState<number>(8.69); // Default to the initial price
   // Call the custom hook to get the data
@@ -269,6 +266,7 @@ const updateOptions = () => {
       const imageUrls = data.imageUrls;
       
       setGeneratedImages(imageUrls);
+      setUploadedImage(null);
       console.log(imageUrls);
       setGeneratedPrompt(prompt);
   
@@ -385,16 +383,6 @@ const updateOptions = () => {
     }
   }, [connected]); 
 
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setUserImageURL(imageURL);
-    }
-  };
-
-
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
       if (catskyBalance >= 5000000000) {
@@ -422,12 +410,11 @@ const updateOptions = () => {
         
         price.toString()
       );
-        // Assuming this code block is within a JSX context
         // Define the type of metadataObj
         type MetadataObject = {
           URLs: string[];
           Prompt: string[];
-          [key: string]: string[]; // Allow additional properties with string array values
+          [key: string]: string[]; 
         };
 
         // Aggregate chunked URLs
@@ -495,6 +482,7 @@ const updateOptions = () => {
       window.removeEventListener('mousemove', updateCursor);
     };
   }, []);
+
   const saveImage = async (imageUrl: string) => {
     try {
         // Open the image in a new tab
@@ -507,6 +495,44 @@ const updateOptions = () => {
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
 
+   const uploadimgbb3 = async (image_file: any) => {
+    let body = new FormData();
+    body.set("key", "IMGBB_API_KEY"); //// DO NOT RELEASE THE KEY
+    body.append("image", image_file);
+
+    //IMGBB_API_KEY replace api key for aws
+    //return
+    const response = await axios({
+      method: "post",
+      url: "https://api.imgbb.com/1/upload",
+      data: body,
+    });
+    return response;
+  };
+
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event?.currentTarget?.files?.length == 1) {
+      const image_file = event.currentTarget.files[0];
+      uploadimgbb3(image_file).then((res) => {
+        console.log(res);
+        const image_data = res.data.data;
+        const image_url = image_data.display_url;
+        setUploadedImage(image_url);
+        setPromptSummary(image_data.image.name);
+        setSelectedModel("User Upload");
+        const model_size = `${image_data.width}x${image_data.height}`;
+        setSelectedSize(model_size);
+        setSelectedQuality("Undefined");
+        const chunkedMetadata = chunkData(image_url, 64);
+        setChunkedMetadata(chunkedMetadata);
+        const chunkedPromptData = chunkData("Uploaded", 64);
+        setChunkedPrompt(chunkedPromptData);
+        setGeneratedImages([]);
+        setSlideshowDisabled(true)
+      });
+    }
+  }
 
 
   return (
@@ -711,13 +737,43 @@ const updateOptions = () => {
               </button>
 
 
-              <button
-                type="button"
-                onClick={processTransaction}
-                className={`button animated-gradient2 ${(!connected || isLoading || !generatedImages || generatedImages.length === 0) ? 'disabled-button' : ''}`}
-                disabled={!connected || isLoading || !generatedImages || generatedImages.length === 0} // Disable button based on condition
+            <div className="Upload">
+              <label
+                htmlFor="upload_button"
+                className={`button animated-gradient`}
               >
-                Mint on Cardano: ₳ {mintingPrice.toString()} 
+                <span id="gradient-text">{process.env.TOTO}Upload Image</span>
+              </label>
+              <input
+                className={`button animated-gradient`}
+                type="file"
+                onChange={handleChange}
+                accept=".jpg,.jpeg,.png"
+                id="upload_button"
+                style={{ visibility: "hidden" }}
+              />
+            </div>
+
+
+            <button
+              type="button"
+              onClick={processTransaction}
+              className={`button animated-gradient2 ${
+                !connected ||
+                isLoading ||
+                (!generatedImages && !uploadedImage) ||
+                (generatedImages.length === 0 && !uploadedImage)
+                  ? "disabled-button"
+                  : ""
+              }`}
+              disabled={
+                !connected ||
+                isLoading ||
+                (!generatedImages && !uploadedImage) ||
+                (generatedImages.length === 0 && !uploadedImage)
+              } // Disable button based on condition
+            >
+              Mint on Cardano: ₳ {mintingPrice.toString()}
 
               </button>
               <div>
@@ -795,6 +851,18 @@ const updateOptions = () => {
                 ))}
               </div>
             )}
+            {uploadedImage && (
+            <div>
+              <div key={`uploaded-image`}>
+                <img
+                  src={uploadedImage}
+                  alt={`Uploaded Image`}
+                  className="mx-auto mt-4 mb-4 imageborder"
+                  onClick={() => saveImage(uploadedImage)}
+                />
+              </div>
+            </div>
+          )}
           </div>
       </div>
     </>
