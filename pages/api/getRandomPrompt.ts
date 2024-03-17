@@ -13,8 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Play sound when the endpoint is called
       const playSound = () => {
         spawn('afplay', ['pages/styles/mixkit-futuristic-door-open-183.mp3', '-v', '0.']); 
-
-
       };
       
       playSound(); // Call the function to play the sound

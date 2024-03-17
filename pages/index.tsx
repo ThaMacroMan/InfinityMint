@@ -6,6 +6,8 @@ import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
 
+
+
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
@@ -495,12 +497,14 @@ const updateOptions = () => {
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
 
+
+
+ 
    const uploadimgbb3 = async (image_file: any) => {
     let body = new FormData();
-    body.set("key", "IMGBB_API_KEY"); //// DO NOT RELEASE THE KEY
+    body.set("key", process.env.REACT_APP_IMGBB_API_KEY); //// DO NOT RELEASE THE KEY
     body.append("image", image_file);
 
-    //IMGBB_API_KEY replace api key for aws
     //return
     const response = await axios({
       method: "post",
@@ -509,31 +513,35 @@ const updateOptions = () => {
     });
     return response;
   };
+  
+   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    if (event?.currentTarget?.files?.length == 1) {
-      const image_file = event.currentTarget.files[0];
-      uploadimgbb3(image_file).then((res) => {
-        console.log(res);
-        const image_data = res.data.data;
-        const image_url = image_data.display_url;
-        setUploadedImage(image_url);
-        setPromptSummary(image_data.image.name);
-        setSelectedModel("User Upload");
-        const model_size = `${image_data.width}x${image_data.height}`;
-        setSelectedSize(model_size);
-        setSelectedQuality("Undefined");
-        const chunkedMetadata = chunkData(image_url, 64);
-        setChunkedMetadata(chunkedMetadata);
-        const chunkedPromptData = chunkData("Uploaded", 64);
-        setChunkedPrompt(chunkedPromptData);
-        setGeneratedImages([]);
-        setSlideshowDisabled(true)
-      });
-    }
-  }
-
+   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+     if (event?.target?.files?.length === 1) {
+       const image_file = event.target.files[0];
+       try {
+         const res = await uploadimgbb3(image_file);
+         console.log(res);
+         const image_data = res.data.data;
+         const image_url = image_data.display_url;
+         setUploadedImage(image_url);
+         setPromptSummary(image_data.image.name);
+         setSelectedModel("User Upload");
+         const model_size = `${image_data.width}x${image_data.height}`;
+         setSelectedSize(model_size);
+         setSelectedQuality("Undefined");
+         const chunkedMetadata = chunkData(image_url, 64);
+         setChunkedMetadata(chunkedMetadata);
+         const chunkedPromptData = chunkData("Uploaded", 64);
+         setChunkedPrompt(chunkedPromptData);
+         setGeneratedImages([]);
+         setSlideshowDisabled(true)
+       } catch (error) {
+         // Handle error
+         console.error('Error uploading image:', error);
+       }
+     }
+   };
 
   return (
     
