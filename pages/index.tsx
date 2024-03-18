@@ -6,8 +6,6 @@ import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
 
-
-
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
@@ -18,7 +16,6 @@ import axios from "axios";
 
 import logo from '../pages/styles/catsky-logo-white.png'
 import jpglogo from '../pages/styles/jpglogo.png'
-import tokenlogo from '../pages/styles/tokenlogo.png'
 import chartlogo from '../pages/styles/chartlogo.png'
 import matrix from '../pages/public/images/matrix.png'
 import square from '../pages/public/images/square.png'
@@ -67,24 +64,18 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
-  const [userImageURL, setUserImageURL] = useState<string | null>(null); // State to store the uploaded user image URL
   const [slideshowDisabled, setSlideshowDisabled] = useState(false);
-
-  //const GENERATIONS_MADE_KEY = "generationsMade";
-  //const [generationsAllowed, setGenerationsAllowed] = useState<number>(0);
-  //const [generationsMade, setGenerationsMade] = useState<number>(0);
-  //const CATSKY_PER_GENERATION = 1000;
-
   const [mintingPrice, setMintingPrice] = useState<number>(8.69); // Default to the initial price
-  // Call the custom hook to get the data
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+  const [userEnterInfo, setUserEnterInfo] = useState('');
+  const [userEnterName, setUserEnterName] = useState('');
+
+
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
-  
   const catskyBalance = catskyAssetSummary["$CATSKY"] || 0;
   const catnipBalance = catskyAssetSummary["CatNip NFT"] || 0;
   const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
   const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
-
-  const [showInfo, setShowInfo] = useState<boolean>(false);
 
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 
@@ -92,7 +83,6 @@ const Home: NextPage = () => {
     textarea.style.height = 'inherit'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
-
 // Inside the updateOptions function
 const updateOptions = () => {
   const modelSelect = document.getElementById("model") as HTMLSelectElement;
@@ -169,20 +159,14 @@ const updateOptions = () => {
       qualitySelect.disabled = true;
     }
   }
-
   // Update size and quality based on the new selections
   setSelectedSize(sizeSelect.value);
   setSelectedQuality(qualitySelect.value);
   setSelectedModel(modelSelect.value);
 };
-
-
   const getRandomPrompt = async () => {
     try {
       setIsLoading(true); // Set loading state to true
-      //const audio = new Audio("/darkSynthAudio.MP3");
-      //audio.play();
-  
       // Call your internal API endpoint instead of OpenAI's API directly
       const response = await fetch('/api/getRandomPrompt');
   
@@ -191,7 +175,6 @@ const updateOptions = () => {
         setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
       const data = await response.json();
       const randomPrompt = data.prompt;
       console.log(randomPrompt);
@@ -203,12 +186,10 @@ const updateOptions = () => {
     } catch (error) {
       setIsLoading(false); // Ensure loading state is reset even on error
       console.error('Error generating random prompt:', error);
-      
     }
   }
 
   const summarizePrompt = async (prompt: string) => {
-    
     try {
       const response = await fetch('/api/summarizePrompt', {
         method: 'POST',
@@ -221,7 +202,6 @@ const updateOptions = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
       const data = await response.json();
       const summary = data.summary;
       console.log(summary);
@@ -232,14 +212,10 @@ const updateOptions = () => {
       throw error;
     }
   };
-  
   const generateImage = async () => {
+    setUserEnterName('');
+    setModalVisible(false)
     setSlideshowDisabled(true); // Disable the slideshow when generating image
-  //  if (generationsMade < generationsAllowed) {
-  //    setGenerationsMade(prevGenerationsMade => prevGenerationsMade + 1);
-  //    if (typeof window !== 'undefined') {
-  //      localStorage.setItem(GENERATIONS_MADE_KEY, (generationsMade + 1).toString());
-  //    }
     try {
       setIsLoading(true); // Set loading state to true when generating image
       console.log(selectedModel,selectedModel,selectedQuality);
@@ -248,7 +224,6 @@ const updateOptions = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        
         body: JSON.stringify({
           prompt: `${prompt} In Style: '${selectedStyle}'`, // Include the selected style in the prompt
           size: selectedSize,
@@ -263,35 +238,27 @@ const updateOptions = () => {
         setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
       const data = await response.json();
       const imageUrls = data.imageUrls;
-      
       setGeneratedImages(imageUrls);
       setUploadedImage(null);
       console.log(imageUrls);
       setGeneratedPrompt(prompt);
-  
       // Get summary for the prompt
       const promptSummary = await summarizePrompt(prompt);
       setPromptSummary(promptSummary);
-  
       // Chunking image URLs for metadata
       const chunkedMetadata = chunkData(imageUrls.join(','), 64);
       setChunkedMetadata(chunkedMetadata);
-  
       // Chunking prompt for metadata
       const chunkedPromptData = chunkData(prompt, 64);
       setChunkedPrompt(chunkedPromptData);
-
-
       setIsLoading(false); // Set loading state to false when image generation is complete
   
     } catch (error) {
       console.error('Failed to generate images:', error);
       setIsLoading(false); // Ensure loading state is reset even on error
     }
-//  }
   };
 /*
   const generateStableDiffusionImage = async () => {
@@ -341,11 +308,9 @@ const updateOptions = () => {
     }
     return chunks;
   };
-  
   const handleStyleSelection = (style: string) => {
     setSelectedStyle(style);
   };
-
   
 /*
   useEffect(() => {
@@ -405,11 +370,9 @@ const updateOptions = () => {
       console.log('mint price:', price);
       console.log('Chunked image URL (2):', chunkedMetadata )
       console.log('Chunked Prompt (2):', chunkedPrompt);
-
       const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
         'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
-        
         price.toString()
       );
         // Define the type of metadataObj
@@ -418,26 +381,22 @@ const updateOptions = () => {
           Prompt: string[];
           [key: string]: string[]; 
         };
-
         // Aggregate chunked URLs
         let metadataKey = 674;
         let metadataObj: MetadataObject = {
           URLs: [],
           Prompt: [],
         };
-
         // Iterate through each chunk of metadata, split it, and extract URLs
         chunkedMetadata.forEach((chunk: string) => {
           let urlsInChunk: string[] = chunk.split(',');
           metadataObj.URLs.push(...urlsInChunk);
         });
-
         // Iterate through each chunk of prompt, split it, and extract prompt
         chunkedPrompt.forEach((chunk: string) => {
           let promptInChunk: string[] = chunk.split(',');
           metadataObj.Prompt.push(...promptInChunk);
         });
-
         // Add additional metadata properties
         metadataObj['Era'] = ['V1.0: Wildcat Genesis Era']; // Explicitly define Era as string[]
         metadataObj['Text'] = ['Powered by Catsky AI and Sick City']; // Explicitly define Text as string[]
@@ -445,13 +404,11 @@ const updateOptions = () => {
         metadataObj['Name'] = [promptSummary]
         // Set metadata with aggregated URLs, prompt, and additional metadata strings
         tx.setMetadata(metadataKey, metadataObj);
-
       try {
           // Build transaction
           const unsignedTx = await tx.build();
           setUnsignedTx(unsignedTx); // Save unsignedTx to state
           console.log('Unsigned transaction:', unsignedTx);
-
           // Sign transaction
           if (!unsignedTx) {
               console.error('Unsigned transaction not available');
@@ -469,10 +426,66 @@ const updateOptions = () => {
       }
   };
 
+  const processTransaction2 = async () => {
+    const price = calculateMintingPrice(catskyBalance);
+    console.log('mint price:', price);
+    console.log('Chunked image URL (2):', chunkedMetadata )
+    const tx = new Transaction({ initiator: wallet })
+    .sendLovelace(
+      'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
+      price.toString()
+    );
+      // Define the type of metadataObj
+      type MetadataObject = {
+        URLs: string[];
+        [key: string]: string[]; 
+      };
+      // Aggregate chunked URLs
+      let metadataKey = 674;
+      let metadataObj: MetadataObject = {
+        URLs: [],
+      };
+      // Iterate through each chunk of metadata, split it, and extract URLs
+      chunkedMetadata.forEach((chunk: string) => {
+        let urlsInChunk: string[] = chunk.split(',');
+        metadataObj.URLs.push(...urlsInChunk);
+      });
+      // Iterate through each chunk of prompt, split it, and extract prompt
+
+      // Add additional metadata properties
+      metadataObj['Era'] = ['V1.0: Wildcat Genesis Era']; // Explicitly define Era as string[]
+      metadataObj['Text'] = ['Powered by Catsky AI and Sick City']; // Explicitly define Text as string[]
+      metadataObj['Settings'] = [selectedModel, selectedSize, selectedQuality]
+      metadataObj['Name'] = [promptSummary]
+      //metadataObj['Info'] = [userEnterInfo]
+      //metadataObj['Name'] = [userEnterName] 
+      // Set metadata with aggregated URLs, prompt, and additional metadata strings
+      tx.setMetadata(metadataKey, metadataObj);
+    try {
+        // Build transaction
+        const unsignedTx = await tx.build();
+        setUnsignedTx(unsignedTx); // Save unsignedTx to state
+        console.log('Unsigned transaction:', unsignedTx);
+        // Sign transaction
+        if (!unsignedTx) {
+            console.error('Unsigned transaction not available');
+            return;
+        }
+        const signedTx = await wallet.signTx(unsignedTx);
+        console.log('Signed transaction:', signedTx);
+
+        // Submit transaction
+        const txHash = await wallet.submitTx(signedTx);
+        console.log('Transaction hash:', txHash);
+    } catch (error) {
+      setError('You do not have enough ADA or Cancelled')
+        console.error('Error processing transaction:', error);
+    }
+};
+
   useEffect(() => {
     updateOptions();
   }, []);
-
 
   useEffect(() => {
     const updateCursor = (e: MouseEvent) => {
@@ -496,14 +509,12 @@ const updateOptions = () => {
 
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
-
-
- 
+ //API IS ON CLIENT SIDE - FIX IN FUTURE
    const uploadimgbb3 = async (image_file: any) => {
     let body = new FormData();
     body.set("key", "8072702f1c133271b4c484307bff7822") //// DO NOT RELEASE THE KEY
     body.append("image", image_file);
-
+ 
     //return
     const response = await axios({
       method: "post",
@@ -514,45 +525,53 @@ const updateOptions = () => {
   };
   
    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-
    const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-     if (event?.target?.files?.length === 1) {
-       const image_file = event.target.files[0];
-       try {
-         const res = await uploadimgbb3(image_file);
-         console.log(res);
-         const image_data = res.data.data;
-         const image_url = image_data.display_url;
-         setUploadedImage(image_url);
-         setPromptSummary(image_data.image.name);
-         setSelectedModel("User Upload");
-         const model_size = `${image_data.width}x${image_data.height}`;
-         setSelectedSize(model_size);
-         setSelectedQuality("Undefined");
-         const chunkedMetadata = chunkData(image_url, 64);
-         setChunkedMetadata(chunkedMetadata);
-         const chunkedPromptData = chunkData("Uploaded", 64);
-         setChunkedPrompt(chunkedPromptData);
-         setGeneratedImages([]);
-         setSlideshowDisabled(true)
-       } catch (error) {
-         // Handle error
-         console.error('Error uploading image:', error);
-       }
-     }
-   };
+    if (event?.target?.files?.length === 1) {
+      const image_file = event.target.files[0];
+      try {
+        const res = await uploadimgbb3(image_file);
+        console.log(res);
+        const image_data = res.data.data;
+        const image_url = image_data.url;
+        setUploadedImage(image_url);
+
+        //setUserEnterName(image_data.image.name)
+        setPromptSummary(image_data.image.name)
+        setUserEnterInfo("Minted by the Infinity Mint")
+        setSelectedModel("User Uploaded")
+        setSelectedQuality("Uploaded Image")
+        setChunkedPrompt(["No Prompt"])
+        const model_size = `${image_data.width}x${image_data.height}`;
+        setSelectedSize(model_size);
+
+        const chunkedMetadata = chunkData(image_url, 64);
+        setChunkedMetadata(chunkedMetadata);
+
+        setGeneratedImages([]);
+
+        setSlideshowDisabled(true);
+  
+        // Show the metadata update modal after uploading the image
+        setModalVisible(true);
+      } catch (error) {
+        // Handle error
+        console.error('Error uploading image:', error);
+      }
+    }
+  };
+   const [modalVisible, setModalVisible] = useState(false);
+   const handleMetadataUpdate = () => {
+    // Handle metadata update logic here
+    // Close modal after updating metadata
+    setModalVisible(false);
+  };
 
   return (
-    
     <>
-
       <div className="header flex"> 
-
         <h1>
           Infinity Mint <span id="gradient-text">V1.0</span>
-
         </h1>   
-
         <h1>
           <span id="gradient-text">Powered by Catsky AI</span>
         </h1>
@@ -572,7 +591,6 @@ const updateOptions = () => {
         >
           <img src={jpglogo.src} alt="Logo" className="h-10" />
         </a>
-
         <a 
           href="https://www.taptools.io/charts/token?pairID=0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
           target="_blank" 
@@ -580,7 +598,6 @@ const updateOptions = () => {
           style={{ cursor: 'pointer' }}
         >
           <img src={chartlogo.src} alt="Logo" className="h-10" />
-
         </a>
       </div>
       <div className="wrapper">
@@ -592,7 +609,6 @@ const updateOptions = () => {
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
                 <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
-
                 {showInfo}
               </div>
             </div>
@@ -604,9 +620,7 @@ const updateOptions = () => {
             <div className= "tag ">
             <span id="gradient-text"> Hold 100M $CATSKY to Activate AI</span>
             </div>
-
             <form>
-
               <textarea
                 className="textarea"
                 name="prompt"
@@ -615,10 +629,8 @@ const updateOptions = () => {
                 rows={6}
                 onChange={(e) => setPrompt(e.target.value)}
                 onInput={autoExpand}
-
                 placeholder="What will you create? Dream Infinite:"
                 ></textarea>
-                
               <button
                 className="button animated-gradient"
                 type="button"
@@ -628,9 +640,7 @@ const updateOptions = () => {
               >
                <span id="gradient-text"> Generate Prompt</span>
               </button>
-              
               <div/>
-
               <div className="tag2">
               <label htmlFor="model" className="tag">Style</label>
               <div className="dropdown-container">
@@ -639,7 +649,6 @@ const updateOptions = () => {
                 name="style"
                 id="style" 
                 onChange={(e) => handleStyleSelection(e.target.value)}>
-                  
                 <option value="">Select</option>
                   <option value="Surrealism">Surrealism</option>
                   <option value="Renaissance">Renaissance</option>
@@ -657,7 +666,6 @@ const updateOptions = () => {
                 </select>
               </div>
             </div>
-
               <div className="tag2">
                 <label htmlFor="model" className="tag">Model</label>
                 <div className="dropdown-container">
@@ -671,11 +679,9 @@ const updateOptions = () => {
                   {connected && catskyBalance >= 100000000 && (
                   <option value="dall-e-3">Upgraded</option>
                   )}
-                  
                 </select>
                 </div>
               </div>
-
 
               <div>
                 <div className="" onClick={toggleInfo}></div>
@@ -685,7 +691,6 @@ const updateOptions = () => {
                     </div>
                   )}
               </div>
-
               <div className="tag2">
                 <label htmlFor="size" className="tag">Size</label>
                 <div className="dropdown-container">
@@ -707,11 +712,9 @@ const updateOptions = () => {
                       <p><span id="gradient-text"> Square = </span> 1024x1024</p>
                       <p><span id="gradient-text"> Landscape = </span> 1792x1024</p>
                       <p><span id="gradient-text"> Portrait = </span> 1024x1792</p>
-
                     </div>
                   )}
               </div>
-
               <div className="tag2">
                 <label htmlFor="quality" className="tag">Quality</label>
                 <div className="dropdown-container">
@@ -742,8 +745,6 @@ const updateOptions = () => {
               >
                 <span id="gradient-text">Generate Art</span>
               </button>
-
-
             <div className="Upload">
               <label
                 htmlFor="upload_button"
@@ -760,8 +761,32 @@ const updateOptions = () => {
                 style={{ visibility: "hidden" }}
               />
             </div>
+                {/*
+                  {modalVisible && (
+              <div className="modal">
+                <div className="tag2">
+                  <span className="close" onClick={() => setModalVisible(false)}>&times;</span>
+                  <form onSubmit={handleMetadataUpdate}>
 
-
+                  <label htmlFor="editName" className="tag">Edit Name:</label>
+                  <input
+                    type="text"
+                    id="editName"
+                    value={userEnterName}
+                    onChange={(e) => setUserEnterName(e.target.value)}
+                  />
+                  <label htmlFor="editInfo" className="tag">Edit Info:</label>
+                  <input
+                    type="text"
+                    id="editInfo"
+                    value={userEnterInfo}
+                    onChange={(e) => setUserEnterInfo(e.target.value)}
+                  />
+                  </form>
+                </div>
+              </div>
+            )}
+                  */}
             <button
               type="button"
               onClick={processTransaction}
@@ -781,7 +806,6 @@ const updateOptions = () => {
               } // Disable button based on condition
             >
               Mint on Cardano: ₳ {mintingPrice.toString()}
-
               </button>
               <div>
                 <div className="" onClick={toggleInfo}></div>
@@ -798,10 +822,8 @@ const updateOptions = () => {
               </div>
             </form>
           </div>
-
           {/* "Your Creation" Section */}
           <div className="creation-container" > 
-
           {!slideshowDisabled && 
             <ImageSlideshow 
             images={[
@@ -813,8 +835,7 @@ const updateOptions = () => {
               disabled={false} 
             />
           }
-
-            <label className="pixelfont2 " id="gradient-text">{promptSummary}</label>
+            <label className="pixelfont2 " id="gradient-text"> {userEnterName || promptSummary}</label>
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
             {isLoading && (
             <div className="spinner-container">
@@ -833,7 +854,6 @@ const updateOptions = () => {
               />
             {!!generatedImages && generatedImages.length > 0 && (
               <div>
-
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
                     <img
@@ -868,6 +888,8 @@ const updateOptions = () => {
                   onClick={() => saveImage(uploadedImage)}
                 />
               </div>
+              {/* Form for metadata */}
+
             </div>
           )}
           </div>
