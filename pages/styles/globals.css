@@ -218,6 +218,26 @@ width: vw;
 
 }
 
+.button2 {
+  margin: .3rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  justify-content: space-between;
+  display: flex;
+  width: 97.5%; /* Set the width to 100% */
+  border-radius: 0.618rem;
+  padding: 1rem; /* Increase padding to make buttons wider */
+  font-size: 1rem; /* Increase font size */
+  cursor: pointer;
+  color: #ffffff;
+  border: 3px solid #000000; /* Add border */
+  font-family: Public-Pixel;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  margin-left: auto; /* Center the tag horizontally */
+  margin-right: auto; /* Center the tag horizontally */
+
+}
+
 .button:disabled {
   opacity: 0.3; /* Reduce opacity to indicate disabled state */
   cursor: not-allowed; /* Change cursor to indicate non-interactive */

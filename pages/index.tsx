@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
-import { useWallet } from '@meshsdk/react';
+import { useAddress, useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
@@ -13,6 +13,8 @@ import APIErrorPopup from '../components/APIErrorPopup';
 import DownloadImage from '../components/DownloadImage';
 import ImageSlideshow from '../components/ImageSlideshow';
 import axios from "axios";
+import TokenPrice from './api/CheckPrice';
+
 
 import logo from '../pages/styles/catsky-logo-white.png'
 import jpglogo from '../pages/styles/jpglogo.png'
@@ -69,14 +71,27 @@ const Home: NextPage = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [userEnterInfo, setUserEnterInfo] = useState('');
   const [userEnterName, setUserEnterName] = useState('');
-
-
+  const [userUses, setUserUses] = useState<number>(1);
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
   const catskyBalance = catskyAssetSummary["$CATSKY"] || 0;
   const catnipBalance = catskyAssetSummary["CatNip NFT"] || 0;
   const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
   const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
+  const [catskyPerUse, setCatskyPerUse] = useState<number>(0);
 
+/*
+  const tokenDetails = {
+    tokenUnit:'9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59',
+    onchainID: '0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e',
+    interval: '1d',
+    numIntervals: 1,
+  };
+*/
+
+
+  
+  
+  
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 
     const textarea = event.target;
@@ -254,51 +269,32 @@ const updateOptions = () => {
       const chunkedPromptData = chunkData(prompt, 64);
       setChunkedPrompt(chunkedPromptData);
       setIsLoading(false); // Set loading state to false when image generation is complete
-  
+
+      setUserUses((userUses) => userUses - 1); // Update the userUses state
+
+      // Check if a user is connected
+      if (connected) {
+        // Save updated user uses to local storage
+        const userWalletAddress = await fetchUsedAddresses();
+        const updatedUses = userUses - 1;
+        localStorage.setItem(userWalletAddress, updatedUses.toString());
+      } else {
+        // If no user is connected, check if the AI has already been tried
+        const alreadyTriedAI = localStorage.getItem('alreadyTriedAI');
+        if (!alreadyTriedAI) {
+          // Subtract one usage and set the flag if the AI hasn't been tried before
+          setUserUses((userUses) => userUses - 1); // Update the userUses state
+          localStorage.setItem('userUses', (userUses - 1).toString());
+          localStorage.setItem('alreadyTriedAI', 'true');
+        }
+      }
     } catch (error) {
       console.error('Failed to generate images:', error);
       setIsLoading(false); // Ensure loading state is reset even on error
     }
   };
-/*
-  const generateStableDiffusionImage = async () => {
-    try {
-      setIsLoading(true); 
-      const response = await fetch('/api/generateStableDiffusionImage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text_prompts: `${prompt} In Style: '${selectedStyle}'`,
-          cfg_scale: 7, // Example configuration
-          height: 1024,
-          width: 1024,
-          steps: 30,
-          samples: 1,
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      const imageUrls = data.artifacts.map(artifact => `data:image/png;base64,${artifact.base64}`);
-      
-      setGeneratedImages(imageUrls);
-      setGeneratedPrompt(prompt);
-  
-      // Rest of your logic here
-  
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Failed to generate images:', error);
-      setError('An error occurred while generating images');
-      setIsLoading(false);
-    }
-  };
-  */
+
+
   
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
@@ -312,44 +308,131 @@ const updateOptions = () => {
     setSelectedStyle(style);
   };
   
-/*
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedGenerationsMade = localStorage.getItem(GENERATIONS_MADE_KEY);
-      const generationsMadeFromStorage = storedGenerationsMade ? parseInt(storedGenerationsMade, 10) : 0;
-      setGenerationsMade(generationsMadeFromStorage);
+    if (connected) {
+      console.log("$CATSKY", catskyBalance); 
+      console.log("CatNip", catnipBalance);
+      console.log("OG-NFT", ognftBalance);
+      console.log("Era I", inifinitymintsBalance);
+  
+      async function fetchUsedAddresses() {
+        try {
+          const usedAddresses = await wallet.getUsedAddresses();
+          console.log("User Addresses: ", usedAddresses[0]);
+          // Retrieve available uses for the user from local storage
+          const storedUses = localStorage.getItem(usedAddresses[0]);
+          if (storedUses) {
+            const parsedUses = parseInt(storedUses, 10);
+            setUserUses(parsedUses);
+            console.log('User Uses:', parsedUses); // Log the userUses value
+          }
+        } catch (error) {
+          console.error("Error fetching used addresses: ", error);
+        }
+      }
+      fetchUsedAddresses(); // Call the async function to execute
+    } else {
+      // Reset user uses when wallet is disconnected
+      setUserUses(1); // Set the initial value for user uses
+      // Clear user uses from local storage
+      localStorage.removeItem('userWalletAddress');
+    }
+  }, [connected, catskyBalance]); // Include catskyBalance as a dependency
+  
+
+  
+  // Callback function to set catskyPerUse value
+  const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
+    setCatskyPerUse(catskyPerUse);
+    console.log("Catsky Per Use: ", catskyPerUse)
+    console.log("Catsky Price: ₳", formattedPrice)
+    console.log("User Uses: ", userUses)
+  };
+
+  const buyUsesTransaction = async () => {
+
+        // Store user wallet address and available uses in local storage
+        const userWalletAddress = await fetchUsedAddresses();
+        const updatedUses = userUses + 5;
+        localStorage.setItem(userWalletAddress, updatedUses.toString());
+        
+        // Update user uses in state
+        //setUserUses(updatedUses);
+
+    try {
+
+      const tx = new Transaction({ initiator: wallet }).sendAssets(
+        'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
+        [
+          {
+            unit: '9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59',
+            quantity: catskyPerUse.toString()
+            ,
+          },
+        ]
+      );
+  
+      const unsignedTx = await tx.build();
+      setUnsignedTx(unsignedTx); // Save unsignedTx to state
+  
+      if (!unsignedTx) {
+        console.error('Unsigned transaction not available');
+        return;
+      }
+  
+      const signedTx = await wallet.signTx(unsignedTx);
+      const txHash = await wallet.submitTx(signedTx);
+      console.log('Transaction hash:', txHash);
+  
+      // Fetch the user's wallet address
+      const userWalletAddress = await fetchUsedAddresses();
+  
+      // Credit the user with usage
+      await creditUserWithUsage(userWalletAddress);
+    } catch (error) {
+      setError('You do not have enough ADA or the transaction was cancelled');
+      console.error('Error processing transaction:', error);
+    }
+  };
+  
+  const fetchUsedAddresses = async () => {
+    try {
+      const usedAddresses = await wallet.getUsedAddresses();
+      // Assuming the first address is the user's wallet address
+      return usedAddresses[0];
+    } catch (error) {
+      console.error("Error fetching used addresses: ", error);
+      throw error;
+    }
+  };
+  
+  const creditUserWithUsage = async (userWalletAddress: string) => {
+    try {
+      setUserUses((userUses) => userUses + 5); // Update the userUses state
+      
+      console.log(`User ${userWalletAddress} credited with 5 AI usages.`);
+    } catch (error) {
+      console.error('Error crediting user with usage:', error);
+      // Handle the error as needed
+    }
+  }; 
+
+
+  useEffect(() => {
+    // Retrieve user wallet address from local storage
+    const userWalletAddress = localStorage.getItem('userWalletAddress');
+    if (userWalletAddress) {
+      // Retrieve available uses for the user from local storage
+      const storedUses = localStorage.getItem(userWalletAddress);
+      if (storedUses) {
+        setUserUses(parseInt(storedUses));
+      }
     }
   }, []);
+  
 
-  useEffect(() => {
-    if (catskyBalance >= CATSKY_PER_GENERATION) {
-      const generations = Math.floor(catskyBalance / CATSKY_PER_GENERATION);
-      setGenerationsAllowed(generations);
-    } else {
-      setGenerationsAllowed(0);
-    }
-  }, [catskyBalance]);
-  */
-  useEffect(() => {
-    console.log("$CATSKY",catskyBalance);
-    console.log("CatNip",catnipBalance);
-    console.log("OG-NFT",ognftBalance);
-    console.log("Era I",inifinitymintsBalance);
-    const calculatedMintingPrice = calculateMintingPrice(catskyBalance);
-    const firstDigitMintingPrice = calculatedMintingPrice / 1000000; // Extracting the first digit
-    setMintingPrice(firstDigitMintingPrice);
-  }, [catskyBalance]);
-
-  useEffect(() => {
-    if (!connected) {
-      // Reset selected options when wallet is disconnected
-      setSelectedModel("dall-e-2");
-      setSelectedSize("256x256");
-      setSelectedQuality("standard");
-      updateOptions();
-    }
-  }, [connected]); 
-
+  
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
       if (catskyBalance >= 5000000000) {
@@ -367,6 +450,7 @@ const updateOptions = () => {
 
     const processTransaction = async () => {
       const price = calculateMintingPrice(catskyBalance);
+      console.log('user address: ', wallet)
       console.log('mint price:', price);
       console.log('Chunked image URL (2):', chunkedMetadata )
       console.log('Chunked Prompt (2):', chunkedPrompt);
@@ -426,62 +510,7 @@ const updateOptions = () => {
       }
   };
 
-  const processTransaction2 = async () => {
-    const price = calculateMintingPrice(catskyBalance);
-    console.log('mint price:', price);
-    console.log('Chunked image URL (2):', chunkedMetadata )
-    const tx = new Transaction({ initiator: wallet })
-    .sendLovelace(
-      'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
-      price.toString()
-    );
-      // Define the type of metadataObj
-      type MetadataObject = {
-        URLs: string[];
-        [key: string]: string[]; 
-      };
-      // Aggregate chunked URLs
-      let metadataKey = 674;
-      let metadataObj: MetadataObject = {
-        URLs: [],
-      };
-      // Iterate through each chunk of metadata, split it, and extract URLs
-      chunkedMetadata.forEach((chunk: string) => {
-        let urlsInChunk: string[] = chunk.split(',');
-        metadataObj.URLs.push(...urlsInChunk);
-      });
-      // Iterate through each chunk of prompt, split it, and extract prompt
-
-      // Add additional metadata properties
-      metadataObj['Era'] = ['V1.0: Wildcat Genesis Era']; // Explicitly define Era as string[]
-      metadataObj['Text'] = ['Powered by Catsky AI and Sick City']; // Explicitly define Text as string[]
-      metadataObj['Settings'] = [selectedModel, selectedSize, selectedQuality]
-      metadataObj['Name'] = [promptSummary]
-      //metadataObj['Info'] = [userEnterInfo]
-      //metadataObj['Name'] = [userEnterName] 
-      // Set metadata with aggregated URLs, prompt, and additional metadata strings
-      tx.setMetadata(metadataKey, metadataObj);
-    try {
-        // Build transaction
-        const unsignedTx = await tx.build();
-        setUnsignedTx(unsignedTx); // Save unsignedTx to state
-        console.log('Unsigned transaction:', unsignedTx);
-        // Sign transaction
-        if (!unsignedTx) {
-            console.error('Unsigned transaction not available');
-            return;
-        }
-        const signedTx = await wallet.signTx(unsignedTx);
-        console.log('Signed transaction:', signedTx);
-
-        // Submit transaction
-        const txHash = await wallet.submitTx(signedTx);
-        console.log('Transaction hash:', txHash);
-    } catch (error) {
-      setError('You do not have enough ADA or Cancelled')
-        console.error('Error processing transaction:', error);
-    }
-};
+ 
 
   useEffect(() => {
     updateOptions();
@@ -617,9 +646,40 @@ const updateOptions = () => {
               {connected}
               <WalletBalance />
             </div>
-            <div className= "tag ">
-            <span id="gradient-text"> Hold 100M $CATSKY to Activate AI</span>
+            
+            <div>
+            <TokenPrice
+            tokenUnit="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59"
+            onchainID="be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e"
+            interval="1d"
+            numIntervals={1}
+            setCatskyPerUse={handleSetCatskyPerUse} // Pass the callback function as prop
+            />
+
+
             </div>
+            <button
+              type="button"
+              onClick={buyUsesTransaction}
+              className={`button2 animated-gradient2 ${
+                !connected ||
+                isLoading ||
+                (!generatedImages && !uploadedImage) ||
+                (generatedImages.length === 0 && !uploadedImage)
+                  ? "disabled-button"
+                  : ""
+              }`}
+            >
+               <span id="gradient-text">
+                Available Uses: {userUses.toLocaleString()} 
+              </span>
+
+              <span id="gradient-text">
+              Buy 5 AI Uses: {catskyPerUse} $CATSKY 
+              </span>
+              </button>
+              
+
             <form>
               <textarea
                 className="textarea"
@@ -629,7 +689,7 @@ const updateOptions = () => {
                 rows={6}
                 onChange={(e) => setPrompt(e.target.value)}
                 onInput={autoExpand}
-                placeholder="What will you create? Dream Infinite:"
+                placeholder="What will you create? Dream Infinite: "
                 ></textarea>
               <button
                 className="button animated-gradient"
@@ -735,16 +795,19 @@ const updateOptions = () => {
                     </div>
                   )}
               </div>
+
               <button
-                type="button"
-                onClick={generateImage}
-                className={`button animated-gradient ${
-                  isLoading || catskyBalance < 100000000 || !connected || !prompt.trim() ? 'disabled-button' : ''
-                }`}
-                disabled={isLoading || catskyBalance < 100000000 || !connected || !prompt.trim()} // Disable the button if loading, balance is insufficient, not connected, or no prompt text
-              >
-                <span id="gradient-text">Generate Art</span>
-              </button>
+              type="button"
+              onClick={generateImage}
+              className={`button animated-gradient ${
+                isLoading  || !connected || !prompt.trim() || userUses === 0 ? 'disabled-button' : ''
+              }`}
+              disabled={isLoading || !connected || !prompt.trim() || userUses === 0} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
+            >
+              <span id="gradient-text">Generate Art</span>
+            </button>
+
+
             <div className="Upload">
               <label
                 htmlFor="upload_button"
@@ -761,32 +824,6 @@ const updateOptions = () => {
                 style={{ visibility: "hidden" }}
               />
             </div>
-                {/*
-                  {modalVisible && (
-              <div className="modal">
-                <div className="tag2">
-                  <span className="close" onClick={() => setModalVisible(false)}>&times;</span>
-                  <form onSubmit={handleMetadataUpdate}>
-
-                  <label htmlFor="editName" className="tag">Edit Name:</label>
-                  <input
-                    type="text"
-                    id="editName"
-                    value={userEnterName}
-                    onChange={(e) => setUserEnterName(e.target.value)}
-                  />
-                  <label htmlFor="editInfo" className="tag">Edit Info:</label>
-                  <input
-                    type="text"
-                    id="editInfo"
-                    value={userEnterInfo}
-                    onChange={(e) => setUserEnterInfo(e.target.value)}
-                  />
-                  </form>
-                </div>
-              </div>
-            )}
-                  */}
             <button
               type="button"
               onClick={processTransaction}
@@ -807,6 +844,7 @@ const updateOptions = () => {
             >
               Mint on Cardano: ₳ {mintingPrice.toString()}
               </button>
+              
               <div>
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (

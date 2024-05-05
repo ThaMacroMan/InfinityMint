@@ -31,7 +31,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
   return (
     <div>
     <div className="tag4">
-    <span id="gradient-text">Are you holding $CATSKY?</span>
+    <span id="gradient-text">Connect your Wallet to Start</span>
 
     </div>
 
@@ -76,7 +76,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
     </div>
 
     <div className="tag4">
-      <span id="gradient-text"> Generate images and save them on the Cardano Blockchain</span>
+      <span id="gradient-text"> Generate images and mint them on the Cardano Blockchain</span>
       <br></br>
       <span id="gradient-text"> Hold CatNip NFTs for more features...</span>
       </div>
