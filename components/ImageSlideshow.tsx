@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StaticImageData } from 'next/image';
+import { useWallet } from '@meshsdk/react';
 
 interface ImageSlideshowProps {
   images: StaticImageData[];
@@ -9,6 +10,8 @@ interface ImageSlideshowProps {
 
 const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggleSlideshow }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { connected, wallet } = useWallet(); 
+
 
   useEffect(() => {
     let slideshowInterval: NodeJS.Timeout;
@@ -30,10 +33,18 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
 
   return (
     <div>
+  {connected ? (
     <div className="tag4">
-    <span id="gradient-text">Connect your Wallet to Start</span>
-
+      {/* Content to display when wallet is connected */}
+      <span id="gradient-text">Wallet Connected! Enter a Prompt and click Generate Art</span>
     </div>
+  ) : (
+    <div className="tag4">
+      {/* Content to display when wallet is not connected */}
+      <span id="gradient-text">Connect your Wallet to Start</span>
+    </div>
+  )}
+
 
     <div className="slideshow-container">
 
@@ -71,17 +82,18 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
           opacity: 1;
           z-index: 1;
         }
-      `}</style>
-      
-    </div>
-
-    <div className="tag4">
-      <span id="gradient-text"> Generate images and mint them on the Cardano Blockchain</span>
-      <br></br>
-      <span id="gradient-text"> Hold CatNip NFTs for more features...</span>
+        `}</style>
+        </div>
+  
+        {connected && (
+          <div className="tag4">
+            <span id="gradient-text">Generate images and mint them on the Cardano Blockchain</span>
+            <br />
+            <span id="gradient-text">Hold CatNip NFTs for more features...</span>
+          </div>
+        )}
       </div>
-    </div>
-  );
-};
-
-export default ImageSlideshow;
+    );
+  };
+  
+  export default ImageSlideshow;

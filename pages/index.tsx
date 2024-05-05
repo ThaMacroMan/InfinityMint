@@ -5,7 +5,6 @@ import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
-
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
@@ -14,7 +13,6 @@ import DownloadImage from '../components/DownloadImage';
 import ImageSlideshow from '../components/ImageSlideshow';
 import axios from "axios";
 import TokenPrice from './api/CheckPrice';
-
 
 import logo from '../pages/styles/catsky-logo-white.png'
 import jpglogo from '../pages/styles/jpglogo.png'
@@ -25,7 +23,6 @@ import square2 from '../pages/public/images/square2.png'
 import tall from '../pages/public/images/tall.png'
 import wide from '../pages/public/images/wide.png'
 import two from '../pages/public/images/two.png';
-//import three from '../pages/public/images/three.png';
 import four from '../pages/public/images/four.png';
 import five from '../pages/public/images/five.png';
 import six from '../pages/public/images/six.png';
@@ -48,8 +45,6 @@ import twentytwo from '../pages/public/images/twentytwo.png';
 import twentythree from '../pages/public/images/twentythree.png';
 import twentyfour from '../pages/public/images/twentyfour.png';
 import twentyfive from '../pages/public/images/twentyfive.png';
-import { Span } from "next/dist/trace";
-
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -80,21 +75,9 @@ const Home: NextPage = () => {
   const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
   const [catskyPerUse, setCatskyPerUse] = useState<number>(0);
   const [formattedPrice, setFormattedPrice] = useState<string>('');
-/*
-  const tokenDetails = {
-    tokenUnit:'9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59',
-    onchainID: '0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e',
-    interval: '1d',
-    numIntervals: 1,
-  };
-*/
-
-
-  
-  
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-
     const textarea = event.target;
     textarea.style.height = 'inherit'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
@@ -307,7 +290,6 @@ const updateOptions = () => {
     setSelectedStyle(style);
   };
   
-
   useEffect(() => {
     if (connected) {
       console.log("$CATSKY", catskyBalance); 
@@ -338,8 +320,6 @@ const updateOptions = () => {
       localStorage.removeItem('userWalletAddress');
     }
   }, [connected, catskyBalance]); // Include catskyBalance as a dependency
-  
-
   
   // Callback function to set catskyPerUse value
   const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
@@ -414,8 +394,6 @@ const updateOptions = () => {
       // Handle the error as needed
     }
   }; 
-
-
   
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
@@ -494,8 +472,6 @@ const updateOptions = () => {
       }
   };
 
- 
-
   useEffect(() => {
     updateOptions();
   }, []);
@@ -537,7 +513,6 @@ const updateOptions = () => {
     return response;
   };
   
-   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
    const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event?.target?.files?.length === 1) {
       const image_file = event.target.files[0];
@@ -585,16 +560,14 @@ const updateOptions = () => {
         <h1>
           Infinity Mint <span id="gradient-text">V1.0</span>
         </h1>   
-        <h1>
-          <span id="gradient-text">Powered by Catsky AI</span>
-        </h1>
+
         <a 
           href="https://catsky.io/" 
           target="_blank" 
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
         >
-          <img src={logo.src} alt="Logo" className="h-10" />
+              <span id="gradient-text">Powered by Catsky AI</span>
         </a>
         <a 
           href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items" 
@@ -641,7 +614,6 @@ const updateOptions = () => {
             setCatskyPerUse={handleSetCatskyPerUse} // Pass the callback function as prop
             />
 
-
             </div>
             <button
               type="button"
@@ -656,11 +628,11 @@ const updateOptions = () => {
               }`}
             >
                <span id="gradient-text">
-                Available Uses: {userUses.toLocaleString()} 
+                Available Uses: {userUses.toLocaleString()}   
               </span>
 
               <span id="gradient-text">
-              Buy 5 AI Uses: {catskyPerUse} $CATSKY 
+              5 AI Uses: {catskyPerUse} $CATSKY 
               </span>
               </button>
               
