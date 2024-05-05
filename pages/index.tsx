@@ -25,7 +25,7 @@ import square2 from '../pages/public/images/square2.png'
 import tall from '../pages/public/images/tall.png'
 import wide from '../pages/public/images/wide.png'
 import two from '../pages/public/images/two.png';
-import three from '../pages/public/images/three.png';
+//import three from '../pages/public/images/three.png';
 import four from '../pages/public/images/four.png';
 import five from '../pages/public/images/five.png';
 import six from '../pages/public/images/six.png';
@@ -48,6 +48,7 @@ import twentytwo from '../pages/public/images/twentytwo.png';
 import twentythree from '../pages/public/images/twentythree.png';
 import twentyfour from '../pages/public/images/twentyfour.png';
 import twentyfive from '../pages/public/images/twentyfive.png';
+import { Span } from "next/dist/trace";
 
 
 const Home: NextPage = () => {
@@ -78,7 +79,7 @@ const Home: NextPage = () => {
   const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
   const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
   const [catskyPerUse, setCatskyPerUse] = useState<number>(0);
-
+  const [formattedPrice, setFormattedPrice] = useState<string>('');
 /*
   const tokenDetails = {
     tokenUnit:'9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59',
@@ -293,8 +294,6 @@ const updateOptions = () => {
       setIsLoading(false); // Ensure loading state is reset even on error
     }
   };
-
-
   
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
@@ -345,6 +344,7 @@ const updateOptions = () => {
   // Callback function to set catskyPerUse value
   const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
     setCatskyPerUse(catskyPerUse);
+    setFormattedPrice(formattedPrice);
     console.log("Catsky Per Use: ", catskyPerUse)
     console.log("Catsky Price: ₳", formattedPrice)
     console.log("User Uses: ", userUses)
@@ -356,9 +356,6 @@ const updateOptions = () => {
         const userWalletAddress = await fetchUsedAddresses();
         const updatedUses = userUses + 5;
         localStorage.setItem(userWalletAddress, updatedUses.toString());
-        
-        // Update user uses in state
-        //setUserUses(updatedUses);
 
     try {
 
@@ -418,19 +415,6 @@ const updateOptions = () => {
     }
   }; 
 
-
-  useEffect(() => {
-    // Retrieve user wallet address from local storage
-    const userWalletAddress = localStorage.getItem('userWalletAddress');
-    if (userWalletAddress) {
-      // Retrieve available uses for the user from local storage
-      const storedUses = localStorage.getItem(userWalletAddress);
-      if (storedUses) {
-        setUserUses(parseInt(storedUses));
-      }
-    }
-  }, []);
-  
 
   
     // Function to calculate the minting price based on CATSKY token holdings
@@ -626,7 +610,8 @@ const updateOptions = () => {
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
         >
-          <img src={chartlogo.src} alt="Logo" className="h-10" />
+          <p style={{ color: 'green' }}>$CATSKY Price: ₳ {formattedPrice}</p>
+
         </a>
       </div>
       <div className="wrapper">
@@ -865,7 +850,7 @@ const updateOptions = () => {
           {!slideshowDisabled && 
             <ImageSlideshow 
             images={[
-              two, three, four, five, six, seven, eight, nine, ten,
+              two, four, five, six, seven, eight, nine, ten,
               eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty,
               twentyone, twentytwo, twentythree, twentyfour, twentyfive,
               square, square2, wide, tall, matrix
