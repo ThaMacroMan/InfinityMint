@@ -27,10 +27,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         max_tokens: 70,
         temperature: 0.8,
         messages: [
-          { "role": "system", "content": "You make random Dalle prompts that create incredible outputs and utilize dalle to its limits" },
-          { "role": "system", "content": "Only include the prompt itself in the output. Ensure no text or quotes in the image. Max 70 tokens" },
-          { "role": "system", "content": "Example prompt: a surreal cyberpunk cityscape with neon lights, flying cars, and towering skyscrapers reflecting a digital sunset" },
-          { "role": "user", "content": "Make me a dalle prompt that is random and futuristic." }
+          {
+            "role": "system",
+            "content": "Craft Dalle prompts that generate visually rich and imaginative futuristic scenes, tapping into the full capabilities of Dalle."
+          },
+          {
+            "role": "system",
+            "content": "Include only the prompt itself in the output. Ensure no text or quotes appear in the image. Maximum of 70 tokens."
+          },
+          {
+            "role": "system",
+            "content": "Example prompt: a bustling spaceport on an asteroid, with Cardania's citizens and aliens bartering over exotic resources like Prismaleaf and Quantum Dark Energy, starships docking in the background, and Ultrabots patrolling the area."
+          },
+          {
+            "role": "user",
+            "content": "Generate a Dalle prompt that imagines a vibrant scene in the Cardania universe, featuring spaceports, diverse alien interactions, and dynamic use of $RAD and Resource Tokens."
+          }          
+          
         ]
       });
 

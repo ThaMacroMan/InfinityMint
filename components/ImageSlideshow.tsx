@@ -34,14 +34,15 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
   return (
     <div>
   {connected ? (
-    <div className="tag4">
+    
+    <div className="tag5">
       {/* Content to display when wallet is connected */}
-      <span id="gradient-text">Wallet Connected! Enter a Prompt and click Generate Art</span>
+      <span id="creation-gradient-text">Enter a Prompt and click Generate Art</span>
     </div>
   ) : (
-    <div className="tag4">
+    <div className="tag5">
       {/* Content to display when wallet is not connected */}
-      <span id="gradient-text">Connect your Wallet to Start</span>
+      <span id="creation-gradient-text">Connect your Wallet to Start</span>
     </div>
   )}
 
@@ -86,10 +87,10 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
         </div>
   
         {connected && (
-          <div className="tag4">
-            <span id="gradient-text">Generate images and mint them on the Cardano Blockchain</span>
-            <br />
-            <span id="gradient-text">Hold CatNip NFTs for more features...</span>
+          <div className="tag5">
+            <span id="creation-gradient-text">Generate images and mint them on the Cardano Blockchain</span>
+
+            <span id="creation-gradient-text">Hold Cardania NFTs for more features...</span>
           </div>
         )}
       </div>

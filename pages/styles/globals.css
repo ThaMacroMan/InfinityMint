@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: 'Public-Pixel';
-    src: url(PublicPixel-eZPz6.ttf);
+    src: url(Neuropol.otf)
 } 
 
 .pixelfont{
@@ -15,7 +15,7 @@
 
 .pixelfont3{
   font-family: Public-Pixel;
-  font-size: .6rem;
+  font-size: 1.3rem;
 }
 
 .pixelfont2{
@@ -23,7 +23,7 @@
   position: absolute; /* Position the title absolutely */ 
   top: 1px;
   align-self: center;
-  font-size: 1.5rem;
+  font-size: 3rem;
   max-width: 100%; /* Set a maximum width for the title */
   text-align: center; /* Center the text within its container */
 }
@@ -37,6 +37,7 @@
   font-family: 'Public-Pixel';
   justify-content: space-evenly;
   box-shadow: 0 4px 8px rgba(0, 0, 0, .5); /* Add shadow effect */
+  font-size: 1.5rem;
 }
 #gradient-text {
   background: repeating-linear-gradient(to right, red, orange, yellow);
@@ -45,14 +46,15 @@
   -webkit-text-fill-color: transparent;
   font-weight: bold;
   font-style: italic;
-
+  font-size: 1.3rem;
 }
+
 
 .form {
   flex-direction: column; /* Align items vertically */
   align-items: center; /* Center items horizontally */
   justify-content: center;
-  background-color: #2406ba;
+  background-color: #202429;
   border-radius: 0.618rem;
   border: 5px solid #000000;
   margin: .5rem;
@@ -71,9 +73,9 @@
   padding: 1rem;
   margin: .5rem;
   border-radius: .618rem; 
-  background-color: #392bff;
-  background-image: url('cardano-ada-logo.png'); /* Enclose URL in quotes */
-  background-size: 3%; /* Adjust background size if necessary */
+  background-color: #202429;
+  background-image: url('CardaniaLogo.png'); /* Enclose URL in quotes */
+  background-size: 25%; /* Adjust background size if necessary */
   background-position: center; /* Adjust background position if necessary */
   width: 100%; /* Make the container expand to fit the available space */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
@@ -98,8 +100,6 @@
 
 }
 
-
-
 /* Media query for smaller screens */
 @media screen and (max-width: 924px) {
   
@@ -108,7 +108,7 @@
     flex-direction: column; /* Stack items vertically on smaller screens */
     width: 98%; /* Adjust width to fit mobile screen */
     margin: 1rem auto; /* Add margin for spacing */
-    min-height: 25rem;
+    min-height: 20rem;
   }
     /* Adjust font size for pixel fonts */
     .pixelfont,
@@ -116,11 +116,40 @@
       font-size: 0.5rem !important;
     }
   
-    /* Adjust font size for header */
     .header {
-      font-size: 0.6rem; /* Decrease font size for header */
+      display: flex;
+      align-items: center; /* Ensures that items are vertically centered in the line */
+      justify-content: flex-start; /* Aligns items to the start of the container */
+      flex-direction: row; /* Aligns items horizontally */
+      font-size: .75rem;
     }
-  
+    img.h-10 {
+      height: .75rem; /* or 40px if h-10 means height 10 units */
+      width: auto; /* Maintain aspect ratio */
+      margin-right: 8px; /* Optional: space between the logo and text */
+    }
+    #gradient-text {
+      background: repeating-linear-gradient(to right, red, orange, yellow);
+      background-clip: content-box;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      font-style: italic;
+      font-size: 1.3rem;
+    }
+    .asset-value {
+      font-size: 1.3rem; /* Adjust the font size as needed */
+    }
+    .asset-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 1.3rem;
+    }
+    .pixelfont3{
+      font-family: Public-Pixel;
+      font-size: 1.3rem;
+    }
     /* Adjust font size for other elements */
     .textarea,
     .button,
@@ -186,12 +215,12 @@
   border-width: 3px;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
-  font-size: .95rem;
+  font-size: 1.5rem;
   width: 97.5%
 }
 .info-popup {
 font-family: Public-Pixel;
-font-size: .84rem;
+font-size: 1.5rem;
 margin-left: 2rem;
 margin-right: 2rem;
 color: #ffffff;
@@ -207,7 +236,7 @@ width: vw;
   width: 97.5%; /* Set the width to 100% */
   border-radius: 0.618rem;
   padding: 1rem; /* Increase padding to make buttons wider */
-  font-size: 1rem; /* Increase font size */
+  font-size: 1.5rem; /* Increase font size */
   cursor: pointer;
   color: #ffffff;
   border: 3px solid #000000; /* Add border */
@@ -227,7 +256,7 @@ width: vw;
   width: 97.5%; /* Set the width to 100% */
   border-radius: 0.618rem;
   padding: 1rem; /* Increase padding to make buttons wider */
-  font-size: 1rem; /* Increase font size */
+  font-size: 1.5rem; /* Increase font size */
   cursor: pointer;
   color: #ffffff;
   border: 3px solid #000000; /* Add border */
@@ -254,7 +283,7 @@ width: vw;
   align-items: center; /* Vertically center the content */
   display: flex;
   border-radius: 0.618rem;
-  font-size: .75rem; /* Increase font size */
+  font-size: 1.5rem; /* Increase font size */
   cursor: pointer;
   border: 3px solid #000000; /* Add border */
   font-family: Public-Pixel;
@@ -284,7 +313,7 @@ width: vw;
   background-color: #2b00ff;
   border: 3px solid #000000;
   border-radius: 0.618rem;
-  font-size: .75rem;
+  font-size: 1.5rem;
   margin: .25rem;
   padding: .25rem;
   color: #ffffff;
@@ -325,7 +354,7 @@ width: vw;
     background-color: #2b00ff;
     border: 3px solid #000000;
     border-radius: 0.618rem;
-    font-size: 1rem;
+    font-size: 1.5rem;
     margin: 0.25rem;
     padding: 0.25rem;
     color: #ffffff;
@@ -337,7 +366,7 @@ width: vw;
     background-color: #2b00ff;
     border: 3px solid #000000;
     border-radius: 0.618rem;
-    font-size: 1.25rem;
+    font-size: 3rem;
     margin-top: .5rem;
     margin-bottom: .5rem;
     margin-left: 7rem;
@@ -350,13 +379,42 @@ width: vw;
     flex-direction: column; /* Display items vertically */
   }
 
+  .tag5 {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center text vertically */
+    justify-content: center; /* Center text horizontally */
+    background-color: #2b00ff;
+    border: 3px solid #000000;
+    border-radius: 0.618rem;
+    font-size: 3rem;
+    padding: 0.25rem;
+    color: #ffffff;
+    font-family: 'Public-Pixel', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: fit-content;
+    margin: 3rem auto; /* Auto margins for horizontal centering if parent is block */
+  }
+
+  #creation-gradient-text {
+    background: repeating-linear-gradient(to right, red, orange, yellow);
+    background-clip: content-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    align-content: center;
+    align-self: center;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 2rem;
+  }
+
 .field {
   display: flex;
   text-align: center;
   background-color: #b9b9b9;
   border: 3px solid black;
   border-radius: 0.618rem; /* Light grey background */
-  font-size: .7rem;
+  font-size: 1.5rem;
   width: fit-content;
   font-family: Public-Pixel;
   padding: .1rem;
@@ -438,7 +496,7 @@ width: vw;
 }
 /*cursor settings*/
 body{
-    background-color: #2b00ff;
+    background-color: #202429;
     cursor: auto;
 } 
 
@@ -450,7 +508,7 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 3rem;
+  height: 4rem;
 }
 .asset-value {
   font-size: 1rem; /* Adjust the font size as needed */

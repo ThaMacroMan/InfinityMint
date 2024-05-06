@@ -14,9 +14,8 @@ import ImageSlideshow from '../components/ImageSlideshow';
 import axios from "axios";
 import TokenPrice from './api/CheckPrice';
 
-import logo from '../pages/styles/catsky-logo-white.png'
+import logo from '../pages/styles/CardaniaLogo.png'
 import jpglogo from '../pages/styles/jpglogo.png'
-import chartlogo from '../pages/styles/chartlogo.png'
 import matrix from '../pages/public/images/matrix.png'
 import square from '../pages/public/images/square.png'
 import square2 from '../pages/public/images/square2.png'
@@ -69,8 +68,8 @@ const Home: NextPage = () => {
   const [userEnterName, setUserEnterName] = useState('');
   const [userUses, setUserUses] = useState<number>(1);
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
-  const catskyBalance = catskyAssetSummary["$CATSKY"] || 0;
-  const catnipBalance = catskyAssetSummary["CatNip NFT"] || 0;
+  const catskyBalance = catskyAssetSummary["$RAD"] || 0;
+  const catnipBalance = catskyAssetSummary["Terraforms"] || 0;
   const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
   const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
   const [catskyPerUse, setCatskyPerUse] = useState<number>(0);
@@ -292,10 +291,10 @@ const updateOptions = () => {
   
   useEffect(() => {
     if (connected) {
-      console.log("$CATSKY", catskyBalance); 
-      console.log("CatNip", catnipBalance);
-      console.log("OG-NFT", ognftBalance);
-      console.log("Era I", inifinitymintsBalance);
+      console.log("$RAD", catskyBalance); 
+      console.log("Terraforms", catnipBalance);
+      console.log("StarShips", ognftBalance);
+      console.log("Citizens", inifinitymintsBalance);
   
       async function fetchUsedAddresses() {
         try {
@@ -325,17 +324,13 @@ const updateOptions = () => {
   const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
     setCatskyPerUse(catskyPerUse);
     setFormattedPrice(formattedPrice);
-    console.log("Catsky Per Use: ", catskyPerUse)
-    console.log("Catsky Price: ₳", formattedPrice)
+    console.log("RAD Per Use: ", catskyPerUse)
+    console.log("RAD Price: ₳", formattedPrice)
     console.log("User Uses: ", userUses)
   };
 
   const buyUsesTransaction = async () => {
 
-        // Store user wallet address and available uses in local storage
-        const userWalletAddress = await fetchUsedAddresses();
-        const updatedUses = userUses + 5;
-        localStorage.setItem(userWalletAddress, updatedUses.toString());
 
     try {
 
@@ -343,7 +338,7 @@ const updateOptions = () => {
         'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
         [
           {
-            unit: '9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59',
+            unit: '6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73',
             quantity: catskyPerUse.toString()
             ,
           },
@@ -368,7 +363,7 @@ const updateOptions = () => {
       // Credit the user with usage
       await creditUserWithUsage(userWalletAddress);
     } catch (error) {
-      setError('You do not have enough ADA or the transaction was cancelled');
+      setError('You do not have enough ADA , RAD or Rejected the TX');
       console.error('Error processing transaction:', error);
     }
   };
@@ -556,11 +551,16 @@ const updateOptions = () => {
 
   return (
     <>
-      <div className="header flex"> 
-        <h1>
-          Infinity Mint <span id="gradient-text">V1.0</span>
-        </h1>   
-
+<div className="header" style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}> 
+  <a 
+      href="https://cardania.com/" 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+    >
+      <img src={logo.src} alt="Logo" style={{ height: '100px', width: 'auto', marginRight: '8px' }} />
+      Digital DreamForge <span id="gradient-text">V1.0</span>
+  </a>
         <a 
           href="https://catsky.io/" 
           target="_blank" 
@@ -583,7 +583,7 @@ const updateOptions = () => {
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
         >
-          <p style={{ color: 'green' }}>$CATSKY Price: ₳ {formattedPrice}</p>
+          <p style={{ color: 'green' }}>$RAD: ₳ {formattedPrice}</p>
 
         </a>
       </div>
@@ -607,8 +607,8 @@ const updateOptions = () => {
             
             <div>
             <TokenPrice
-            tokenUnit="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59"
-            onchainID="be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e"
+            tokenUnit="6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73"
+            onchainID="0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474"
             interval="1d"
             numIntervals={1}
             setCatskyPerUse={handleSetCatskyPerUse} // Pass the callback function as prop
@@ -632,7 +632,7 @@ const updateOptions = () => {
               </span>
 
               <span id="gradient-text">
-              5 AI Uses: {catskyPerUse} $CATSKY 
+              5 AI Uses: {catskyPerUse} $RAD 
               </span>
               </button>
               
@@ -693,7 +693,7 @@ const updateOptions = () => {
                   onChange={updateOptions}
                 >
                   <option value="dall-e-2">Regular</option>
-                  {connected && catskyBalance >= 100000000 && (
+                  {connected && catskyBalance >= 10000 && (
                   <option value="dall-e-3">Upgraded</option>
                   )}
                 </select>
@@ -830,7 +830,7 @@ const updateOptions = () => {
               disabled={false} 
             />
           }
-            <label className="pixelfont2 " id="gradient-text"> {userEnterName || promptSummary}</label>
+            <label className="pixelfont2" id="creation-gradient-text"> {userEnterName || promptSummary}</label>
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
             {isLoading && (
             <div className="spinner-container">
@@ -857,9 +857,10 @@ const updateOptions = () => {
                       className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
-                    <div className="button animated-gradient3 mx-auto">
+                    {/*<div className="button animated-gradient3 mx-auto">
                       <DownloadImage imageUrl={imageUrl} />
                     </div>
+                */}
                     <div className="tag3">
                       <div className="tag">Model: {selectedModel}</div>
                       <div className="tag">Size: {selectedSize}</div>
