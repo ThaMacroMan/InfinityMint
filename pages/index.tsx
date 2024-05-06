@@ -332,11 +332,6 @@ const updateOptions = () => {
 
   const buyUsesTransaction = async () => {
 
-        // Store user wallet address and available uses in local storage
-        const userWalletAddress = await fetchUsedAddresses();
-        const updatedUses = userUses + 5;
-        localStorage.setItem(userWalletAddress, updatedUses.toString());
-
     try {
 
       const tx = new Transaction({ initiator: wallet }).sendAssets(
