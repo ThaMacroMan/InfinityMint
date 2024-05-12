@@ -9,41 +9,24 @@ import { useTokenCheck } from '../hooks/TokenCheck';
 import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
 import APIErrorPopup from '../components/APIErrorPopup';
-import DownloadImage from '../components/DownloadImage';
 import ImageSlideshow from '../components/ImageSlideshow';
 import axios from "axios";
 import TokenPrice from './api/CheckPrice';
 
 import logo from '../pages/styles/CardaniaLogo.png'
 import jpglogo from '../pages/styles/jpglogo.png'
-import matrix from '../pages/public/images/matrix.png'
-import square from '../pages/public/images/square.png'
-import square2 from '../pages/public/images/square2.png'
-import tall from '../pages/public/images/tall.png'
-import wide from '../pages/public/images/wide.png'
-import two from '../pages/public/images/two.png';
-import four from '../pages/public/images/four.png';
-import five from '../pages/public/images/five.png';
-import six from '../pages/public/images/six.png';
-import seven from '../pages/public/images/seven.png';
-import eight from '../pages/public/images/eight.png';
-import nine from '../pages/public/images/nine.png';
-import ten from '../pages/public/images/ten.png';
-import eleven from '../pages/public/images/eleven.png';
-import twelve from '../pages/public/images/twelve.png';
-import thirteen from '../pages/public/images/thirteen.png';
-import fourteen from '../pages/public/images/fourteen.png';
-import fifteen from '../pages/public/images/fifteen.png';
-import sixteen from '../pages/public/images/sixteen.png';
-import seventeen from '../pages/public/images/seventeen.png';
-import eighteen from '../pages/public/images/eighteen.png';
-import nineteen from '../pages/public/images/nineteen.png';
-import twenty from '../pages/public/images/twenty.png';
-import twentyone from '../pages/public/images/twentyone.png';
-import twentytwo from '../pages/public/images/twentytwo.png';
-import twentythree from '../pages/public/images/twentythree.png';
-import twentyfour from '../pages/public/images/twentyfour.png';
-import twentyfive from '../pages/public/images/twentyfive.png';
+
+
+import aigirl from '../pages/public/images/aigirl.jpg';
+import amazonman from '../pages/public/images/amazonman.jpg';
+import citizen from '../pages/public/images/citizen.jpg';
+import dead from '../pages/public/images/dead.jpg';
+import dragon from '../pages/public/images/dragon.jpg';
+import escape from '../pages/public/images/escape.jpg';
+import powergirl from '../pages/public/images/powergirl.jpg';
+import ship from '../pages/public/images/ship.jpg';
+
+
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -62,7 +45,7 @@ const Home: NextPage = () => {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
   const [slideshowDisabled, setSlideshowDisabled] = useState(false);
-  const [mintingPrice, setMintingPrice] = useState<number>(8.69); // Default to the initial price
+  const [mintingPrice, setMintingPrice] = useState<number>(8690000); // Default to the initial price
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [userEnterInfo, setUserEnterInfo] = useState('');
   const [userEnterName, setUserEnterName] = useState('');
@@ -260,6 +243,9 @@ const Home: NextPage = () => {
       console.log("Terraforms", catnipBalance);
       console.log("StarShips", ognftBalance);
       console.log("Citizens", inifinitymintsBalance);
+
+      const price = calculateMintingPrice(mintingPrice);
+      setMintingPrice(price);
       
     } 
   }, [connected, catskyBalance, userAddress, userUses]); // Include catskyBalance as a dependency
@@ -286,8 +272,12 @@ const Home: NextPage = () => {
     };
 
     const creditUser = async()=>{
-      setUserUses((userUses) => String(Number(userUses) + 5));
-      localStorage.setItem(userAddress, userUses);
+
+      setUserUses((prevUserUses) => {
+        const newUserUses = String(Number(prevUserUses) + 5);
+        localStorage.setItem(userAddress, newUserUses);
+        return newUserUses; // Return the updated count to ensure the state is correctly set
+      })
     }
   
   const buyUsesTransaction = async () => {
@@ -326,17 +316,15 @@ const Home: NextPage = () => {
   
 //////////////////////////////////////////////
   
-  
-  
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
-      if (catskyBalance >= 5000000000) {
+      if (catskyBalance >= 5000000) {
         return 4690000; // 5 billion CATSKY tokens
-      } else if (catskyBalance >= 3000000000) {
+      } else if (catskyBalance >= 3000000) {
         return 5690000; // 3 billion CATSKY tokens
-      } else if (catskyBalance >= 1000000000) {
+      } else if (catskyBalance >= 1000000) {
         return 6690000; // 1 billion CATSKY tokens
-      } else if (catskyBalance >= 500000000) {
+      } else if (catskyBalance >= 500000) {
         return 7690000; // 500M CATSKY tokens
       } else {
         return 8690000; // Default initial price when no CATSKY tokens are held
@@ -487,6 +475,14 @@ const Home: NextPage = () => {
     setModalVisible(false);
   };
 
+  const widgetStyle = {
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    transform: 'translateY(0)', // Reset any previous translation on the y-axis
+
+  };
+
   return (
     <>
 <div className="header" style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}> 
@@ -553,10 +549,12 @@ const Home: NextPage = () => {
             />
 
             </div>
+
+
             <button
               type="button"
               onClick={buyUsesTransaction}
-              className={`button2 animated-gradient2 ${
+              className={`tag2 animated-gradient2 ${
                 !connected ||
                 isLoading ||
                 (!generatedImages && !uploadedImage) ||
@@ -565,14 +563,13 @@ const Home: NextPage = () => {
                   : ""
               }`}
             >
-               <span id="gradient-text">
-                Uses: {userUses}   
-              </span>
 
-              <span id="gradient-text">
-              Click to buy 5 Uses for {catskyPerUse} $RAD 
-              </span>
-              </button>
+              <label htmlFor="model" className="tag">Uses: {userUses}</label>
+              <span id='gradient-text'>Aquire 5 uses:  {catskyPerUse} $RAD </span>
+              
+
+
+             </button>
               
 
             <form>
@@ -596,6 +593,7 @@ const Home: NextPage = () => {
                <span id="gradient-text"> Generate Prompt</span>
               </button>
               <div/>
+
               <div className="tag2">
               <label htmlFor="model" className="tag">Style</label>
               <div className="dropdown-container">
@@ -686,7 +684,7 @@ const Home: NextPage = () => {
               <span id="gradient-text">Generate Art</span>
             </button>
 
-
+              {/*}
             <div className="Upload">
               <label
                 htmlFor="upload_button"
@@ -703,6 +701,7 @@ const Home: NextPage = () => {
                 style={{ visibility: "hidden" }}
               />
             </div>
+            */}
             <button
               type="button"
               onClick={processTransaction}
@@ -721,19 +720,21 @@ const Home: NextPage = () => {
                 (generatedImages.length === 0 && !uploadedImage)
               } // Disable button based on condition
             >
-              Mint on Cardano: ₳ {mintingPrice.toString()}
+
+              <span id='gradient-text'>Mint NFT: ₳ {(mintingPrice / 1000000).toFixed(2)}</span>
+
               </button>
               
               <div>
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-texts"></span> Hold $CATSKY when minting!</p>
+                      <p><span id="gradient-texts"></span> Hold $RAD when minting!</p>
                       <br></br>
-                      <p><span id="gradient-text"> 0.5 B = ₳ 1 ADA</span> an 11% Discount</p>
-                      <p><span id="gradient-text"> 1.0 B = ₳ 2 ADA</span> an 22% Discount!</p>
-                      <p><span id="gradient-text"> 3.0 B = ₳ 3 ADA</span> an 34% Discount!!</p>
-                      <p><span id="gradient-text"> 5.0 B = ₳ 4 ADA</span> an 46% Discount!!!</p>
+                      <p><span id="gradient-text"> 0.5 M = ₳ 1 ADA</span> an 11% Discount</p>
+                      <p><span id="gradient-text"> 1.0 M = ₳ 2 ADA</span> an 22% Discount!</p>
+                      <p><span id="gradient-text"> 3.0 M = ₳ 3 ADA</span> an 34% Discount!!</p>
+                      <p><span id="gradient-text"> 5.0 M = ₳ 4 ADA</span> an 46% Discount!!!</p>
                     </div>
                   )}
               </div>
@@ -744,21 +745,23 @@ const Home: NextPage = () => {
           {!slideshowDisabled && 
             <ImageSlideshow 
             images={[
-              two, four, five, six, seven, eight, nine, ten,
-              eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty,
-              twentyone, twentytwo, twentythree, twentyfour, twentyfive,
-              square, square2, wide, tall, matrix
+              aigirl, amazonman, citizen, dead, dragon, escape, powergirl, ship
             ]}  
               disabled={false} 
             />
           }
-            <label className="pixelfont2" id="creation-gradient-text"> {userEnterName || promptSummary}</label>
+          <div className="tag3">
+          {generatedImages && 
+          <label className="tag"> {userEnterName || promptSummary}</label>
+          }
+            </div>
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
             {isLoading && (
             <div className="spinner-container">
              <Spinner message="Generating your creation..." />
             </div>
             )}
+
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
                 defaultToken="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59"
@@ -769,6 +772,7 @@ const Home: NextPage = () => {
                 partnerName="CatskyAI"
                 displayType="WIDGET"
               />
+
             {!!generatedImages && generatedImages.length > 0 && (
               <div>
                 {generatedImages.map((imageUrl, imageIndex) => (

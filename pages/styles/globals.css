@@ -48,8 +48,6 @@
 
 }
 
-
-
 .form {
   flex-direction: column; /* Align items vertically */
   align-items: center; /* Center items horizontally */
@@ -64,8 +62,10 @@
 
 }
 
+
+
 .creation-container {
-  position: relative; /* Ensure non-static positioning context */
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -74,14 +74,16 @@
   margin: .5rem;
   border-radius: .618rem; 
   background-color: #202429;
-  background-image: url('uzyGxtnY.jpg'); /* Enclose URL in quotes */
-  background-size: 75%; /* Adjust background size if necessary */
-  background-position: center; /* Adjust background position if necessary */
-  width: 100%; /* Make the container expand to fit the available space */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
-  animation: flow 30s alternate infinite;
+  background-image: url('LczGzLNl.jpg');
+  background-size: cover; /* Use auto to prevent repeating and maintain aspect ratio */
+  background-position: bottom right; /* Ensure bottom-right portion is always visible */
+  background-repeat: no-repeat; /* Prevent background image from repeating */
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   cursor: auto;
-}
+} 
+
+
 
 .error-popup {
   font-family: Public-Pixel;
@@ -95,8 +97,6 @@
   border-radius: 5px;
   z-index: 1000;
   cursor: pointer; /* Add this line to set the cursor to pointer */
-
-
 
 }
 
@@ -175,7 +175,6 @@
       max-width: 50vh;
     }
   
-  
 }
 
 /* Media query for larger screens */
@@ -193,10 +192,7 @@
   .creation-container {
     width: calc(70% - 1rem); /* Adjust width to fit side by side with margin */
     margin: 0.5rem;
-
   }
-
-  
 }
 /* Adjust the width of the image as needed */
 .imageborder {
@@ -310,7 +306,7 @@ width: vw;
 .tag {
   display: flex;
   align-items: center; /* Center text vertically */
-  background-color: #585858;;
+  background-color: #000000;
   border: 3px solid #000000;
   border-radius: 0.618rem;
   font-size: 1.5rem;
