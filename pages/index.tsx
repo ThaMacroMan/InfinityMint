@@ -244,10 +244,9 @@ const Home: NextPage = () => {
       console.log("$RAD", catskyBalance); 
       console.log("Terraforms", catnipBalance);
       console.log("StarShips", ognftBalance);
-      console.log("Citizens", inifinitymintsBalance);
-      
+      console.log("Citizens", inifinitymintsBalance); 
     } 
-  }, [connected, catskyBalance, userAddress, userUses]); // Include catskyBalance as a dependency
+  }, [connected, catskyBalance, ognftBalance, inifinitymintsBalance, userAddress, userUses]); // Include catskyBalance as a dependency
 
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
@@ -394,7 +393,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     updateOptions();
-  }, [catnipBalance, ognftBalance, inifinitymintsBalance]); // Ensure updateOpt
+  }, [catnipBalance, ognftBalance, inifinitymintsBalance,updateOptions]); // Ensure updateOpt
 
   useEffect(() => {
     const updateCursor = (e: MouseEvent) => {
