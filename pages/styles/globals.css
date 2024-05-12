@@ -44,10 +44,10 @@
   background-clip: content-box;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: bold;
-  font-style: italic;
   font-size: 1.3rem;
+
 }
+
 
 
 .form {
@@ -74,8 +74,8 @@
   margin: .5rem;
   border-radius: .618rem; 
   background-color: #202429;
-  background-image: url('CardaniaLogo.png'); /* Enclose URL in quotes */
-  background-size: 25%; /* Adjust background size if necessary */
+  background-image: url('uzyGxtnY.jpg'); /* Enclose URL in quotes */
+  background-size: 75%; /* Adjust background size if necessary */
   background-position: center; /* Adjust background position if necessary */
   width: 100%; /* Make the container expand to fit the available space */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
@@ -133,9 +133,8 @@
       background-clip: content-box;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-weight: bold;
-      font-style: italic;
       font-size: 1.3rem;
+
     }
     .asset-value {
       font-size: 1.3rem; /* Adjust the font size as needed */
@@ -292,12 +291,13 @@ width: vw;
   height: 60px;
   max-width: 400px;
 }
+/*
 .animated-gradient {
-  background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); /* Define the gradient */
-  background-size: 400% auto; /* Double the background size to make the gradient flow */
-  animation: flow 2.618s linear infinite ; /* Apply the animation */
+  background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); 
+  background-size: 400% auto; 
+  animation: flow 2.618s linear infinite ; 
 }   
-
+*/
 @keyframes flow2 {
   0% {
       background-position: 0% 100%;
@@ -310,7 +310,7 @@ width: vw;
 .tag {
   display: flex;
   align-items: center; /* Center text vertically */
-  background-color: #2b00ff;
+  background-color: #585858;;
   border: 3px solid #000000;
   border-radius: 0.618rem;
   font-size: 1.5rem;
@@ -332,7 +332,7 @@ width: vw;
   padding: .3rem;
   padding-top: .25rem;
   padding-bottom: .25rem;
-  background-color: #2b00ff;
+
   border: 3px solid #000000;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
@@ -351,7 +351,7 @@ width: vw;
   .tag3 .tag {
     display: flex; /* Ensure tags are displayed as flex items */
     align-items: center; /* Center tag content vertically */
-    background-color: #2b00ff;
+
     border: 3px solid #000000;
     border-radius: 0.618rem;
     font-size: 1.5rem;
@@ -363,7 +363,7 @@ width: vw;
   .tag4 {
     display: flex;
     align-items: center; /* Center text vertically */
-    background-color: #2b00ff;
+
     border: 3px solid #000000;
     border-radius: 0.618rem;
     font-size: 3rem;
@@ -384,7 +384,7 @@ width: vw;
     flex-direction: column;
     align-items: center; /* Center text vertically */
     justify-content: center; /* Center text horizontally */
-    background-color: #2b00ff;
+    background-color: #000000;
     border: 3px solid #000000;
     border-radius: 0.618rem;
     font-size: 3rem;
@@ -403,8 +403,6 @@ width: vw;
     -webkit-text-fill-color: transparent;
     align-content: center;
     align-self: center;
-    font-weight: bold;
-    font-style: italic;
     font-size: 2rem;
   }
 
@@ -479,20 +477,19 @@ width: vw;
     background-position: 100% 50%;
   }
 }
-
-
+/*
 .animated-gradient2 {
-  background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
-  background-size: auto 200%; /* Allow the gradient to expand along the vertical axis */
-  animation: flow2 1.618s linear infinite; /* Apply the animation */
+  background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); 
+  background-size: auto 200%; /* Allow the gradient to expand along the vertical axis 
+  animation: flow2 1.618s linear infinite;
 }
 .animated-gradient3 {
-  background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); /* Define the gradient */
-  background-size: auto 200%; /* Allow the gradient to expand along the vertical axis */
-  animation: flow2 1.618s linear infinite; /* Apply the animation */
+  background: linear-gradient
+  background-size: auto 200%; 
+  animation: flow2 1.618s linear infinite; 
   width:25vw;
-  margin-left: auto; /* Center horizontally */
-  margin-right: auto; /* Center horizontally */
+  margin-left: auto; 
+  margin-right: auto; 
 }
 /*cursor settings*/
 body{

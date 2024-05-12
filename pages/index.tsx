@@ -55,8 +55,8 @@ const Home: NextPage = () => {
   const [generatedPrompt, setGeneratedPrompt] = useState<string>(''); // State variable to store the generated prompt
   const [error, setError] = useState<string | null>(null);
   const [chunkedMetadata, setChunkedMetadata] = useState<string[]>([]);
-  const [selectedModel, setSelectedModel] = useState("dall-e-2");
-  const [selectedSize, setSelectedSize] = useState("256x256");
+  const [selectedModel, setSelectedModel] = useState("dall-e-3");
+  const [selectedSize, setSelectedSize] = useState("1024x1024");
   const [selectedQuality, setSelectedQuality] = useState("standard");
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -66,7 +66,8 @@ const Home: NextPage = () => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [userEnterInfo, setUserEnterInfo] = useState('');
   const [userEnterName, setUserEnterName] = useState('');
-  const [userUses, setUserUses] = useState<number>(1);
+  const [userUses, setUserUses] = useState<string>('1');
+  const [userAddress, setUserAddress] = useState<string>('none');
   const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
   const catskyBalance = catskyAssetSummary["$RAD"] || 0;
   const catnipBalance = catskyAssetSummary["Terraforms"] || 0;
@@ -81,87 +82,54 @@ const Home: NextPage = () => {
     textarea.style.height = 'inherit'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
-// Inside the updateOptions function
-const updateOptions = () => {
-  const modelSelect = document.getElementById("model") as HTMLSelectElement;
-  const sizeSelect = document.getElementById("size") as HTMLSelectElement;
-  const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
-  const selectedModel = modelSelect.value;
+  const updateOptions = () => {
+    const modelSelect = document.getElementById("model") as HTMLSelectElement;
+    const sizeSelect = document.getElementById("size") as HTMLSelectElement;
+    const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
+    const selectedModel = modelSelect.value;
 
-  sizeSelect.innerHTML = "";
-  qualitySelect.innerHTML = "";
+    // Clear existing options
+    sizeSelect.innerHTML = "";
+    qualitySelect.innerHTML = "";
 
-  if (selectedModel === "dall-e-2") {
-    // Add size options for DALL·E-2
-    const sizeOptions = [
-      { value: "256x256", label: "Small" },
-      { value: "512x512", label: "Medium" },
-      { value: "1024x1024", label: "Large" },
-    ];
-    sizeOptions.forEach((optionData) => {
-      const option = document.createElement("option");
-      option.value = optionData.value;
-      option.textContent = optionData.label;
-      sizeSelect.appendChild(option);
-    });
-
-    const qualityOption = document.createElement("option");
-    qualityOption.value = "standard";
-    qualityOption.textContent = "Standard";
-    qualitySelect.appendChild(qualityOption);
-  } else if (selectedModel === "dall-e-3") {
-    const sizeOptions = [
-      { value: "1024x1024", label: "Square" },
-    ];
-    sizeOptions.forEach((optionData) => {
-      const option = document.createElement("option");
-      option.value = optionData.value;
-      option.textContent = optionData.label;
-      sizeSelect.appendChild(option);
-    });
-
-    // Always add a standard quality option for DALL·E-3
-    const standardOption = document.createElement("option");
-    standardOption.value = "standard";
-    standardOption.textContent = "Standard";
-    qualitySelect.appendChild(standardOption);
-
-    // Add quality options for DALL·E-3 if user has CatNip
-    if (catnipBalance >= 3 || ognftBalance >= 1 || inifinitymintsBalance >=10) {
+    // Default options are always available
+    const squareOption = document.createElement("option");
+    squareOption.value = "1024x1024";
+    squareOption.textContent = "Square";
+    sizeSelect.appendChild(squareOption);
+  
+    const standardQualityOption = document.createElement("option");
+    standardQualityOption.value = "standard";
+    standardQualityOption.textContent = "Standard";
+    qualitySelect.appendChild(standardQualityOption);
+  
+    // Conditional addition of more options based on asset balances
+    if (catnipBalance >= 3 || ognftBalance >= 1 || inifinitymintsBalance >= 10) {
+      // Enable additional size options
       const landscapeOption = document.createElement("option");
       landscapeOption.value = "1792x1024";
       landscapeOption.textContent = "Landscape";
       sizeSelect.appendChild(landscapeOption);
-
+      
+  
       const portraitOption = document.createElement("option");
       portraitOption.value = "1024x1792";
       portraitOption.textContent = "Portrait";
       sizeSelect.appendChild(portraitOption);
-
-      const standardOption = document.createElement("option");
-      standardOption.value = "standard";
-      standardOption.textContent = "Standard";
-      qualitySelect.appendChild(standardOption);
-
+  
+      // Enable additional quality options
       const hdOption = document.createElement("option");
       hdOption.value = "hd";
       hdOption.textContent = "HD";
       qualitySelect.appendChild(hdOption);
-    } else {
-      const disabledOption = document.createElement("option");
-      disabledOption.value = "standard";
-      disabledOption.textContent = "Select";
-      sizeSelect.appendChild(disabledOption);
-
-      // Quality options are disabled if CatNip is not available
-      qualitySelect.disabled = true;
     }
-  }
-  // Update size and quality based on the new selections
-  setSelectedSize(sizeSelect.value);
-  setSelectedQuality(qualitySelect.value);
-  setSelectedModel(modelSelect.value);
-};
+  
+    // Update the selected values to reflect any changes
+    setSelectedSize(sizeSelect.value);
+    setSelectedQuality(qualitySelect.value);
+
+  };
+  
   const getRandomPrompt = async () => {
     try {
       setIsLoading(true); // Set loading state to true
@@ -210,27 +178,46 @@ const updateOptions = () => {
       throw error;
     }
   };
+///////////////////
+  const fetchUserData = async () => {
+    const usedAddresses = await wallet.getUsedAddresses();
+    setUserAddress(usedAddresses[0])
+
+    if (localStorage.getItem(userAddress) === 'null') {
+      console.log('New User Detected, saving and setting to 1 free use')
+      localStorage.setItem(userAddress, '1');
+
+    }
+    else {
+      const storedUses = localStorage.getItem(userAddress) || '0';
+      setUserUses(storedUses);
+      console.log('Returning user detected with', userUses)
+    }
+  }
+///////////////////
+
   const generateImage = async () => {
     setUserEnterName('');
     setModalVisible(false)
     setSlideshowDisabled(true); // Disable the slideshow when generating image
     try {
       setIsLoading(true); // Set loading state to true when generating image
-      console.log(selectedModel,selectedModel,selectedQuality);
+      console.log(selectedModel,selectedSize,selectedQuality);
       const response = await fetch('/api/generateImage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: `${prompt} In Style: '${selectedStyle}'`, // Include the selected style in the prompt
+          prompt: `${prompt}`, // Include the selected style in the prompt
           size: selectedSize,
           quality: selectedQuality,
           model: selectedModel,
+          style: selectedStyle
         }),
       });
-      console.log(selectedStyle);
-      console.log(prompt);
+      console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
+
       if (!response.ok) {
         setError('Requests with swears or nudity are rejected. If error continues, notify MacroMan');
         setIsLoading(false);
@@ -253,30 +240,30 @@ const updateOptions = () => {
       setChunkedPrompt(chunkedPromptData);
       setIsLoading(false); // Set loading state to false when image generation is complete
 
-      setUserUses((userUses) => userUses - 1); // Update the userUses state
+      setUserUses((prevUserUses) => {
+        const newUserUses = String(Number(prevUserUses) - 1);
+        localStorage.setItem(userAddress, newUserUses);
+        return newUserUses; // Return the updated count to ensure the state is correctly set
+      });
 
-      // Check if a user is connected
-      if (connected) {
-        // Save updated user uses to local storage
-        const userWalletAddress = await fetchUsedAddresses();
-        const updatedUses = userUses - 1;
-        localStorage.setItem(userWalletAddress, updatedUses.toString());
-      } else {
-        // If no user is connected, check if the AI has already been tried
-        const alreadyTriedAI = localStorage.getItem('alreadyTriedAI');
-        if (!alreadyTriedAI) {
-          // Subtract one usage and set the flag if the AI hasn't been tried before
-          setUserUses((userUses) => userUses - 1); // Update the userUses state
-          localStorage.setItem('userUses', (userUses - 1).toString());
-          localStorage.setItem('alreadyTriedAI', 'true');
-        }
-      }
     } catch (error) {
       console.error('Failed to generate images:', error);
       setIsLoading(false); // Ensure loading state is reset even on error
     }
   };
-  
+
+  useEffect(() => {
+    
+    if (connected) {
+      fetchUserData();
+      console.log("$RAD", catskyBalance); 
+      console.log("Terraforms", catnipBalance);
+      console.log("StarShips", ognftBalance);
+      console.log("Citizens", inifinitymintsBalance);
+      
+    } 
+  }, [connected, catskyBalance, userAddress, userUses]); // Include catskyBalance as a dependency
+
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
     const chunks = [];
@@ -288,49 +275,22 @@ const updateOptions = () => {
   const handleStyleSelection = (style: string) => {
     setSelectedStyle(style);
   };
-  
-  useEffect(() => {
-    if (connected) {
-      console.log("$RAD", catskyBalance); 
-      console.log("Terraforms", catnipBalance);
-      console.log("StarShips", ognftBalance);
-      console.log("Citizens", inifinitymintsBalance);
-  
-      async function fetchUsedAddresses() {
-        try {
-          const usedAddresses = await wallet.getUsedAddresses();
-          console.log("User Addresses: ", usedAddresses[0]);
-          // Retrieve available uses for the user from local storage
-          const storedUses = localStorage.getItem(usedAddresses[0]);
-          if (storedUses) {
-            const parsedUses = parseInt(storedUses, 10);
-            setUserUses(parsedUses);
-            console.log('User Uses:', parsedUses); // Log the userUses value
-          }
-        } catch (error) {
-          console.error("Error fetching used addresses: ", error);
-        }
-      }
-      fetchUsedAddresses(); // Call the async function to execute
-    } else {
-      // Reset user uses when wallet is disconnected
-      setUserUses(1); // Set the initial value for user uses
-      // Clear user uses from local storage
-      localStorage.removeItem('userWalletAddress');
+
+    // Callback function to set catskyPerUse value
+    const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
+      setCatskyPerUse(catskyPerUse);
+      setFormattedPrice(formattedPrice);
+      console.log("RAD Per Use: ", catskyPerUse)
+      console.log("RAD Price: ₳", formattedPrice)
+      console.log("User Uses: ", userUses)
+    };
+
+    const creditUser = async()=>{
+      setUserUses((userUses) => String(Number(userUses) + 5));
+      localStorage.setItem(userAddress, userUses);
     }
-  }, [connected, catskyBalance]); // Include catskyBalance as a dependency
   
-  // Callback function to set catskyPerUse value
-  const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
-    setCatskyPerUse(catskyPerUse);
-    setFormattedPrice(formattedPrice);
-    console.log("RAD Per Use: ", catskyPerUse)
-    console.log("RAD Price: ₳", formattedPrice)
-    console.log("User Uses: ", userUses)
-  };
-
   const buyUsesTransaction = async () => {
-
 
     try {
 
@@ -356,39 +316,17 @@ const updateOptions = () => {
       const signedTx = await wallet.signTx(unsignedTx);
       const txHash = await wallet.submitTx(signedTx);
       console.log('Transaction hash:', txHash);
-  
-      // Fetch the user's wallet address
-      const userWalletAddress = await fetchUsedAddresses();
-  
-      // Credit the user with usage
-      await creditUserWithUsage(userWalletAddress);
+      creditUser();
+
     } catch (error) {
       setError('You do not have enough ADA , RAD or Rejected the TX');
       console.error('Error processing transaction:', error);
     }
   };
   
-  const fetchUsedAddresses = async () => {
-    try {
-      const usedAddresses = await wallet.getUsedAddresses();
-      // Assuming the first address is the user's wallet address
-      return usedAddresses[0];
-    } catch (error) {
-      console.error("Error fetching used addresses: ", error);
-      throw error;
-    }
-  };
+//////////////////////////////////////////////
   
-  const creditUserWithUsage = async (userWalletAddress: string) => {
-    try {
-      setUserUses((userUses) => userUses + 5); // Update the userUses state
-      
-      console.log(`User ${userWalletAddress} credited with 5 AI usages.`);
-    } catch (error) {
-      console.error('Error crediting user with usage:', error);
-      // Handle the error as needed
-    }
-  }; 
+  
   
     // Function to calculate the minting price based on CATSKY token holdings
     const calculateMintingPrice = (catskyBalance: number) => {
@@ -469,7 +407,7 @@ const updateOptions = () => {
 
   useEffect(() => {
     updateOptions();
-  }, []);
+  }, [catnipBalance, ognftBalance, inifinitymintsBalance]); // Ensure updateOpt
 
   useEffect(() => {
     const updateCursor = (e: MouseEvent) => {
@@ -559,7 +497,7 @@ const updateOptions = () => {
       style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
     >
       <img src={logo.src} alt="Logo" style={{ height: '100px', width: 'auto', marginRight: '8px' }} />
-      Digital DreamForge <span id="gradient-text">V1.0</span>
+      Digital DreamForge <span id="gradient-text"></span>
   </a>
         <a 
           href="https://catsky.io/" 
@@ -567,7 +505,7 @@ const updateOptions = () => {
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
         >
-              <span id="gradient-text">Powered by Catsky AI</span>
+              <span id="gradient-text">Powered by Catsky AI </span>
         </a>
         <a 
           href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items" 
@@ -575,7 +513,7 @@ const updateOptions = () => {
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
         >
-          <img src={jpglogo.src} alt="Logo" className="h-10" />
+          <img src={jpglogo.src} alt="Logo" className="h-9" />
         </a>
         <a 
           href="https://www.taptools.io/charts/token?pairID=0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
@@ -628,11 +566,11 @@ const updateOptions = () => {
               }`}
             >
                <span id="gradient-text">
-                Available Uses: {userUses.toLocaleString()}   
+                Uses: {userUses}   
               </span>
 
               <span id="gradient-text">
-              5 AI Uses: {catskyPerUse} $RAD 
+              Click to buy 5 Uses for {catskyPerUse} $RAD 
               </span>
               </button>
               
@@ -667,19 +605,8 @@ const updateOptions = () => {
                 id="style" 
                 onChange={(e) => handleStyleSelection(e.target.value)}>
                 <option value="">Select</option>
-                  <option value="Surrealism">Surrealism</option>
-                  <option value="Renaissance">Renaissance</option>
-                  <option value="Impressionism">Impressionism</option>
-                  <option value="Cubism">Cubism</option>
-                  <option value="Minimalism">Minimalism</option>
-                  <option value="Pop art">Pop art</option>
-                  <option value="Abstract">Abstract</option>
-                  <option value="Art Deco">Art Deco</option>
-                  <option value="Contemporary">Contemporary</option>
-                  <option value="Digital art">Digital art</option>
-                  <option value="Graffiti">Graffiti</option>
-                  <option value="Light painting">Light painting</option>
-                  <option value="Futurism">Futurism</option>
+                  <option value="natural">Natural</option>
+                  <option value="vivid">Vivid</option>
                 </select>
               </div>
             </div>
@@ -692,19 +619,17 @@ const updateOptions = () => {
                   id="model"
                   onChange={updateOptions}
                 >
-                  <option value="dall-e-2">Regular</option>
-                  {connected && catskyBalance >= 10000 && (
-                  <option value="dall-e-3">Upgraded</option>
-                  )}
+                  <option value="dall-e-3"> dalle 3</option>
+
                 </select>
                 </div>
-              </div>
+            </div> 
 
               <div>
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Models:</span> Dalle 2 and 3 are the current OpenAI Image Genearation Models. Dalle3 is significantly better, but slower</p>
+                      <p><span id="gradient-text"> Models:</span> Dalle 3 is OpenAI's latest image generation model. </p>
                     </div>
                   )}
               </div>
@@ -723,9 +648,6 @@ const updateOptions = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Small = </span> 256x256</p>
-                      <p><span id="gradient-text"> Medium =</span> 512x512</p>
-                      <p><span id="gradient-text"> Large = </span> 1024x1024</p>
                       <p><span id="gradient-text"> Square = </span> 1024x1024</p>
                       <p><span id="gradient-text"> Landscape = </span> 1792x1024</p>
                       <p><span id="gradient-text"> Portrait = </span> 1024x1792</p>
@@ -748,7 +670,7 @@ const updateOptions = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Qualtiy:</span> Dalle 3 has 2 quality options to try</p>
+                      <p><span id="gradient-text"> Qualtiy:</span> Dalle 3 has 2 quality options: Standard and HD.</p>
                     </div>
                   )}
               </div>
@@ -757,9 +679,9 @@ const updateOptions = () => {
               type="button"
               onClick={generateImage}
               className={`button animated-gradient ${
-                isLoading  || !connected || !prompt.trim() || userUses === 0 ? 'disabled-button' : ''
+                isLoading  || !connected || !prompt.trim() || userUses === '0' ? 'disabled-button' : ''
               }`}
-              disabled={isLoading || !connected || !prompt.trim() || userUses === 0} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
+              disabled={isLoading || !connected || !prompt.trim() || userUses === '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
             >
               <span id="gradient-text">Generate Art</span>
             </button>
@@ -860,7 +782,6 @@ const updateOptions = () => {
                     {/*<div className="button animated-gradient3 mx-auto">
                       <DownloadImage imageUrl={imageUrl} />
                     </div>
-                */}
                     <div className="tag3">
                       <div className="tag">Model: {selectedModel}</div>
                       <div className="tag">Size: {selectedSize}</div>
