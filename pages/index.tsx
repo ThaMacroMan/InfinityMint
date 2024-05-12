@@ -180,6 +180,8 @@ const Home: NextPage = () => {
 ///////////////////
 
   const generateImage = async () => {
+    const price = calculateMintingPrice(mintingPrice);
+    setMintingPrice(price);
     setUserEnterName('');
     setModalVisible(false)
     setSlideshowDisabled(true); // Disable the slideshow when generating image
@@ -243,9 +245,6 @@ const Home: NextPage = () => {
       console.log("Terraforms", catnipBalance);
       console.log("StarShips", ognftBalance);
       console.log("Citizens", inifinitymintsBalance);
-
-      const price = calculateMintingPrice(mintingPrice);
-      setMintingPrice(price);
       
     } 
   }, [connected, catskyBalance, userAddress, userUses]); // Include catskyBalance as a dependency
@@ -567,8 +566,6 @@ const Home: NextPage = () => {
               <label htmlFor="model" className="tag">Uses: {userUses}</label>
               <span id='gradient-text'>Aquire 5 uses:  {catskyPerUse} $RAD </span>
               
-
-
              </button>
               
 
