@@ -680,24 +680,6 @@ const Home: NextPage = () => {
               <span id="gradient-text">Generate Art</span>
             </button>
 
-              {/*}
-            <div className="Upload">
-              <label
-                htmlFor="upload_button"
-                className={`button animated-gradient`}
-              >
-                <span id="gradient-text">{process.env.TOTO}Upload Image</span>
-              </label>
-              <input
-                className={`button animated-gradient`}
-                type="file"
-                onChange={handleChange}
-                accept=".jpg,.jpeg,.png"
-                id="upload_button"
-                style={{ visibility: "hidden" }}
-              />
-            </div>
-            */}
             <button
               type="button"
               onClick={processTransaction}
