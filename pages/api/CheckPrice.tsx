@@ -65,11 +65,7 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  return (
-    <div>
-      <p>Formatted Price: {formattedPrice}</p>
-    </div>
-  );
+  return 
 };
 
 export default TokenPrice;

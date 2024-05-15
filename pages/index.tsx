@@ -60,6 +60,30 @@ const Home: NextPage = () => {
   const [catskyPerUse, setCatskyPerUse] = useState<number>(0);
   const [formattedPrice, setFormattedPrice] = useState<string>('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [balances, setBalances] = useState({
+    catskyBalance: 0,
+    catnipBalance: 0,
+    ognftBalance: 0,
+    inifinitymintsBalance: 0,
+  });
+
+  
+  
+  useEffect(() => {
+    if (connected) {
+      const newBalances = {
+        catskyBalance: catskyAssetSummary["$RAD"] || 0,
+        catnipBalance: catskyAssetSummary["Terraforms"] || 0,
+        ognftBalance: catskyAssetSummary["StarShips"] || 0,
+        inifinitymintsBalance: catskyAssetSummary["Citizens"] || 0,
+      };
+      setBalances(newBalances);
+      console.log("$RAD", newBalances.catskyBalance);
+      console.log("Terraforms", newBalances.catnipBalance);
+      console.log("StarShips", newBalances.ognftBalance);
+      console.log("Citizens", newBalances.inifinitymintsBalance);
+    }
+  }, [connected, catskyAssetSummary]);
   
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = event.target;
@@ -255,16 +279,7 @@ const Home: NextPage = () => {
     }
   };
 
-  useEffect(() => {
-    
-    if (connected) {
-      fetchUserData();
-      console.log("$RAD", catskyBalance); 
-      console.log("Terraforms", catnipBalance);
-      console.log("StarShips", ognftBalance);
-      console.log("Citizens", inifinitymintsBalance); 
-    } 
-  }, [connected, catskyBalance, ognftBalance, inifinitymintsBalance, userAddress, userUses]); // Include catskyBalance as a dependency
+
 
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
@@ -402,9 +417,6 @@ const Home: NextPage = () => {
       }
   };
 
-  useEffect(() => {
-    updateOptions();
-  }, [catnipBalance, ognftBalance, inifinitymintsBalance,updateOptions]); // Ensure updateOpt
 
   useEffect(() => {
     const updateCursor = (e: MouseEvent) => {
@@ -775,11 +787,10 @@ const Home: NextPage = () => {
               <div>
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
-                    <Image
+                    <img
                       src={imageUrl}
                       alt={`Generated Image ${imageIndex + 1}`}
-                      width={500}
-                      height={300}
+
                       className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
