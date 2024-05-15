@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Image from 'next/image';
 import type { NextPage } from "next";
 import { useAddress, useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
@@ -65,11 +66,13 @@ const Home: NextPage = () => {
     textarea.style.height = 'inherit'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
-  const updateOptions = () => {
+  
+  const updateOptions = useCallback(() => {
     const modelSelect = document.getElementById("model") as HTMLSelectElement;
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
     const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
-    const selectedModel = modelSelect.value;
+
+    if (!modelSelect || !sizeSelect || !qualitySelect) return;
 
     // Clear existing options
     sizeSelect.innerHTML = "";
@@ -80,12 +83,12 @@ const Home: NextPage = () => {
     squareOption.value = "1024x1024";
     squareOption.textContent = "Square";
     sizeSelect.appendChild(squareOption);
-  
+
     const standardQualityOption = document.createElement("option");
     standardQualityOption.value = "standard";
     standardQualityOption.textContent = "Standard";
     qualitySelect.appendChild(standardQualityOption);
-  
+
     // Conditional addition of more options based on asset balances
     if (catnipBalance >= 3 || ognftBalance >= 1 || inifinitymintsBalance >= 10) {
       // Enable additional size options
@@ -93,25 +96,27 @@ const Home: NextPage = () => {
       landscapeOption.value = "1792x1024";
       landscapeOption.textContent = "Landscape";
       sizeSelect.appendChild(landscapeOption);
-      
-  
+
       const portraitOption = document.createElement("option");
       portraitOption.value = "1024x1792";
       portraitOption.textContent = "Portrait";
       sizeSelect.appendChild(portraitOption);
-  
+
       // Enable additional quality options
       const hdOption = document.createElement("option");
       hdOption.value = "hd";
       hdOption.textContent = "HD";
       qualitySelect.appendChild(hdOption);
     }
-  
+
     // Update the selected values to reflect any changes
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
+  }, [catnipBalance, ognftBalance, inifinitymintsBalance, setSelectedSize, setSelectedQuality]);
 
-  };
+  useEffect(() => {
+    updateOptions();
+  }, [updateOptions]);
   
   const getRandomPrompt = async () => {
     try {
@@ -177,6 +182,19 @@ const Home: NextPage = () => {
       console.log('Returning user detected with', userUses)
     }
   }
+
+
+
+  const handleSetCatskyPerUse = useCallback((newCatskyPerUse: number, newFormattedPrice: string) => {
+    setCatskyPerUse(newCatskyPerUse);
+    setFormattedPrice(newFormattedPrice);
+    console.log("RAD Per Use: ", catskyPerUse)
+    console.log("RAD Price: ₳", formattedPrice)
+    console.log("User Uses: ", userUses)
+  }, []);
+
+
+
 ///////////////////
 
   const generateImage = async () => {
@@ -260,14 +278,7 @@ const Home: NextPage = () => {
     setSelectedStyle(style);
   };
 
-    // Callback function to set catskyPerUse value
-    const handleSetCatskyPerUse = (catskyPerUse: number, formattedPrice: string) => {
-      setCatskyPerUse(catskyPerUse);
-      setFormattedPrice(formattedPrice);
-      console.log("RAD Per Use: ", catskyPerUse)
-      console.log("RAD Price: ₳", formattedPrice)
-      console.log("User Uses: ", userUses)
-    };
+
 
     const creditUser = async()=>{
 
@@ -490,7 +501,12 @@ const Home: NextPage = () => {
       rel="noopener noreferrer" 
       style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
     >
-      <img src={logo.src} alt="Logo" style={{ height: '100px', width: 'auto', marginRight: '8px' }} />
+      <Image 
+      src={logo.src} 
+      alt="Logo" 
+      width={500}
+      height={300}
+      style={{ height: '100px', width: 'auto', marginRight: '8px' }} />
       Digital DreamForge <span id="gradient-text"></span>
   </a>
         <a 
@@ -507,7 +523,11 @@ const Home: NextPage = () => {
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
         >
-          <img src={jpglogo.src} alt="Logo" className="h-9" />
+          <Image 
+          src={jpglogo.src} 
+          alt="Logo" className="h-9"
+          width={200}
+          height={300} />
         </a>
         <a 
           href="https://www.taptools.io/charts/token?pairID=0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
@@ -755,9 +775,11 @@ const Home: NextPage = () => {
               <div>
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
-                    <img
+                    <Image
                       src={imageUrl}
                       alt={`Generated Image ${imageIndex + 1}`}
+                      width={500}
+                      height={300}
                       className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
@@ -780,9 +802,11 @@ const Home: NextPage = () => {
             {uploadedImage && (
             <div>
               <div key={`uploaded-image`}>
-                <img
+                <Image
                   src={uploadedImage}
                   alt={`Uploaded Image`}
+                  width={500}
+                  height={300}
                   className="mx-auto mt-4 mb-4 imageborder"
                   onClick={() => saveImage(uploadedImage)}
                 />

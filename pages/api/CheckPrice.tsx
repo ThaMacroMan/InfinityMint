@@ -6,22 +6,6 @@ interface TokenPriceProps {
   interval: string;
   numIntervals: number;
   setCatskyPerUse: (catskyPerUse: number, formattedPrice: string) => void;
-
-
-}
-
-interface PriceData {
-  close: number;
-  high: number;
-  low: number;
-  open: number;
-  time: number;
-  volume: number;
-}
-
-interface TokenPriceData {
-  formattedPrice: string;
-  catskyPerUse: number;
 }
 
 const TokenPrice: React.FC<TokenPriceProps> = ({
@@ -30,12 +14,10 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
   interval,
   numIntervals,
   setCatskyPerUse
-
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [formattedPrice, setFormattedPrice] = useState<string>('');
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,11 +60,17 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
     };
 
     fetchData();
-  }, []);
+  }, [tokenUnit, onchainID, interval, numIntervals, setCatskyPerUse]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  return (
+    <div>
+      <p>Formatted Price: {formattedPrice}</p>
+    </div>
+  );
 };
 
 export default TokenPrice;
+
