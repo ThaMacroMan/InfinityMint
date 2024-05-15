@@ -78,12 +78,14 @@ const Home: NextPage = () => {
         inifinitymintsBalance: catskyAssetSummary["Citizens"] || 0,
       };
       setBalances(newBalances);
+      fetchUserData();
+      console.log('addy is:', userAddress)
       console.log("$RAD", newBalances.catskyBalance);
       console.log("Terraforms", newBalances.catnipBalance);
       console.log("StarShips", newBalances.ognftBalance);
       console.log("Citizens", newBalances.inifinitymintsBalance);
     }
-  }, [connected, catskyAssetSummary]);
+  }, [connected, catskyAssetSummary, userAddress, userUses]);
   
   const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = event.target;
