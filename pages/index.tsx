@@ -623,7 +623,7 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Models:</span> Dalle 3 is OpenAI's latest image generation model. </p>
+                      <p><span id="gradient-text"> Models:</span> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
                     </div>
                   )}
               </div>
