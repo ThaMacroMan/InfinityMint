@@ -4,24 +4,24 @@ import { useTokenCheck } from '../hooks/TokenCheck';
 
 const WalletBalance: React.FC = () => {
   const { connected } = useWallet();
-  const { catskyAssetSummary } = useTokenCheck();
+  const { projectAssetSummary } = useTokenCheck();
   const [balances, setBalances] = useState({
-    catskyBalance: 0,
-    catnipBalance: 0,
-    ognftBalance: 0,
-    inifinitymintsBalance: 0,
+    tokenBalance: 0,
+    nft1Balance: 0,
+    nft2Balance: 0,
+    nft3balance: 0,
   });
 
   useEffect(() => {
-    if (connected && catskyAssetSummary) {
+    if (connected && projectAssetSummary) {
       setBalances({
-        catskyBalance: catskyAssetSummary["$RAD"] || 0,
-        catnipBalance: catskyAssetSummary["Terraforms"] || 0,
-        ognftBalance: catskyAssetSummary["StarShips"] || 0,
-        inifinitymintsBalance: catskyAssetSummary["Citizens"] || 0,
+        tokenBalance: projectAssetSummary["$RAD"] || 0,
+        nft1Balance: projectAssetSummary["Terraforms"] || 0,
+        nft2Balance: projectAssetSummary["StarShips"] || 0,
+        nft3balance: projectAssetSummary["Citizens"] || 0,
       });
     }
-  }, [connected, catskyAssetSummary]);
+  }, [connected, projectAssetSummary]);
 
   if (!connected) {
     return null; // Don't render anything if the wallet is not connected
@@ -35,7 +35,7 @@ const WalletBalance: React.FC = () => {
         </div>
         <div className="asset-value">
           <span className="pixelfont3 text-white">
-            {Math.floor((balances.catskyBalance || 0) / 1000).toLocaleString()} K
+            {Math.floor((balances.tokenBalance || 0) / 1000).toLocaleString()} K
           </span>
         </div>
       </div>
@@ -45,7 +45,7 @@ const WalletBalance: React.FC = () => {
         </div>
         <div className="asset-value">
           <span className="pixelfont3 text-white">
-            {(balances.catnipBalance || 0).toLocaleString()}
+            {(balances.nft1Balance || 0).toLocaleString()}
           </span>
         </div>
       </div>
@@ -55,7 +55,7 @@ const WalletBalance: React.FC = () => {
         </div>
         <div className="asset-value">
           <span className="pixelfont3 text-white">
-            {(balances.ognftBalance || 0).toLocaleString()}
+            {(balances.nft2Balance || 0).toLocaleString()}
           </span>
         </div>
       </div>
@@ -65,7 +65,7 @@ const WalletBalance: React.FC = () => {
         </div>
         <div className="asset-value">
           <span className="pixelfont3 text-white">
-            {(balances.inifinitymintsBalance || 0).toLocaleString()}
+            {(balances.nft3balance || 0).toLocaleString()}
           </span>
         </div>
       </div>

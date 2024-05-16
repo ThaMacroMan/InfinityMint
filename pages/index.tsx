@@ -48,51 +48,68 @@ const Home: NextPage = () => {
   const [slideshowDisabled, setSlideshowDisabled] = useState(false);
   const [mintingPrice, setMintingPrice] = useState<number>(8690000); // Default to the initial price
   const [showInfo, setShowInfo] = useState<boolean>(false);
-  const [userEnterInfo, setUserEnterInfo] = useState('');
-  const [userEnterName, setUserEnterName] = useState('');
+
   const [userUses, setUserUses] = useState<string>('1');
   const [userAddress, setUserAddress] = useState<string>('none');
-  const { catskyAssetSummary, hasMinRequiredTokens } = useTokenCheck();
-  const catskyBalance = catskyAssetSummary["$RAD"] || 0;
-  const catnipBalance = catskyAssetSummary["Terraforms"] || 0;
-  const ognftBalance = catskyAssetSummary["OG NFT"] || 0;
-  const inifinitymintsBalance = catskyAssetSummary["Era I"] || 0;
-  const [catskyPerUse, setCatskyPerUse] = useState<number>(0);
+  const { projectAssetSummary, hasMinRequiredTokens } = useTokenCheck();
+  const tokenBalance = projectAssetSummary["$RAD"] || 0; //ENTER
+  const nft1Balance = projectAssetSummary["Terraforms"] || 0;//ENTER
+  const nft2Balance = projectAssetSummary["OG NFT"] || 0;//ENTER
+  const nft3balance = projectAssetSummary["Era I"] || 0;//ENTER
+  const [tokenPerUse, settokenPerUse] = useState<number>(0);
   const [formattedPrice, setFormattedPrice] = useState<string>('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [balances, setBalances] = useState({
-    catskyBalance: 0,
-    catnipBalance: 0,
-    ognftBalance: 0,
-    inifinitymintsBalance: 0,
+    tokenBalance: 0,
+    nft1Balance: 0,
+    nft2Balance: 0,
+    nft3balance: 0,
   });
 
-  
-  
+  ///////Load User Data
   useEffect(() => {
     if (connected) {
+      
       const newBalances = {
-        catskyBalance: catskyAssetSummary["$RAD"] || 0,
-        catnipBalance: catskyAssetSummary["Terraforms"] || 0,
-        ognftBalance: catskyAssetSummary["StarShips"] || 0,
-        inifinitymintsBalance: catskyAssetSummary["Citizens"] || 0,
+        tokenBalance: projectAssetSummary["$RAD"] || 0,//ENTER
+        nft1Balance: projectAssetSummary["Terraforms"] || 0,//ENTER
+        nft2Balance: projectAssetSummary["StarShips"] || 0,//ENTER
+        nft3balance: projectAssetSummary["Citizens"] || 0,//ENTER
       };
       setBalances(newBalances);
       fetchUserData();
+      const price = calculateMintingPrice(mintingPrice);
+      setMintingPrice(price);
+
       console.log('addy is:', userAddress)
-      console.log("$RAD", newBalances.catskyBalance);
-      console.log("Terraforms", newBalances.catnipBalance);
-      console.log("StarShips", newBalances.ognftBalance);
-      console.log("Citizens", newBalances.inifinitymintsBalance);
+      console.log("$RAD", newBalances.tokenBalance);
+      console.log("Terraforms", newBalances.nft1Balance);
+      console.log("StarShips", newBalances.nft2Balance);
+      console.log("Citizens", newBalances.nft3balance);
     }
-  }, [connected, catskyAssetSummary, userAddress, userUses]);
+    else {
+      setMintingPrice(8690000)
+    }
+  }, [connected, projectAssetSummary, userAddress, userUses, setMintingPrice]);
+
+  const fetchUserData = async () => {
+    const usedAddresses = await wallet.getUsedAddresses();
+    setUserAddress(usedAddresses[0])
+
+    if (localStorage.getItem(userAddress) === 'null') {
+      console.log('New User Detected, saving and setting to 1 free use')
+      localStorage.setItem(userAddress, '1');
+
+    }
+    else {
+      const storedUses = localStorage.getItem(userAddress) || '0';
+      setUserUses(storedUses);
+      console.log('Returning user detected with', userUses)
+    }
+  }
+    ///////Load User Data
   
-  const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = event.target;
-    textarea.style.height = 'inherit'; // Reset the height
-    textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
-  };
-  
+  //////////////// Model Options
   const updateOptions = useCallback(() => {
     const modelSelect = document.getElementById("model") as HTMLSelectElement;
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
@@ -116,7 +133,7 @@ const Home: NextPage = () => {
     qualitySelect.appendChild(standardQualityOption);
 
     // Conditional addition of more options based on asset balances
-    if (catnipBalance >= 3 || ognftBalance >= 1 || inifinitymintsBalance >= 10) {
+    if (nft1Balance >= 3 || nft2Balance >= 1 || nft3balance >= 10) {
       // Enable additional size options
       const landscapeOption = document.createElement("option");
       landscapeOption.value = "1792x1024";
@@ -138,12 +155,14 @@ const Home: NextPage = () => {
     // Update the selected values to reflect any changes
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
-  }, [catnipBalance, ognftBalance, inifinitymintsBalance, setSelectedSize, setSelectedQuality]);
+  }, [nft1Balance, nft2Balance, nft3balance, setSelectedSize, setSelectedQuality]);
 
   useEffect(() => {
     updateOptions();
   }, [updateOptions]);
+  //////////////// Model Options
   
+  /////////////// GPT-3.5-Turbo Prompt
   const getRandomPrompt = async () => {
     try {
       setIsLoading(true); // Set loading state to true
@@ -168,7 +187,9 @@ const Home: NextPage = () => {
       console.error('Error generating random prompt:', error);
     }
   }
+  /////////////// GPT-3.5-Turbo Prompt
 
+    /////////////// GPT-3.5-Turbo Summary of Prompt
   const summarizePrompt = async (prompt: string) => {
     try {
       const response = await fetch('/api/summarizePrompt', {
@@ -192,42 +213,22 @@ const Home: NextPage = () => {
       throw error;
     }
   };
-///////////////////
-  const fetchUserData = async () => {
-    const usedAddresses = await wallet.getUsedAddresses();
-    setUserAddress(usedAddresses[0])
-
-    if (localStorage.getItem(userAddress) === 'null') {
-      console.log('New User Detected, saving and setting to 1 free use')
-      localStorage.setItem(userAddress, '1');
-
-    }
-    else {
-      const storedUses = localStorage.getItem(userAddress) || '0';
-      setUserUses(storedUses);
-      console.log('Returning user detected with', userUses)
-    }
-  }
+  /////////////// GPT-3.5-Turbo Summary of Prompt
 
 
-
-  const handleSetCatskyPerUse = useCallback((newCatskyPerUse: number, newFormattedPrice: string) => {
-    setCatskyPerUse(newCatskyPerUse);
+  const handleSettokenPerUse = useCallback((newtokenPerUse: number, newFormattedPrice: string) => {
+    settokenPerUse(newtokenPerUse);
     setFormattedPrice(newFormattedPrice);
-    console.log("RAD Per Use: ", catskyPerUse)
+    console.log("RAD Per Use: ", tokenPerUse)
     console.log("RAD Price: ₳", formattedPrice)
     console.log("User Uses: ", userUses)
   }, []);
 
-
-
-///////////////////
-
+///////////////////Generate Image with Dalle 3
   const generateImage = async () => {
     const price = calculateMintingPrice(mintingPrice);
     setMintingPrice(price);
-    setUserEnterName('');
-    setModalVisible(false)
+
     setSlideshowDisabled(true); // Disable the slideshow when generating image
     try {
       setIsLoading(true); // Set loading state to true when generating image
@@ -238,7 +239,7 @@ const Home: NextPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: `${prompt}`, // Include the selected style in the prompt
+          prompt: `${prompt}`,
           size: selectedSize,
           quality: selectedQuality,
           model: selectedModel,
@@ -281,8 +282,6 @@ const Home: NextPage = () => {
     }
   };
 
-
-
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
     const chunks = [];
@@ -291,21 +290,22 @@ const Home: NextPage = () => {
     }
     return chunks;
   };
+  ///////////////////Generate Image with Dalle 3
+
+
   const handleStyleSelection = (style: string) => {
     setSelectedStyle(style);
   };
 
+  const creditUser = async()=>{
 
-
-    const creditUser = async()=>{
-
-      setUserUses((prevUserUses) => {
-        const newUserUses = String(Number(prevUserUses) + 5);
-        localStorage.setItem(userAddress, newUserUses);
-        return newUserUses; // Return the updated count to ensure the state is correctly set
-      })
-    }
-  
+    setUserUses((prevUserUses) => {
+      const newUserUses = String(Number(prevUserUses) + 5);
+      localStorage.setItem(userAddress, newUserUses);
+      return newUserUses; // Return the updated count to ensure the state is correctly set
+    })
+  }
+  /////////////Purchase AI Uses Transaction
   const buyUsesTransaction = async () => {
 
     try {
@@ -315,7 +315,7 @@ const Home: NextPage = () => {
         [
           {
             unit: '6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73',
-            quantity: catskyPerUse.toString()
+            quantity: tokenPerUse.toString()
             ,
           },
         ]
@@ -339,26 +339,28 @@ const Home: NextPage = () => {
       console.error('Error processing transaction:', error);
     }
   };
+  /////////////Purchase AI Uses Transaction
   
-//////////////////////////////////////////////
-  
-    // Function to calculate the minting price based on CATSKY token holdings
-    const calculateMintingPrice = (catskyBalance: number) => {
-      if (catskyBalance >= 5000000) {
-        return 4690000; // 5 billion CATSKY tokens
-      } else if (catskyBalance >= 3000000) {
-        return 5690000; // 3 billion CATSKY tokens
-      } else if (catskyBalance >= 1000000) {
-        return 6690000; // 1 billion CATSKY tokens
-      } else if (catskyBalance >= 500000) {
-        return 7690000; // 500M CATSKY tokens
+    /////// Calculate NFT Mint price based on token balance
+    const calculateMintingPrice = (tokenBalance: number) => {
+      if (tokenBalance >= 5000000) {
+        return 4690000; 
+      } else if (tokenBalance >= 3000000) {
+        return 5690000; 
+      } else if (tokenBalance >= 1000000) {
+        return 6690000; 
+      } else if (tokenBalance >= 500000) {
+        return 7690000; 
       } else {
-        return 8690000; // Default initial price when no CATSKY tokens are held
+        return 8690000; 
       }
     };
+    /////// Calculate NFT Mint price based on token balance
 
+
+  //////// NFT Mint Transaction
     const processTransaction = async () => {
-      const price = calculateMintingPrice(catskyBalance);
+      const price = calculateMintingPrice(tokenBalance);
       console.log('user address: ', wallet)
       console.log('mint price:', price);
       console.log('Chunked image URL (2):', chunkedMetadata )
@@ -419,6 +421,14 @@ const Home: NextPage = () => {
       }
   };
 
+  //////// NFT Mint Transaction
+
+  const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = event.target;
+    textarea.style.height = 'inherit'; // Reset the height
+    textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
+  };
+
 
   useEffect(() => {
     const updateCursor = (e: MouseEvent) => {
@@ -443,67 +453,12 @@ const Home: NextPage = () => {
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
  //API IS ON CLIENT SIDE - FIX IN FUTURE
-   const uploadimgbb3 = async (image_file: any) => {
-    let body = new FormData();
-    body.set("key", "8072702f1c133271b4c484307bff7822") //// DO NOT RELEASE THE KEY
-    body.append("image", image_file);
- 
-    //return
-    const response = await axios({
-      method: "post",
-      url: "https://api.imgbb.com/1/upload",
-      data: body,
-    });
-    return response;
-  };
-  
-   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event?.target?.files?.length === 1) {
-      const image_file = event.target.files[0];
-      try {
-        const res = await uploadimgbb3(image_file);
-        console.log(res);
-        const image_data = res.data.data;
-        const image_url = image_data.url;
-        setUploadedImage(image_url);
-
-        //setUserEnterName(image_data.image.name)
-        setPromptSummary(image_data.image.name)
-        setUserEnterInfo("Minted by the Infinity Mint")
-        setSelectedModel("User Uploaded")
-        setSelectedQuality("Uploaded Image")
-        setChunkedPrompt(["No Prompt"])
-        const model_size = `${image_data.width}x${image_data.height}`;
-        setSelectedSize(model_size);
-
-        const chunkedMetadata = chunkData(image_url, 64);
-        setChunkedMetadata(chunkedMetadata);
-
-        setGeneratedImages([]);
-
-        setSlideshowDisabled(true);
-  
-        // Show the metadata update modal after uploading the image
-        setModalVisible(true);
-      } catch (error) {
-        // Handle error
-        console.error('Error uploading image:', error);
-      }
-    }
-  };
-   const [modalVisible, setModalVisible] = useState(false);
-   const handleMetadataUpdate = () => {
-    // Handle metadata update logic here
-    // Close modal after updating metadata
-    setModalVisible(false);
-  };
 
   const widgetStyle = {
     position: 'fixed',
     top: 0,
     right: 0,
     transform: 'translateY(0)', // Reset any previous translation on the y-axis
-
   };
 
   return (
@@ -544,7 +499,7 @@ const Home: NextPage = () => {
           height={300} />
         </a>
         <a 
-          href="https://www.taptools.io/charts/token?pairID=0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
+          href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474" //UPDATEs
           target="_blank" 
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer' }}
@@ -577,11 +532,9 @@ const Home: NextPage = () => {
             onchainID="0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474"
             interval="1d"
             numIntervals={1}
-            setCatskyPerUse={handleSetCatskyPerUse} // Pass the callback function as prop
+            settokenPerUse={handleSettokenPerUse} // Pass the callback function as prop
             />
-
             </div>
-
 
             <button
               type="button"
@@ -595,13 +548,10 @@ const Home: NextPage = () => {
                   : ""
               }`}
             >
-
               <label htmlFor="model" className="tag">Uses: {userUses}</label>
-              <span id='gradient-text'>Aquire 5 uses:  {catskyPerUse} $RAD </span>
-              
+              <span id='gradient-text'>Aquire 5 uses:  {tokenPerUse} $RAD </span>
              </button>
               
-
             <form>
               <textarea
                 className="textarea"
@@ -667,7 +617,7 @@ const Home: NextPage = () => {
                 <select className="field" 
                   name="size" 
                   id="size"
-                  onChange={(e) => setSelectedSize(e.target.value)} // Add this line
+                  onChange={(e) => setSelectedSize(e.target.value)} 
                   >
                 </select>
                 </div>
@@ -752,6 +702,7 @@ const Home: NextPage = () => {
               </div>
             </form>
           </div>
+
           {/* "Your Creation" Section */}
           <div className="creation-container" > 
           {!slideshowDisabled && 
@@ -764,7 +715,7 @@ const Home: NextPage = () => {
           }
           <div className="tag3">
           {generatedImages && 
-          <label className="tag"> {userEnterName || promptSummary}</label>
+          <label className="tag"> { promptSummary}</label>
           }
             </div>
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
@@ -796,15 +747,7 @@ const Home: NextPage = () => {
                       className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
-                    {/*<div className="button animated-gradient3 mx-auto">
-                      <DownloadImage imageUrl={imageUrl} />
-                    </div>
-                    <div className="tag3">
-                      <div className="tag">Model: {selectedModel}</div>
-                      <div className="tag">Size: {selectedSize}</div>
-                      <div className="tag">Quality: {selectedQuality}</div>
-                    </div>
-                                {/* Prompt */}
+                        {/* Prompt */}
                   <div className="tag3">
                     <div className="tag">Prompt: {generatedPrompt}</div>
                   </div>
@@ -824,8 +767,6 @@ const Home: NextPage = () => {
                   onClick={() => saveImage(uploadedImage)}
                 />
               </div>
-              {/* Form for metadata */}
-
             </div>
           )}
           </div>

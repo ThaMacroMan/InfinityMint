@@ -11,7 +11,7 @@ const POLICY_ID_NAMES: { [key: string]: string } = {
 export const useTokenCheck = () => {
   const { connected, wallet } = useWallet();
   const [hasMinRequiredTokens, setHasMinRequiredTokens] = useState(false);
-  const [catskyAssetSummary, setCatskyAssetSummary] = useState<Record<string, number>>({});
+  const [projectAssetSummary, setprojectAssetSummary] = useState<Record<string, number>>({});
 
   const fetchBalanceAndCheckAssets = async () => {
     try {
@@ -42,7 +42,7 @@ export const useTokenCheck = () => {
       }).length;
 
       setHasMinRequiredTokens(policiesMet >= 2); // Require two or more policies to be met
-      setCatskyAssetSummary(assetSums); // Update the summary based on the fetched assets
+      setprojectAssetSummary(assetSums); // Update the summary based on the fetched assets
     } catch (error: any) {
       console.error("Detailed error:", error);
     }
@@ -54,5 +54,5 @@ export const useTokenCheck = () => {
     }
   }, [connected, wallet]);
 
-  return { hasMinRequiredTokens, catskyAssetSummary, fetchBalanceAndCheckAssets, POLICY_ID_NAMES };
+  return { hasMinRequiredTokens, projectAssetSummary, fetchBalanceAndCheckAssets, POLICY_ID_NAMES };
 };

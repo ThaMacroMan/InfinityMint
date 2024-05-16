@@ -5,7 +5,7 @@ interface TokenPriceProps {
   onchainID?: string;
   interval: string;
   numIntervals: number;
-  setCatskyPerUse: (catskyPerUse: number, formattedPrice: string) => void;
+  settokenPerUse: (tokenPerUse: number, formattedPrice: string) => void;
 }
 
 const TokenPrice: React.FC<TokenPriceProps> = ({
@@ -13,7 +13,7 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
   onchainID,
   interval,
   numIntervals,
-  setCatskyPerUse
+  settokenPerUse
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,10 +47,10 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
         const formattedClosePriceADA = json[0]?.close.toFixed(10);
         const [wholePart, decimalPart] = formattedClosePriceADA.split('.');
         const formattedPrice = `${wholePart}.${decimalPart.slice(0, 9)}`;
-        const catskyPerUse = Math.floor(0.1 / parseFloat(formattedPrice));
+        const tokenPerUse = Math.floor(0.1 / parseFloat(formattedPrice));
         
         setFormattedPrice(formattedPrice);
-        setCatskyPerUse(catskyPerUse, formattedPrice);
+        settokenPerUse(tokenPerUse, formattedPrice);
 
       } catch (error: any) {
         setError(`There was an error fetching the token price: ${error.message}`);
@@ -60,10 +60,10 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
     };
 
     fetchData();
-  }, [tokenUnit, onchainID, interval, numIntervals, setCatskyPerUse]);
+  }, [tokenUnit, onchainID, interval, numIntervals, settokenPerUse]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div></div>;
+  if (error) return <div></div>;
 
   return 
 };
