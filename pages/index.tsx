@@ -78,8 +78,10 @@ const Home: NextPage = () => {
       };
       setBalances(newBalances);
       fetchUserData();
-      const price = calculateMintingPrice(mintingPrice);
+      const price = calculateMintingPrice(tokenBalance);
+      console.log('price is :', price)
       setMintingPrice(price);
+      console.log('minting price set :', price)
 
       console.log('addy is:', userAddress)
       console.log("$RAD", newBalances.tokenBalance);
