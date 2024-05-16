@@ -191,6 +191,15 @@ const Home: NextPage = () => {
   }
   /////////////// GPT-3.5-Turbo Prompt
 
+
+    // Function to clear the prompt and generated images
+    const clearGeneratedData = () => {
+      setPrompt('');
+      setGeneratedImages([]);
+      setGeneratedPrompt('');
+      setPromptSummary('');
+    };
+
     /////////////// GPT-3.5-Turbo Summary of Prompt
   const summarizePrompt = async (prompt: string) => {
     try {
@@ -755,7 +764,16 @@ const Home: NextPage = () => {
                   </div>
                 </div>
                 ))}
+
+                <button
+                  type="button"
+                  onClick={clearGeneratedData}
+                  className="button-animate"
+                >
+                  <span id=" tag gradient-text">Try Again</span>
+                </button>
               </div>
+
             )}
             {uploadedImage && (
             <div>

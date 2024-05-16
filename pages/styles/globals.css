@@ -507,3 +507,43 @@ body{
 .asset-value {
   font-size: 1rem; /* Adjust the font size as needed */
 }
+
+/* TRY AGAIN BUTTON EYE CATCHINGNESS */ 
+@keyframes slideInOut {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.button-animate {
+  animation: slideInOut 2s infinite, gradientFlow 5s infinite;
+  background: linear-gradient(270deg, #ff6a00, #ee0979);
+  background-size: 400% 400%;
+  color: white;
+  border: none;
+  padding: 2rem 2rem;
+  cursor: pointer;
+  outline: none;
+  font-size: 2rem;
+  border-radius: 5px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.button-animate:hover {
+  transform: scale(1.5);
+}
