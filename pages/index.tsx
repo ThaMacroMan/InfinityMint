@@ -105,7 +105,7 @@ const Home: NextPage = () => {
     }
     else {
       const storedUses = localStorage.getItem(userAddress) || '0';
-      setUserUses(storedUses);
+      setUserUses(storedUses); //// FOR TESTING ADD 1
       console.log('Returning user detected with', userUses)
     }
   }
@@ -167,6 +167,8 @@ const Home: NextPage = () => {
   /////////////// GPT-3.5-Turbo Prompt
   const getRandomPrompt = async () => {
     try {
+
+
       setIsLoading(true); // Set loading state to true
       // Call your internal API endpoint instead of OpenAI's API directly
       const response = await fetch('/api/getRandomPrompt');
@@ -474,51 +476,56 @@ const Home: NextPage = () => {
 
   return (
     <>
-<div className="header" style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}> 
-  <a 
-      href="https://cardania.com/" 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-    >
-      <Image 
-      src={logo.src} 
-      alt="Logo" 
-      width={500}
-      height={300}
-      style={{ height: '100px', width: 'auto', marginRight: '8px' }} />
-      Digital DreamForge <span id="gradient-text"></span>
-  </a>
+    <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1rem' }}>
+      <a 
+        href="https://cardania.com/" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+      >
+        <Image 
+          src={logo.src} 
+          alt="Logo" 
+          width={50}
+          height={50}
+          style={{ marginRight: '8px' }} 
+        />
+        <span>Digital DreamForge</span>
+      </a>
+      <div style={{ display: 'flex', justifyContent: 'space-evenly', flex: 1, padding: '0 1rem' }}>
         <a 
           href="https://catsky.io/" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
-              <span id="gradient-text">Powered by Catsky AI </span>
+          <span id="gradient-text">Powered by Catsky AI</span>
         </a>
         <a 
           href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
           <Image 
-          src={jpglogo.src} 
-          alt="Logo" className="h-9"
-          width={200}
-          height={300} />
-        </a>
-        <a 
-          href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474" //UPDATEs
-          target="_blank" 
-          rel="noopener noreferrer" 
-          style={{ cursor: 'pointer' }}
-        >
-          <p style={{ color: 'green' }}>$RAD: ₳ {formattedPrice}</p>
-
+            src={jpglogo.src} 
+            alt="Logo" 
+            className="h-9"
+            width={150}
+            height={50} 
+          />
         </a>
       </div>
+      <a 
+        href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+      >
+        <p style={{ color: 'green', margin: 0 }}>$RAD: ₳ {formattedPrice}</p>
+      </a>
+    </div>
+
       <div className="wrapper">
         {/* Form Section */}
         <div className="form">
@@ -560,7 +567,7 @@ const Home: NextPage = () => {
               }`}
             >
               <label htmlFor="model" className="tag">Uses: {userUses}</label>
-              <span id='gradient-text'>Aquire 5 uses:  {tokenPerUse} $RAD </span>
+              <span id='gradient-text'>5 uses:  {tokenPerUse} $RAD </span>
              </button>
               
             <form>
@@ -765,14 +772,17 @@ const Home: NextPage = () => {
                 </div>
                 ))}
 
-                <button
-                  type="button"
-                  onClick={clearGeneratedData}
-                  className="button-animate"
-                >
-                  <span id=" tag gradient-text">Try Again</span>
-                </button>
-              </div>
+                  <div className="flex items-center justify-center">
+                  <button
+                    type="button"
+                    onClick={clearGeneratedData}
+                    className="button-animate"
+                  >
+                    <span id=" tag gradient-text">Try Again</span>
+                  </button>
+                  </div> 
+                  </div>
+
 
             )}
             {uploadedImage && (

@@ -49,7 +49,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
       ) : (
         <div className="tag5">
           {/* Content to display when wallet is not connected */}
-          <span id="creation-gradient-text">Connect your Wallet</span>
+          <span id="creation-gradient-text">Connect your Wallet...</span>
         </div>
       )}
 

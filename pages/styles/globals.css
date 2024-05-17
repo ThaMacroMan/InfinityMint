@@ -13,11 +13,6 @@
   font-family: Public-Pixel;
 }
 
-.pixelfont3{
-  font-family: Public-Pixel;
-  font-size: 1.3rem;
-}
-
 .pixelfont2{
   font-family: Public-Pixel;
   position: absolute; /* Position the title absolutely */ 
@@ -26,6 +21,11 @@
   font-size: 3rem;
   max-width: 100%; /* Set a maximum width for the title */
   text-align: center; /* Center the text within its container */
+}
+
+.pixelfont3{
+  font-family: Public-Pixel;
+  font-size: 1.3rem;
 }
 
 .header {
@@ -38,14 +38,6 @@
   justify-content: space-evenly;
   box-shadow: 0 4px 8px rgba(0, 0, 0, .5); /* Add shadow effect */
   font-size: 1.5rem;
-}
-#gradient-text {
-  background: repeating-linear-gradient(to right, red, orange, yellow);
-  background-clip: content-box;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 1.3rem;
-
 }
 
 .form {
@@ -61,8 +53,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
 
 }
-
-
 
 .creation-container {
   position: relative;
@@ -83,8 +73,6 @@
   cursor: auto;
 } 
 
-
-
 .error-popup {
   font-family: Public-Pixel;
   font-size: 1.5rem;
@@ -100,83 +88,16 @@
 
 }
 
-/* Media query for smaller screens */
-@media screen and (max-width: 924px) {
-  
-  .form,
-  .creation-container {
-    flex-direction: column; /* Stack items vertically on smaller screens */
-    width: 98%; /* Adjust width to fit mobile screen */
-    margin: 1rem auto; /* Add margin for spacing */
-    min-height: 20rem;
-  }
-    /* Adjust font size for pixel fonts */
-    .pixelfont,
-    .pixelfont2 {
-      font-size: 0.5rem !important;
-    }
+#gradient-text {
+  background: repeating-linear-gradient(to right, red, orange, yellow);
+  background-clip: content-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.3rem;
 
-  
-    .header {
-      display: flex;
-      align-items: center; /* Ensures that items are vertically centered in the line */
-      justify-content: flex-start; /* Aligns items to the start of the container */
-      flex-direction: row; /* Aligns items horizontally */
-      font-size: .75rem;
-    }
-    img.h-10 {
-      height: .75rem; /* or 40px if h-10 means height 10 units */
-      width: auto; /* Maintain aspect ratio */
-      margin-right: 8px; /* Optional: space between the logo and text */
-    }
-    #gradient-text {
-      background: repeating-linear-gradient(to right, red, orange, yellow);
-      background-clip: content-box;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 1.3rem;
-
-    }
-    .asset-value {
-      font-size: 1.3rem; /* Adjust the font size as needed */
-    }
-    .asset-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 1.3rem;
-    }
-    .pixelfont3{
-      font-family: Public-Pixel;
-      font-size: 1.3rem;
-    }
-    /* Adjust font size for other elements */
-    .textarea,
-    .button,
-    .widebutton,
-    .tag,
-    .tag2,
-    .tag3 .tag,
-    .field,
-    .info-popup 
-    .wallet 
-    .form {
-      font-size: 0.65rem !important;
-    }
-    
-    .spinner-message {
-      font-size: medium;
-    }
-  
-    .adalogo {
-      width: 30rem;
-    }
-  
-    .imageborder {
-      max-width: 50vh;
-    }
-  
 }
+
+
 
 /* Media query for larger screens */
 @media screen and (min-width: 924px) {
@@ -186,12 +107,12 @@
     justify-content: space-between; /* Space items evenly */
   }
   .form {
-    width: calc(30% - 1rem); /* Adjust width to fit side by side with margin */
+    min-width: calc(25% - 1rem); /* Adjust width to fit side by side with margin */
     margin: 0.5rem;
 
   }
   .creation-container {
-    width: calc(70% - 1rem); /* Adjust width to fit side by side with margin */
+    width: calc(75% - 1rem); /* Adjust width to fit side by side with margin */
     margin: 0.5rem;
   }
 }
@@ -288,21 +209,6 @@ width: vw;
   height: 60px;
   max-width: 400px;
 }
-/*
-.animated-gradient {
-  background: linear-gradient(to right,  #ff00f7, #0000ff,#ff0000, #ff00f7 ,#0000ff); 
-  background-size: 400% auto; 
-  animation: flow 2.618s linear infinite ; 
-}   
-*/
-@keyframes flow2 {
-  0% {
-      background-position: 0% 100%;
-  }
-  100% {
-      background-position: 0% 0%;
-  }
-}
 
 .tag {
   display: flex;
@@ -329,7 +235,6 @@ width: vw;
   padding: .3rem;
   padding-top: .25rem;
   padding-bottom: .25rem;
-
   border: 3px solid #000000;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
@@ -345,18 +250,6 @@ width: vw;
     margin-top: 1rem;
   }
   
-  .tag3 .tag {
-    display: flex; /* Ensure tags are displayed as flex items */
-    align-items: center; /* Center tag content vertically */
-
-    border: 3px solid #000000;
-    border-radius: 0.618rem;
-    font-size: 1.5rem;
-    margin: 0.25rem;
-    padding: 0.25rem;
-    color: #ffffff;
-    font-family: 'Public-Pixel', sans-serif;
-  }
   .tag4 {
     display: flex;
     align-items: center; /* Center text vertically */
@@ -474,21 +367,7 @@ width: vw;
     background-position: 100% 50%;
   }
 }
-/*
-.animated-gradient2 {
-  background: linear-gradient(to bottom, #8800ff,#0033ad, #8800ff, #0033ad, #8800ff); 
-  background-size: auto 200%; /* Allow the gradient to expand along the vertical axis 
-  animation: flow2 1.618s linear infinite;
-}
-.animated-gradient3 {
-  background: linear-gradient
-  background-size: auto 200%; 
-  animation: flow2 1.618s linear infinite; 
-  width:25vw;
-  margin-left: auto; 
-  margin-right: auto; 
-}
-/*cursor settings*/
+
 body{
     background-color: #202429;
     cursor: auto;
@@ -510,11 +389,14 @@ body{
 
 /* TRY AGAIN BUTTON EYE CATCHINGNESS */ 
 @keyframes slideInOut {
-  0%, 100% {
-    transform: translateX(0);
+  0% {
+    transform: translateX(-2rem);
   }
   50% {
-    transform: translateX(-10px);
+    transform: translateX(2rem);
+  }
+  100% {
+    transform: translateX(-2rem);
   }
 }
 
@@ -531,7 +413,7 @@ body{
 }
 
 .button-animate {
-  animation: slideInOut 2s infinite, gradientFlow 5s infinite;
+  animation: slideInOut 3s infinite, gradientFlow 5s infinite;
   background: linear-gradient(270deg, #ff6a00, #ee0979);
   background-size: 400% 400%;
   color: white;
@@ -542,8 +424,10 @@ body{
   font-size: 2rem;
   border-radius: 5px;
   transition: transform 0.3s ease-in-out;
+
 }
 
 .button-animate:hover {
   transform: scale(1.5);
 }
+
