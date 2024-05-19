@@ -44,12 +44,12 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
       {connected ? (
         <div className="tag5">
           {/* Content to display when wallet is connected */}
-          <span id="creation-gradient-text">Enter a Prompt and click Generate Art</span>
+          <span  id="creation-gradient-text">Refuel - Detail vision - Deploy vision</span>
         </div>
       ) : (
         <div className="tag5">
           {/* Content to display when wallet is not connected */}
-          <span id="creation-gradient-text">Connect your Wallet...</span>
+          <span  id="creation-gradient-text">Connect your Wallet...</span>
         </div>
       )}
 
@@ -64,38 +64,12 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
             />
           ))}
         </div>
-        <style jsx>{`
-          .slideshow-container {
-            position: relative;
-            height: auto; /* Adjust height automatically */
-            overflow: hidden; /* Hide overflow */
-            display: flex;
-            align-items: center; /* Center items vertically */
-          }
-          .slides {
-            display: flex;
-            transition: transform 6.18s ease; /* Apply smooth transition */
-            transform: translateX(-${currentIndex * 100}%); /* Move slides horizontally */
-          }
-          .slide {
-            flex: 0 0 auto;
-            width: 100%; /* Ensure images take up full width */
-            height: auto; /* Let the height adjust automatically */
-            max-height: 40rem; /* Limit maximum height */
-            object-fit: contain; /* Maintain aspect ratio */
-          }
-          .active {
-            opacity: 1;
-            z-index: 1;
-          }
-        `}</style>
       </div>
 
       {connected ? (
         <div className="tag5">
           {/* Content to display when wallet is connected */}
-          <span id="creation-gradient-text">Generate images and mint them on the Cardano Blockchain</span>
-          <span id="creation-gradient-text">Hold Cardania NFTs for more features...</span>
+          <span  id="creation-gradient-text">Aquire Cardania artifacts for enhanced forging parameters...</span>
         </div>
       ) : (
         <div className="tag5">
@@ -103,6 +77,33 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
           <span id="creation-gradient-text">Forge your dreams...</span>
         </div>
       )}
+      <style jsx>{`
+        .slideshow-container {
+          position: relative;
+          height: auto; /* Adjust height automatically */
+          overflow: hidden; /* Hide overflow */
+          display: flex;
+          align-items: center; /* Center items vertically */
+        }
+        .slides {
+          display: flex;
+          transition: transform 6.18s ease; /* Apply smooth transition */
+          transform: translateX(-${currentIndex * 100}%); /* Move slides horizontally */
+        }
+        .slide {
+          flex: 0 0 auto;
+          width: 100%; /* Ensure images take up full width */
+          height: auto; /* Let the height adjust automatically */
+          max-height: 72vh; /* Limit maximum height */
+          object-fit: contain; /* Maintain aspect ratio */
+        }
+        .active {
+          opacity: 1;
+          z-index: 1;
+        }
+
+        }
+      `}</style>
     </div>
   );
 };

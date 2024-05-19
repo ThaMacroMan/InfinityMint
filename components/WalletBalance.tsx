@@ -28,7 +28,7 @@ const WalletBalance: React.FC = () => {
   }
 
   return (
-    <div className="tag">
+    <div className="tag grid-container">
       <div className="asset-container">
         <div>
           <span id="gradient-text">$RAD</span>
@@ -71,6 +71,8 @@ const WalletBalance: React.FC = () => {
       </div>
     </div>
   );
+  
+  
 };
 
 export default WalletBalance;

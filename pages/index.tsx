@@ -313,7 +313,7 @@ const Home: NextPage = () => {
   const creditUser = async()=>{
 
     setUserUses((prevUserUses) => {
-      const newUserUses = String(Number(prevUserUses) + 5);
+      const newUserUses = String(Number(prevUserUses) + 10);
       localStorage.setItem(userAddress, newUserUses);
       return newUserUses; // Return the updated count to ensure the state is correctly set
     })
@@ -534,15 +534,58 @@ const Home: NextPage = () => {
             <div className="flex tag"> 
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
+                
                 <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
                 {showInfo}
               </div>
             </div>
           </div>
-            <div className="">
+          <button
+                onClick={buyUsesTransaction}
+                className={`tag2 animated-gradient2 ${
+                  !connected ||
+                  isLoading ||
+                  (!generatedImages && !uploadedImage) ||
+                  (generatedImages.length === 0 && !uploadedImage)
+                    ? "disabled-button"
+                    : ""
+                }`}
+              >
+                <p style={{ color: 'green', margin: 0 }}>Refuel: {tokenPerUse} RAD {formattedPrice}</p>
+            </button>
+            <div className="uses-container">
+              <div className="loading-bar">
+                <div className='loading-block' >
+                <p style={{ color: 'red', margin: 0 }}>E</p>
+                </div>
+                {Array.from({ length: 10 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className={`loading-block ${
+                      userUses >= 5
+                        ? "green"
+                        : userUses > 0
+                        ? "orange"
+                        : "red"
+                    } ${
+                      index < userUses ? "filled" : ""
+                    }`}
+                  ></div>
+                  
+                ))}
+                                <div className='loading-block'>
+                <p style={{ color: 'red', margin: 0 }}>F</p>
+                </div>
+              </div>
+              
+              <div className="token-per-use">
+
+              </div>
+            </div>
+
               {connected}
               <WalletBalance />
-            </div>
+
             
             <div>
             <TokenPrice
@@ -554,46 +597,31 @@ const Home: NextPage = () => {
             />
             </div>
 
-            <button
-              type="button"
-              onClick={buyUsesTransaction}
-              className={`tag2 animated-gradient2 ${
-                !connected ||
-                isLoading ||
-                (!generatedImages && !uploadedImage) ||
-                (generatedImages.length === 0 && !uploadedImage)
-                  ? "disabled-button"
-                  : ""
-              }`}
-            >
-              <label htmlFor="model" className="tag">Uses: {userUses}</label>
-              <span id='gradient-text'>5 uses:  {tokenPerUse} $RAD </span>
-             </button>
-              
-            <form>
+            
+
               <textarea
                 className="textarea"
                 name="prompt"
                 id="prompt"
                 value={prompt}
-                rows={6}
+                rows={5}
                 onChange={(e) => setPrompt(e.target.value)}
                 onInput={autoExpand}
-                placeholder="What will you create? Dream Infinite: "
+                placeholder="Detail artifact vision: "
                 ></textarea>
               <button
-                className="button animated-gradient"
+                className="button"
                 type="button"
                 id="randomGenerate"
                 disabled={isLoading} // Disable the button when loading
                 onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clickex
               >
-               <span id="gradient-text"> Generate Prompt</span>
+               <span id="gradient-text"> Vision Forge</span>
               </button>
               <div/>
 
               <div className="tag2">
-              <label htmlFor="model" className="tag">Style</label>
+              <label htmlFor="model" className="tag">Aura</label>
               <div className="dropdown-container">
                 <select 
                 className="field"
@@ -607,7 +635,7 @@ const Home: NextPage = () => {
               </div>
             </div>
               <div className="tag2">
-                <label htmlFor="model" className="tag">Model</label>
+                <label htmlFor="model" className="tag">Engine</label>
                 <div className="dropdown-container">
                 <select
                   className="field"
@@ -630,7 +658,7 @@ const Home: NextPage = () => {
                   )}
               </div>
               <div className="tag2">
-                <label htmlFor="size" className="tag">Size</label>
+                <label htmlFor="size" className="tag">Form</label>
                 <div className="dropdown-container">
                 <select className="field" 
                   name="size" 
@@ -651,7 +679,7 @@ const Home: NextPage = () => {
                   )}
               </div>
               <div className="tag2">
-                <label htmlFor="quality" className="tag">Quality</label>
+                <label htmlFor="quality" className="tag">Grade</label>
                 <div className="dropdown-container">
                 <select className="field" 
                   name="quality" 
@@ -679,7 +707,7 @@ const Home: NextPage = () => {
               }`}
               disabled={isLoading || !connected || !prompt.trim() || userUses === '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
             >
-              <span id="gradient-text">Generate Art</span>
+              <span id="gradient-text">Deploy Vision</span>
             </button>
 
             <button
@@ -701,7 +729,7 @@ const Home: NextPage = () => {
               } // Disable button based on condition
             >
 
-              <span id='gradient-text'>Mint NFT: ₳ {(mintingPrice / 1000000).toFixed(2)}</span>
+              <span id='gradient-text'>Forge Artifact: ₳ {(mintingPrice / 1000000).toFixed(2)}</span>
 
               </button>
               
@@ -718,7 +746,7 @@ const Home: NextPage = () => {
                     </div>
                   )}
               </div>
-            </form>
+
           </div>
 
           {/* "Your Creation" Section */}
@@ -731,11 +759,7 @@ const Home: NextPage = () => {
               disabled={false} 
             />
           }
-          <div className="tag3">
-          {generatedImages && 
-          <label className="tag"> { promptSummary}</label>
-          }
-            </div>
+
             {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
             {isLoading && (
             <div className="spinner-container">
@@ -755,33 +779,34 @@ const Home: NextPage = () => {
               />
 
             {!!generatedImages && generatedImages.length > 0 && (
+              
               <div>
+                <label className="tag"> { promptSummary}</label>
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
                     <img
                       src={imageUrl}
                       alt={`Generated Image ${imageIndex + 1}`}
-
                       className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
                     />
                         {/* Prompt */}
-                  <div className="tag3">
+
                     <div className="tag">Prompt: {generatedPrompt}</div>
-                  </div>
+
                 </div>
                 ))}
 
-                  <div className="flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={clearGeneratedData}
-                    className="button-animate"
-                  >
-                    <span id=" tag gradient-text">Try Again</span>
-                  </button>
+                  <div className="tag5">
+                    <button
+                      type="button"
+                      onClick={clearGeneratedData}
+                      className="button-animate"
+                    >
+                      <span id=" tag5 gradient-text">Try Again</span>
+                    </button>
                   </div> 
-                  </div>
+                </div>
 
 
             )}

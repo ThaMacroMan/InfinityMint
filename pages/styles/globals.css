@@ -6,24 +6,24 @@
 
 @font-face {
     font-family: 'Public-Pixel';
-    src: url(Neuropol.otf)
-} 
+    src: url(Neuropol.otf);
+}
 
-.pixelfont{
+.pixelfont {
   font-family: Public-Pixel;
 }
 
-.pixelfont2{
+.pixelfont2 {
   font-family: Public-Pixel;
-  position: absolute; /* Position the title absolutely */ 
+  position: absolute;
   top: 1px;
   align-self: center;
   font-size: 3rem;
-  max-width: 100%; /* Set a maximum width for the title */
-  text-align: center; /* Center the text within its container */
+  max-width: 100%;
+  text-align: center;
 }
 
-.pixelfont3{
+.pixelfont3 {
   font-family: Public-Pixel;
   font-size: 1.3rem;
 }
@@ -36,56 +36,66 @@
   align-items: center;
   font-family: 'Public-Pixel';
   justify-content: space-evenly;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, .5); /* Add shadow effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .5);
   font-size: 1.5rem;
 }
 
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .form {
-  flex-direction: column; /* Align items vertically */
-  align-items: center; /* Center items horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background-color: #202429;
   border-radius: 0.618rem;
   border: 5px solid #000000;
   margin: .5rem;
   min-height: 92vh;
-  width: 20vw;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  width: 25%;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
 
+.form * {
+  flex-shrink: 1;
 }
 
 .creation-container {
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   border: 5px solid #000000;
-  padding: 1rem;
-  margin: .5rem;
-  border-radius: .618rem; 
+  padding: .5rem;
+  margin: .25rem;
+  border-radius: .618rem;
   background-color: #202429;
   background-image: url('LczGzLNl.jpg');
-  background-size: cover; /* Use auto to prevent repeating and maintain aspect ratio */
-  background-position: bottom right; /* Ensure bottom-right portion is always visible */
-  background-repeat: no-repeat; /* Prevent background image from repeating */
-  width: 100%;
+  background-size: cover;
+  background-position: bottom right;
+  background-repeat: no-repeat;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  cursor: auto;
-} 
+  flex-grow: 1;
+  flex-basis: 0;
+}
 
 .error-popup {
   font-family: Public-Pixel;
   font-size: 1.5rem;
-  display: flex; /* Change position to display */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #ffcccc;
   padding: 10px;
   border: 1px solid #ff0000;
   border-radius: 5px;
   z-index: 1000;
-  cursor: pointer; /* Add this line to set the cursor to pointer */
-
+  cursor: pointer;
 }
 
 #gradient-text {
@@ -94,115 +104,85 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 1.3rem;
-
 }
 
-
-
-/* Media query for larger screens */
-@media screen and (min-width: 924px) {
+@media screen and (max-width: 924px) {
   .wrapper {
-    display: flex; /* Ensure wrapper uses flex layout */
-    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
-    justify-content: space-between; /* Space items evenly */
+    flex-direction: column;
   }
-  .form {
-    min-width: calc(25% - 1rem); /* Adjust width to fit side by side with margin */
-    margin: 0.5rem;
+  .form, .creation-container {
+    min-width: 100%;
+    margin: 0.5rem 0;
+    max-width: none;
+  }
 
-  }
-  .creation-container {
-    width: calc(75% - 1rem); /* Adjust width to fit side by side with margin */
-    margin: 0.5rem;
-  }
 }
-/* Adjust the width of the image as needed */
+
+
 .imageborder {
   max-height: 70vh;
   min-height: 30vw;
   max-width: 70vw;
   min-width: 30vw;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 1); /* Add shadow effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
 }
 
 .textarea {
-  display: flex;
   padding-top: .5rem;
   margin: .3rem;
   border-width: 3px;
   border-radius: 0.618rem;
   font-family: Public-Pixel;
   font-size: 1.5rem;
-  width: 97.5%
-}
-.info-popup {
-font-family: Public-Pixel;
-font-size: 1.5rem;
-margin-left: 2rem;
-margin-right: 2rem;
-color: #ffffff;
-width: vw;
+  width: 97.5%;
 }
 
-.button {
-  margin: .3rem;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+.info-popup {
+  font-family: Public-Pixel;
+  font-size: 1.5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  color: #ffffff;
+  width: vw;
+}
+
+.button, .button2 {
+  margin-top: .25rem;
+  margin-bottom: .25rem;
   justify-content: center;
   display: flex;
-  width: 97.5%; /* Set the width to 100% */
+  width: 97.5%;
   border-radius: 0.618rem;
-  padding: 1rem; /* Increase padding to make buttons wider */
-  font-size: 1.5rem; /* Increase font size */
+  padding: .5rem;
   cursor: pointer;
   color: #ffffff;
-  border: 3px solid #000000; /* Add border */
+  background-color: #202429;
+  border: 3px solid #000000;
   font-family: Public-Pixel;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
-  margin-left: auto; /* Center the tag horizontally */
-  margin-right: auto; /* Center the tag horizontally */
-
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .button2 {
-  margin: .3rem;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
-  justify-content: space-between;
-  display: flex;
-  width: 97.5%; /* Set the width to 100% */
-  border-radius: 0.618rem;
-  padding: 1rem; /* Increase padding to make buttons wider */
-  font-size: 1.5rem; /* Increase font size */
-  cursor: pointer;
-  color: #ffffff;
-  border: 3px solid #000000; /* Add border */
-  font-family: Public-Pixel;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
-  margin-left: auto; /* Center the tag horizontally */
-  margin-right: auto; /* Center the tag horizontally */
-
+  background-color: #ee0979;
 }
 
 .button:disabled {
-  opacity: 0.3; /* Reduce opacity to indicate disabled state */
-  cursor: not-allowed; /* Change cursor to indicate non-interactive */
-  background-color: #585858; /* Change background color when disabled */
-  color: #666666; /* Change text color when disabled */
-  border-color: #999999; /* Change border color when disabled */
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: #585858;
+  color: #666666;
+  border-color: #999999;
 }
-
 
 .infobutton {
   display: flex;
-  margin-left: 1rem;
-  padding: .75rem;
-  align-items: center; /* Vertically center the content */
-  display: flex;
+  margin-left: .5rem;
+  padding: .5rem;
+  align-items: center;
   border-radius: 0.618rem;
-  font-size: 1.5rem; /* Increase font size */
+  font-size: 1rem;
   cursor: pointer;
-  border: 3px solid #000000; /* Add border */
+  border: 3px solid #000000;
   font-family: Public-Pixel;
   color:#ffffff;
   background-color:#c50303;
@@ -212,96 +192,90 @@ width: vw;
 
 .tag {
   display: flex;
-  align-items: center; /* Center text vertically */
-  background-color: #000000;
+  align-items: center;
+  justify-content: center;
   border: 3px solid #000000;
   border-radius: 0.618rem;
   font-size: 1.5rem;
   margin: .25rem;
   padding: .25rem;
   color: #ffffff;
-  justify-content: space-between;
-  font-family: 'Public-Pixel', sans-serif; /* Ensure fallback fonts are specified */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+  font-family: 'Public-Pixel', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
- 
+
 .tag2 {
-  margin-top: .5rem;
-  margin-bottom: .5rem;
-  align-items: center; /* Center the buttons vertically */
-  display: flex;
-  justify-content: space-between; /* or space-around or space-evenly */
+  justify-content: space-between;
   width: 98%;
   padding: .3rem;
-  padding-top: .25rem;
-  padding-bottom: .25rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
   border: 3px solid #000000;
   border-radius: 0.618rem;
-  font-family: Public-Pixel;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
-  margin-left: auto; /* Center the tag horizontally */
-  margin-right: auto; /* Center the tag horizontally */
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-family: 'Public-Pixel', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-  .tag3 {
-    display: flex;
-    justify-content: center; /* Center the tags horizontally */
-    align-items: center; /* Center the tags vertically */
-    margin-top: 1rem;
-  }
-  
-  .tag4 {
-    display: flex;
-    align-items: center; /* Center text vertically */
+.tag3 {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #000000;
+  border-radius: 0.618rem;
+  font-size: 1.5rem;
+  margin: .25rem;
+  padding: .25rem;
+  color: #ffffff;
+  font-family: 'Public-Pixel', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
 
-    border: 3px solid #000000;
-    border-radius: 0.618rem;
-    font-size: 3rem;
-    margin-top: .5rem;
-    margin-bottom: .5rem;
-    margin-left: 7rem;
-    margin-right: 7rem;
-    padding: .25rem;
-    color: #ffffff;
-    justify-content: space-between;
-    font-family: 'Public-Pixel', sans-serif; /* Ensure fallback fonts are specified */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
-    flex-direction: column; /* Display items vertically */
-  }
+.tag4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #000000;
+  border-radius: 0.618rem;
+  font-size: 1.5rem;
+  margin: .25rem;
+  padding: .25rem;
+  color: #ffffff;
+  font-family: 'Public-Pixel', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  margin: 1rem 7rem;
+  font-size: 2rem;
+}
 
-  .tag5 {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center text vertically */
-    justify-content: center; /* Center text horizontally */
-    background-color: #000000;
-    border: 3px solid #000000;
-    border-radius: 0.618rem;
-    font-size: 3rem;
-    padding: 0.25rem;
-    color: #ffffff;
-    font-family: 'Public-Pixel', sans-serif;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    width: fit-content;
-    margin: 3rem auto; /* Auto margins for horizontal centering if parent is block */
-  }
+ .tag5 {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #c01616;
+  border-radius: 0.618rem;
+  background-color: #000000;
+  font-size: 1.5rem;
+  width: fit-content;
+  text-align: center;
+  margin: 1rem auto; /* Center horizontally */
+  padding: .2rem;
 
-  #creation-gradient-text {
-    background: repeating-linear-gradient(to right, red, orange, yellow);
-    background-clip: content-box;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    align-content: center;
-    align-self: center;
-    font-size: 2rem;
-  }
+  font-family: 'Public-Pixel', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
 
 .field {
   display: flex;
   text-align: center;
   background-color: #b9b9b9;
   border: 3px solid black;
-  border-radius: 0.618rem; /* Light grey background */
+  border-radius: 0.618rem;
   font-size: 1.5rem;
   width: fit-content;
   font-family: Public-Pixel;
@@ -315,39 +289,24 @@ width: vw;
   transform: translate(-50%, -50%);
 }
 
-  
-  .spinner-message {
-    position: absolute; /* Absolutely position the message inside the spinner */
-    top: 50%;
-    left: 50%;
-    border-radius: 5.618rem;
-    transform: translate(-50%, -50%); /* Center the message */
-    text-align: center;
-    display: flex; /* Ensures the text inside the message is centered */
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
-    color: #ffffff;
-    font-size: large;
-    font-family: Public-Pixel;
-    background: linear-gradient(to left,  #ff00f7, #0000ff,#c50303, #ff00f7 ,#0000ff); /* Define the gradient */
-    background-size: 400% auto; /* Double the background size to make the gradient flow */
-    animation: flow 2.618s linear infinite ; /* Apply the animation */
-    min-width: 20vw;
-    min-height: 20vh;
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-.adalogo {
-  width: 40rem; /* Adjust the width as needed */
-  height: auto; /* Maintain aspect ratio */
+.spinner-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 5.618rem;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: large;
+  font-family: Public-Pixel;
+  background: linear-gradient(to left,  #ff00f7, #0000ff,#c50303, #ff00f7 ,#0000ff);
+  background-size: 400% auto;
+  animation: flow 2.618s linear infinite;
+  min-width: 20vw;
+  min-height: 20vh;
 }
 
 @keyframes spin {
@@ -359,6 +318,11 @@ width: vw;
   }
 }
 
+.adalogo {
+  width: 40rem;
+  height: auto;
+}
+
 @keyframes flow {
   0% {
     background-position: 0% 50%;
@@ -368,26 +332,62 @@ width: vw;
   }
 }
 
-body{
-    background-color: #202429;
-    cursor: auto;
-} 
-
-.prompt-summary{
-  margin-bottom: 3rem;
-
+body {
+  background-color: #202429;
+  cursor: auto;
 }
+
+.prompt-summary {
+  margin-bottom: 3rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns, each taking half the space */
+  gap: 0.618rem; /* Space between grid items */
+  width: 100%; /* Ensure the grid container takes full width */
+}
+
 .asset-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 4rem;
-}
-.asset-value {
-  font-size: 1rem; /* Adjust the font size as needed */
+  justify-content: center; /* Center items horizontally and vertically */
+  border: 1px solid #fff;
+  border-radius: 0.618rem;
+  padding: 0.25rem;
+  background-color: #202429;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: 100%; /* Ensure the container takes full width of the grid cell */
+  height: 100%; /* Ensure the container takes full height of the grid cell */
 }
 
-/* TRY AGAIN BUTTON EYE CATCHINGNESS */ 
+.asset-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Ensure the value takes full width of the container */
+}
+
+
+.button-animate {
+  animation: slideInOut 3s infinite, gradientFlow 5s infinite;
+  background: linear-gradient(270deg, #ff6a00, #ee0979);
+  background-size: 400% 400%;
+  color: white;
+  border: none;
+  padding: 2rem 2rem;
+  cursor: pointer;
+  outline: none;
+  font-size: 2rem;
+  border-radius: 5px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.button-animate:hover {
+  transform: scale(1.5);
+}
+
 @keyframes slideInOut {
   0% {
     transform: translateX(-2rem);
@@ -412,22 +412,63 @@ body{
   }
 }
 
-.button-animate {
-  animation: slideInOut 3s infinite, gradientFlow 5s infinite;
-  background: linear-gradient(270deg, #ff6a00, #ee0979);
-  background-size: 400% 400%;
-  color: white;
-  border: none;
-  padding: 2rem 2rem;
-  cursor: pointer;
-  outline: none;
-  font-size: 2rem;
-  border-radius: 5px;
-  transition: transform 0.3s ease-in-out;
+#creation-gradient-text {
+  background: repeating-linear-gradient(to right, red, orange, yellow);
+  background-clip: content-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  align-content: center;
+  align-self: center;
 
 }
 
-.button-animate:hover {
-  transform: scale(1.5);
+.uses-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
+.uses-label {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.loading-bar {
+  display: flex;
+  width: 98%;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.loading-block {
+  width: 7%;
+  height: 3rem;
+  background-color: #ddd;
+  border-radius: 0.25rem;
+  margin: 0 0.1rem;
+  transition: background-color 0.3s;
+  font-size: 1.5rem;
+  font-family: Public-Pixel;
+  text-align: center;
+  align-content: center;
+}
+
+.loading-block.filled.green {
+  background-color: green;
+}
+
+.loading-block.filled.orange {
+  background-color: orange;
+}
+
+.loading-block.filled.red {
+  background-color: red;
+}
+
+.token-per-use {
+  font-size: 1rem;
+  color: #fff;
+}
