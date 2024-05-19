@@ -562,13 +562,10 @@ const Home: NextPage = () => {
                   <div
                     key={index}
                     className={`loading-block ${
-                      userUses >= 5
-                        ? "green"
-                        : userUses > 0
-                        ? "orange"
-                        : "red"
+                      parseInt(userUses) >= 5 ? "green" : parseInt(userUses) > 0 ? "orange" : "red"
+
                     } ${
-                      index < userUses ? "filled" : ""
+                      index < parseInt(userUses) ? "filled" : ""
                     }`}
                   ></div>
                   
