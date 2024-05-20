@@ -62,7 +62,9 @@
 }
 
 .creation-container {
+  position: relative;
   display: flex;
+  min-width: 300px;
   flex-direction: column;
   justify-content: center;
   border: 5px solid #000000;
@@ -77,6 +79,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   flex-grow: 1;
   flex-basis: 0;
+  overflow: hidden;
 }
 
 .error-popup {
@@ -99,6 +102,27 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 1.3rem;
+}
+
+
+.button2 {
+  margin-top: .25rem;
+  margin-bottom: .25rem;
+  justify-content: center;
+  display: flex;
+  width: 97.5%;
+  border-radius: 0.618rem;
+  padding: .5rem;
+  align-items: center; /* Center vertically */
+  background-color: #202429; /* Adjust as needed */
+  border: 3px solid #5bc1c1; /* Green border */
+  color: #5bc1c1;
+  border-radius: .618rem; /* Optional, for rounded corners */
+  cursor: pointer; /* Add a pointer cursor on hover */
+  font-size: 1.2rem; /* Adjust font size as needed */
+  font-family: Public-Pixel;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s; /* Add transition for hover effect */
 }
 
 @media screen and (max-width: 768px) {
@@ -127,6 +151,10 @@
 
   #gradient-text {
     font-size: .75rem; /* Adjust font size for smaller screens */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
   }
 
   .pixelfont2 {
@@ -149,6 +177,10 @@
   max-width: 70vw;
   min-width: 30vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+  transition: transform 0.2s;
+}
+.imageborder:hover {
+  transform: scale(1.03); /* Slightly enlarge on hover */
 }
 
 .textarea {
@@ -169,7 +201,7 @@
   color: #ffffff;
 }
 
-.button, .button2 {
+.button {
   margin-top: .25rem;
   margin-bottom: .25rem;
   justify-content: center;
@@ -183,11 +215,9 @@
   border: 3px solid #000000;
   font-family: Public-Pixel;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s; /* Add transition for hover effect */
 }
 
-.button2 {
-  background-color: #ee0979;
-}
 
 .button:disabled {
   opacity: 0.3;
@@ -211,6 +241,10 @@
   background-color: #c50303;
   height: 60px;
   max-width: 400px;
+  transition: transform 0.2s;
+}
+.infobutton:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 .tag {
@@ -302,6 +336,10 @@
   width: fit-content;
   font-family: Public-Pixel;
   padding: .1rem;
+  transition: transform 0.2s; /* Add transition for hover effect */
+}
+.field:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 .spinner-container {
@@ -382,6 +420,12 @@ body {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  cursor: pointer; /* Change cursor to pointer */
+  transition: transform 0.2s; /* Optional: Add transition for hover effect */
+}
+
+.asset-container:hover {
+  transform: scale(1.05); /* Optional: Slightly enlarge on hover */
 }
 
 .asset-value {
@@ -405,8 +449,8 @@ body {
   transition: transform 0.3s ease-in-out;
 }
 
-.button-animate:hover {
-  transform: scale(1.5);
+.button:hover, .button2:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 @keyframes slideInOut {
@@ -476,8 +520,8 @@ body {
   align-content: center;
 }
 
-.loading-block.filled.green {
-  background-color: green;
+.loading-block.filled.magenta {
+  background-color: #5bc1c1;
 }
 
 .loading-block.filled.orange {

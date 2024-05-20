@@ -509,7 +509,8 @@ const Home: NextPage = () => {
         rel="noopener noreferrer" 
         style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
       >
-        <p style={{ color: 'green', margin: 0 }}>$RAD: ₳ {formattedPrice}</p>
+        <p style={{ color: '#FF00FF', margin: 0 }}>$RAD: ₳ {formattedPrice}</p>
+
       </a>
     </div>
 
@@ -527,9 +528,10 @@ const Home: NextPage = () => {
               </div>
             </div>
           </div>
+
           <button
                 onClick={buyUsesTransaction}
-                className={`tag2 animated-gradient2 ${
+                className={`button2 ${
                   !connected ||
                   isLoading ||
                   (!generatedImages && !uploadedImage) ||
@@ -538,8 +540,9 @@ const Home: NextPage = () => {
                     : ""
                 }`}
               >
-                <p style={{ color: 'green', margin: 0 }}>Refuel: {tokenPerUse} RAD {formattedPrice}</p>
+                <p> Refuel: {tokenPerUse} RAD </p>
             </button>
+
             <div className="uses-container">
               <div className="loading-bar">
                 <div className='loading-block' >
@@ -549,7 +552,8 @@ const Home: NextPage = () => {
                   <div
                     key={index}
                     className={`loading-block ${
-                      parseInt(userUses) >= 5 ? "green" : parseInt(userUses) > 0 ? "orange" : "red"
+                      parseInt(userUses) >= 4 ? "magenta" : parseInt(userUses) > 0 ? "orange" : "red"
+
 
                     } ${
                       index < parseInt(userUses) ? "filled" : ""
@@ -611,6 +615,7 @@ const Home: NextPage = () => {
                 className="field"
                 name="style"
                 id="style" 
+                style={{ cursor: 'pointer' }}
                 onChange={(e) => handleStyleSelection(e.target.value)}>
                 <option value="">Select</option>
                   <option value="natural">Natural</option>
@@ -625,6 +630,7 @@ const Home: NextPage = () => {
                   className="field"
                   name="model"
                   id="model"
+                  style={{ cursor: 'pointer' }}
                   onChange={updateOptions}
                 >
                   <option value="dall-e-3"> dalle 3</option>
@@ -647,6 +653,7 @@ const Home: NextPage = () => {
                 <select className="field" 
                   name="size" 
                   id="size"
+                  style={{ cursor: 'pointer' }}
                   onChange={(e) => setSelectedSize(e.target.value)} 
                   >
                 </select>
@@ -668,6 +675,7 @@ const Home: NextPage = () => {
                 <select className="field" 
                   name="quality" 
                   id="quality"
+                  style={{ cursor: 'pointer' }}
                   onChange={(e) => setSelectedQuality(e.target.value)}>
                   <option value="standard">Standard</option>
                   <option value="hd">HD</option>
@@ -754,22 +762,22 @@ const Home: NextPage = () => {
           </div>
 
           {/* "Your Creation" Section */}
-          <div className="creation-container" > 
-          {!slideshowDisabled && 
-            <ImageSlideshow 
-            images={[
-              aigirl, amazonman, citizen, dead, dragon, escape, powergirl, ship
-            ]}  
-              disabled={false} 
-            />
-          }
+          <div className="creation-container">
+              {!slideshowDisabled && (
+                <ImageSlideshow 
+                  images={[
+                    aigirl, amazonman, citizen, dead, dragon, escape, powergirl, ship
+                  ]}
+                  disabled={false} 
+                />
+              )}
 
-            {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
-            {isLoading && (
-            <div className="spinner-container">
-             <Spinner message="Generating your creation..." />
-            </div>
-            )}
+              {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
+              {isLoading && (
+                <div className="spinner-container">
+                  <Spinner message="Generating your creation..." />
+                </div>
+              )}
 
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
@@ -783,9 +791,10 @@ const Home: NextPage = () => {
               />
 
             {!!generatedImages && generatedImages.length > 0 && (
-              
               <div>
-                <label className="tag"> { promptSummary}</label>
+              <div className="tag5">
+                <span  id="creation-gradient-text"> {promptSummary}</span>
+                </div>
                 {generatedImages.map((imageUrl, imageIndex) => (
                   <div key={`generated-image-${imageIndex}`}>
                     <img
@@ -793,11 +802,13 @@ const Home: NextPage = () => {
                       alt={`Generated Image ${imageIndex + 1}`}
                       className="mx-auto mt-4 mb-4 imageborder"
                       onClick={() => saveImage(imageUrl)}
+                      style={{ cursor: 'pointer' }} // Add this line
                     />
                         {/* Prompt */}
 
-                    <div className="tag">Prompt: {generatedPrompt}</div>
-
+                    <div className="tag5">
+                    <span  id="creation-gradient-text">Prompt: {generatedPrompt}</span>
+                      </div>
                 </div>
                 ))}
 
@@ -807,7 +818,7 @@ const Home: NextPage = () => {
                       onClick={clearGeneratedData}
                       className="button-animate"
                     >
-                      <span id=" tag5 gradient-text">Try Again</span>
+                      <span id=" tag5 gradient-text">ReForge</span>
                     </button>
                   </div> 
                 </div>
