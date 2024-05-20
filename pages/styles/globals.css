@@ -5,8 +5,8 @@
 @import url('https://fonts.cdnfonts.com/css/public-pixel');
 
 @font-face {
-    font-family: 'Public-Pixel';
-    src: url(Neuropol.otf);
+  font-family: 'Public-Pixel';
+  src: url(Neuropol.otf);
 }
 
 .pixelfont {
@@ -56,14 +56,9 @@
   border: 5px solid #000000;
   margin: .5rem;
   min-height: 92vh;
-  width: 25%;
   width: 400px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-}
-
-.form * {
-  flex-shrink: 1;
 }
 
 .creation-container {
@@ -106,18 +101,47 @@
   font-size: 1.3rem;
 }
 
-@media screen and (max-width: 924px) {
+@media screen and (max-width: 768px) {
   .wrapper {
     flex-direction: column;
   }
+  
   .form, .creation-container {
-    min-width: 100%;
+    width: 98%;
     margin: 0.5rem 0;
-    max-width: none;
   }
 
-}
+  .form {
+    min-height: auto;
+    height: auto;
+  }
+  
+  .creation-container {
+    height: auto;
+  }
+  
+  .header {
+    font-size: 1rem;
+    text-align: center;
+  }
 
+  #gradient-text {
+    font-size: .75rem; /* Adjust font size for smaller screens */
+  }
+
+  .pixelfont2 {
+    font-size: 2rem;
+  }
+
+  .button, .button2, .infobutton, .tag, .tag2, .tag3, .tag4, .tag5 {
+    font-size: 1rem;
+    padding: .25rem;
+  }
+  
+  .textarea {
+    font-size: 1rem;
+  }
+}
 
 .imageborder {
   max-height: 70vh;
@@ -143,7 +167,6 @@
   margin-left: 2rem;
   margin-right: 2rem;
   color: #ffffff;
-  width: vw;
 }
 
 .button, .button2 {
@@ -184,8 +207,8 @@
   cursor: pointer;
   border: 3px solid #000000;
   font-family: Public-Pixel;
-  color:#ffffff;
-  background-color:#c50303;
+  color: #ffffff;
+  background-color: #c50303;
   height: 60px;
   max-width: 400px;
 }
@@ -252,7 +275,7 @@
   font-size: 2rem;
 }
 
- .tag5 {
+.tag5 {
   flex-direction: column;
   display: flex;
   align-items: center;
@@ -263,9 +286,8 @@
   font-size: 1.5rem;
   width: fit-content;
   text-align: center;
-  margin: 1rem auto; /* Center horizontally */
+  margin: 1rem auto;
   padding: .2rem;
-
   font-family: 'Public-Pixel', sans-serif;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
@@ -302,7 +324,7 @@
   color: #ffffff;
   font-size: large;
   font-family: Public-Pixel;
-  background: linear-gradient(to left,  #ff00f7, #0000ff,#c50303, #ff00f7 ,#0000ff);
+  background: linear-gradient(to left, #ff00f7, #0000ff, #c50303, #ff00f7, #0000ff);
   background-size: 400% auto;
   animation: flow 2.618s linear infinite;
   min-width: 20vw;
@@ -343,32 +365,31 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two columns, each taking half the space */
-  gap: 0.618rem; /* Space between grid items */
-  width: 100%; /* Ensure the grid container takes full width */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.618rem;
+  width: 100%;
 }
 
 .asset-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center items horizontally and vertically */
+  justify-content: center;
   border: 1px solid #fff;
   border-radius: 0.618rem;
   padding: 0.25rem;
   background-color: #202429;
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  width: 100%; /* Ensure the container takes full width of the grid cell */
-  height: 100%; /* Ensure the container takes full height of the grid cell */
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }
 
 .asset-value {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%; /* Ensure the value takes full width of the container */
+  width: 100%;
 }
-
 
 .button-animate {
   animation: slideInOut 3s infinite, gradientFlow 5s infinite;
@@ -419,7 +440,6 @@ body {
   -webkit-text-fill-color: transparent;
   align-content: center;
   align-self: center;
-
 }
 
 .uses-container {
@@ -468,7 +488,22 @@ body {
   background-color: red;
 }
 
+.letter-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 7%;
+  height: 3rem;
+  font-size: 1.5rem;
+  font-family: Public-Pixel;
+  color: red;
+  background-color: #ddd;
+  border-radius: 0.25rem;
+  margin: 0 0.1rem;
+}
+
 .token-per-use {
   font-size: 1rem;
   color: #fff;
 }
+ 

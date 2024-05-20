@@ -35,7 +35,7 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': API_KEY,
+            'x-api-key': '8w7MBbmePqxKF5phWuUPzPE0xUkCgt2p',
           },
         });
 
@@ -44,6 +44,8 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
         }
 
         const json = await response.json();
+        console.log('API response:', json);
+
         const formattedClosePriceADA = json[0]?.close.toFixed(10);
         const [wholePart, decimalPart] = formattedClosePriceADA.split('.');
         const formattedPrice = `${wholePart}.${decimalPart.slice(0, 9)}`;
@@ -53,6 +55,7 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
         settokenPerUse(tokenPerUse, formattedPrice);
 
       } catch (error: any) {
+        console.error('Error fetching token price:', error);
         setError(`There was an error fetching the token price: ${error.message}`);
       } finally {
         setLoading(false);
@@ -62,11 +65,10 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
     fetchData();
   }, [tokenUnit, onchainID, interval, numIntervals, settokenPerUse]);
 
-  if (loading) return <div></div>;
-  if (error) return <div></div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
-  return 
+  return null; // No need to return any JSX as there's no content specified
 };
 
 export default TokenPrice;
-
