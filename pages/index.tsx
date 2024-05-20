@@ -501,20 +501,7 @@ const Home: NextPage = () => {
         >
           <span id="gradient-text">Powered by Catsky AI</span>
         </a>
-        <a 
-          href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-        >
-          <Image 
-            src={jpglogo.src} 
-            alt="Logo" 
-            className="h-9"
-            width={150}
-            height={50} 
-          />
-        </a>
+
       </div>
       <a 
         href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474" 
@@ -697,15 +684,15 @@ const Home: NextPage = () => {
               </div>
 
               <button
-              type="button"
-              onClick={generateImage}
-              className={`button animated-gradient ${
-                isLoading  || !connected || !prompt.trim() || userUses === '0' ? 'disabled-button' : ''
-              }`}
-              disabled={isLoading || !connected || !prompt.trim() || userUses === '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
-            >
-              <span id="gradient-text">Deploy Vision</span>
-            </button>
+                type="button"
+                onClick={generateImage}
+                className={`button animated-gradient ${
+                  isLoading  || !connected || !prompt.trim() || userUses === '0' ? 'disabled-button' : ''
+                }`}
+                disabled={isLoading || !connected || !prompt.trim() || userUses === '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
+              >
+                <span id="gradient-text">Deploy Vision</span>
+              </button>
 
             <button
               type="button"
@@ -725,11 +712,31 @@ const Home: NextPage = () => {
                 (generatedImages.length === 0 && !uploadedImage)
               } // Disable button based on condition
             >
-
               <span id='gradient-text'>Forge Artifact: ₳ {(mintingPrice / 1000000).toFixed(2)}</span>
-
               </button>
-              
+
+
+              <a
+                    className={'button animated-gradient2'}
+                    href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ cursor: 'pointer', display: 'flex', alignContent:'center', justifyContent: 'space-around', paddingRight:'1rem', paddingLeft: '1rem' }}
+                  >
+                    <span id='gradient-text'>Market:  </span>
+                  
+                
+                  <Image 
+                    src={jpglogo.src} 
+                    alt="Logo" 
+                    className="h-9"
+                    width={150}
+                    height={50} 
+                  />
+                </a>
+
+
+
               <div>
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
