@@ -142,8 +142,9 @@
   }
   
   .creation-container {
-    min-height: 700px; /* Maintain minimum height */
+    min-height: 850px; /* Maintain minimum height */
     height: auto;
+    width: auto;
   }
   
   .header {

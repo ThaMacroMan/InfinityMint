@@ -793,12 +793,12 @@ const Home: NextPage = () => {
 
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
-                defaultToken="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59"
+                defaultToken="6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73"
                 colors={{"background":"#0E0F12","containers":"#191B23","subText":"#88919E","mainText":"#FFFFFF","buttonText":"#FFFFFF","accent":"#007DFF"}}
                 theme="dark"
                 width="450"
-                partnerCode="catskyai61646472317179766566647937643264396477726e63616e74687772787861656d357a757474636332687839386568717a7672346c786c736330386e753970766630706865386d6778646776757465783678636474787176633868736563616e7164766a307674da39a3ee5e6b4b0d3255bfef95601890afd80709"
-                partnerName="CatskyAI"
+                partnerCode="cardania2463617264616e6961da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                partnerName="Cardania"
                 displayType="WIDGET"
               />
 
