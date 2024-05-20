@@ -623,6 +623,17 @@ const Home: NextPage = () => {
                 </select>
               </div>
             </div>
+
+            <div>
+                <div className="" onClick={toggleInfo}>
+                </div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p><span id="gradient-text"> Aura:</span> Select Natural for more natural looking images and vivid for more pop. </p>
+                    </div>
+                  )}
+              </div>
+
               <div className="tag2">
                 <label htmlFor="model" className="tag">Engine</label>
                 <div className="dropdown-container">
@@ -640,10 +651,11 @@ const Home: NextPage = () => {
             </div> 
 
               <div>
-                <div className="" onClick={toggleInfo}></div>
+                <div className="" onClick={toggleInfo}>
+                </div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Models:</span> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
+                      <p><span id="gradient-text"> Engine:</span> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
                     </div>
                   )}
               </div>
@@ -686,7 +698,7 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Qualtiy:</span> Dalle 3 has 2 quality options: Standard and HD.</p>
+                      <p><span id="gradient-text"> Grade:</span> Dalle 3 has 2 quality options: Standard and HD.</p>
                     </div>
                   )}
               </div>
@@ -750,7 +762,7 @@ const Home: NextPage = () => {
                   {showInfo && (
                     <div className="info-popup">
                       <p><span id="gradient-texts"></span> Hold $RAD when minting!</p>
-                      <br></br>
+
                       <p><span id="gradient-text"> 0.5 M = ₳ 1 ADA</span> an 11% Discount</p>
                       <p><span id="gradient-text"> 1.0 M = ₳ 2 ADA</span> an 22% Discount!</p>
                       <p><span id="gradient-text"> 3.0 M = ₳ 3 ADA</span> an 34% Discount!!</p>
