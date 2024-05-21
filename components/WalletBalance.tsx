@@ -15,10 +15,10 @@ const WalletBalance: React.FC = () => {
   useEffect(() => {
     if (connected && projectAssetSummary) {
       setBalances({
-        tokenBalance: projectAssetSummary["$RAD"] || 0,
-        nft1Balance: projectAssetSummary["Terraforms"] || 0,
-        nft2Balance: projectAssetSummary["StarShips"] || 0,
-        nft3balance: projectAssetSummary["Citizens"] || 0,
+        tokenBalance: projectAssetSummary["$CATSKY"] || 0,
+        nft1Balance: projectAssetSummary["CatNips"] || 0,
+        nft2Balance: projectAssetSummary["OG NFTs"] || 0,
+        nft3balance: projectAssetSummary["Era I"] || 0,
       });
     }
   }, [connected, projectAssetSummary]);
@@ -29,10 +29,10 @@ const WalletBalance: React.FC = () => {
 
   return (
     <div className="tag grid-container">
-      <a href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474" className="asset-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" className="asset-link" target="_blank" rel="noopener noreferrer">
         <div className="asset-container">
           <div>
-            <span id="gradient-text">$RAD</span>
+            <span id="gradient-text">$CATSKY</span>
           </div>
           <div className="asset-value">
             <span className="pixelfont3 text-white">
@@ -41,10 +41,10 @@ const WalletBalance: React.FC = () => {
           </div>
         </div>
       </a>
-      <a href="https://www.jpg.store/collection/cardaniaterraforms?tab=items" className="asset-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.jpg.store/collection/catnips" className="asset-link" target="_blank" rel="noopener noreferrer">
         <div className="asset-container">
           <div>
-            <span id="gradient-text">Terraforms</span>
+            <span id="gradient-text">CatNips</span>
           </div>
           <div className="asset-value">
             <span className="pixelfont3 text-white">
@@ -53,10 +53,10 @@ const WalletBalance: React.FC = () => {
           </div>
         </div>
       </a>
-      <a href="https://www.jpg.store/collection/starships?tab=items" className="asset-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.jpg.store/collection/ogcatsky" className="asset-link" target="_blank" rel="noopener noreferrer">
         <div className="asset-container">
           <div>
-            <span id="gradient-text">StarShips</span>
+            <span id="gradient-text">OG NFTs</span>
           </div>
           <div className="asset-value">
             <span className="pixelfont3 text-white">
@@ -65,10 +65,10 @@ const WalletBalance: React.FC = () => {
           </div>
         </div>
       </a>
-      <a href="https://www.jpg.store/collection/citizens?tab=items" className="asset-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.jpg.store/collection/infinitymintwildcatgenesisera" className="asset-link" target="_blank" rel="noopener noreferrer">
         <div className="asset-container">
           <div>
-            <span id="gradient-text">Citizens</span>
+            <span id="gradient-text">Era 1</span>
           </div>
           <div className="asset-value">
             <span className="pixelfont3 text-white">

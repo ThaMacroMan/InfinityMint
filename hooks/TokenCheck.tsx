@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useWallet } from '@meshsdk/react';
 
 const POLICY_ID_NAMES: { [key: string]: string } = {
-  "c859e9d7e71b8f90bdc1e453fd1b9adbc5e6163898fb574543cb5be8": "Terraforms",
-  "9a4579e93ba889999f91db52f8b2268541fea47b8b16d961e0f77e6d": "StarShips",
-  "6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286": "$RAD",
-  "3530c5d7ce77ea067c20bbca7688e18731c8f0c7de456a940eefa27c": "Citizens"
+  "9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921": "$CATSKY",
+  "b77791d20054db4fa9726a58854b8c02550277c8683286ec5a353b89": "CatNips",
+  "6f5d880ec1746a32afc1f4fb53ad7ec1e214f49f53f1175c424b1200": "OG NFTs",
+  "333710c6c50bbee8197888e2e9ea26ad7bcc308e34706723a32082f5": "Era 1"
 };
 
 export const useTokenCheck = () => {

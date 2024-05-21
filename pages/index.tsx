@@ -14,7 +14,7 @@ import ImageSlideshow from '../components/ImageSlideshow';
 import axios from "axios";
 import TokenPrice from './api/CheckPrice';
 
-import logo from '../pages/styles/CardaniaLogo.png'
+import logo from '../pages/styles/infinitymint logo.png'
 import jpglogo from '../pages/styles/jpglogo.png'
 
 
@@ -52,8 +52,8 @@ const Home: NextPage = () => {
   const [userUses, setUserUses] = useState<string>('1');
   const [userAddress, setUserAddress] = useState<string>('none');
   const { projectAssetSummary, hasMinRequiredTokens } = useTokenCheck();
-  const tokenBalance = projectAssetSummary["$RAD"] || 0; //ENTER
-  const nft1Balance = projectAssetSummary["Terraforms"] || 0;//ENTER
+  const tokenBalance = projectAssetSummary["$CATSKY"] || 0; //ENTER
+  const nft1Balance = projectAssetSummary["CatNips"] || 0;//ENTER
   const nft2Balance = projectAssetSummary["OG NFT"] || 0;//ENTER
   const nft3balance = projectAssetSummary["Era I"] || 0;//ENTER
   const [tokenPerUse, settokenPerUse] = useState<number>(0);
@@ -71,10 +71,10 @@ const Home: NextPage = () => {
     if (connected) {
       
       const newBalances = {
-        tokenBalance: projectAssetSummary["$RAD"] || 0,//ENTER
-        nft1Balance: projectAssetSummary["Terraforms"] || 0,//ENTER
-        nft2Balance: projectAssetSummary["StarShips"] || 0,//ENTER
-        nft3balance: projectAssetSummary["Citizens"] || 0,//ENTER
+        tokenBalance: projectAssetSummary["$CATSKY"] || 0,//ENTER
+        nft1Balance: projectAssetSummary["CatNips"] || 0,//ENTER
+        nft2Balance: projectAssetSummary["OG NFTs"] || 0,//ENTER
+        nft3balance: projectAssetSummary["Era 1"] || 0,//ENTER
       };
       setBalances(newBalances);
       fetchUserData();
@@ -84,10 +84,10 @@ const Home: NextPage = () => {
       console.log('minting price set :', price)
 
       console.log('addy is:', userAddress)
-      console.log("$RAD", newBalances.tokenBalance);
-      console.log("Terraforms", newBalances.nft1Balance);
-      console.log("StarShips", newBalances.nft2Balance);
-      console.log("Citizens", newBalances.nft3balance);
+      console.log("$CATSKY", newBalances.tokenBalance);
+      console.log("CatNips", newBalances.nft1Balance);
+      console.log("OG NFTs", newBalances.nft2Balance);
+      console.log("Era 1", newBalances.nft3balance);
     }
     else {
       setMintingPrice(8690000)
@@ -232,8 +232,8 @@ const Home: NextPage = () => {
   const handleSettokenPerUse = useCallback((newtokenPerUse: number, newFormattedPrice: string) => {
     settokenPerUse(newtokenPerUse);
     setFormattedPrice(newFormattedPrice);
-    console.log("RAD Per Use: ", tokenPerUse)
-    console.log("RAD Price: ₳", formattedPrice)
+    console.log("CATSKY Per Use: ", tokenPerUse)
+    console.log("CATSKY Price: ₳", formattedPrice)
     console.log("User Uses: ", userUses)
   }, []);
 
@@ -323,15 +323,9 @@ const Home: NextPage = () => {
 
     try {
 
-      const tx = new Transaction({ initiator: wallet }).sendAssets(
+      const tx = new Transaction({ initiator: wallet }).sendLovelace(
         'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
-        [
-          {
-            unit: '6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73',
-            quantity: tokenPerUse.toString()
-            ,
-          },
-        ]
+        '1000000'
       );
   
       const unsignedTx = await tx.build();
@@ -356,13 +350,13 @@ const Home: NextPage = () => {
   
     /////// Calculate NFT Mint price based on token balance
     const calculateMintingPrice = (tokenBalance: number) => {
-      if (tokenBalance >= 5000000) {
+      if (tokenBalance >= 5000000000) {
         return 4690000; 
-      } else if (tokenBalance >= 3000000) {
+      } else if (tokenBalance >= 3000000000) {
         return 5690000; 
-      } else if (tokenBalance >= 1000000) {
+      } else if (tokenBalance >= 1000000000) {
         return 6690000; 
-      } else if (tokenBalance >= 500000) {
+      } else if (tokenBalance >= 500000000) {
         return 7690000; 
       } else {
         return 8690000; 
@@ -478,7 +472,7 @@ const Home: NextPage = () => {
     <>
     <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1rem' }}>
       <a 
-        href="https://cardania.com/" 
+        href="https://catsky.io/" 
         target="_blank" 
         rel="noopener noreferrer" 
         style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
@@ -490,7 +484,7 @@ const Home: NextPage = () => {
           height={50}
           style={{ marginRight: '8px' }} 
         />
-        <span>Digital DreamForge</span>
+        <span id="gradient-text">Infinity Mint V1.69</span>
       </a>
       <div style={{ display: 'flex', justifyContent: 'space-evenly', flex: 1, padding: '0 1rem' }}>
         <a 
@@ -504,12 +498,12 @@ const Home: NextPage = () => {
 
       </div>
       <a 
-        href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474" 
+        href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
         target="_blank" 
         rel="noopener noreferrer" 
         style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
       >
-        <p style={{ color: '#FF00FF', margin: 0 }}>$RAD: ₳ {formattedPrice}</p>
+        <p style={{ color: 'blue', margin: 0 }}>$CATSKY: ₳ {formattedPrice}</p>
 
       </a>
     </div>
@@ -540,7 +534,7 @@ const Home: NextPage = () => {
                     : ""
                 }`}
               >
-                <p> Refuel: {tokenPerUse} RAD </p>
+                <p> Refuel: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
             </button>
 
             <div className="uses-container">
@@ -585,8 +579,6 @@ const Home: NextPage = () => {
             />
             </div>
 
-            
-
               <textarea
                 className="textarea"
                 name="prompt"
@@ -595,7 +587,7 @@ const Home: NextPage = () => {
                 rows={5}
                 onChange={(e) => setPrompt(e.target.value)}
                 onInput={autoExpand}
-                placeholder="Detail artifact vision: "
+                placeholder="Your Idea: " //update for brand
                 ></textarea>
               <button
                 className="button"
@@ -604,12 +596,12 @@ const Home: NextPage = () => {
                 disabled={isLoading} // Disable the button when loading
                 onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clickex
               >
-               <span id="gradient-text"> Vision Forge</span>
+               <span id="gradient-text"> AutoIdea</span>
               </button>
               <div/>
 
               <div className="tag2">
-              <label htmlFor="model" className="tag">Aura</label>
+              <label htmlFor="model" className="tag">Style</label> {/* update for brand */}
               <div className="dropdown-container">
                 <select 
                 className="field"
@@ -629,13 +621,13 @@ const Home: NextPage = () => {
                 </div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Aura:</span> Select Natural for more natural looking images and vivid for more pop. </p>
+                      <p><span id="gradient-text"> Style:</span> Select Natural for more natural looking images and vivid for more pop. </p>
                     </div>
                   )}
               </div>
 
               <div className="tag2">
-                <label htmlFor="model" className="tag">Engine</label>
+                <label htmlFor="model" className="tag">AI Model</label> {/* update for brand */}
                 <div className="dropdown-container">
                 <select
                   className="field"
@@ -655,12 +647,12 @@ const Home: NextPage = () => {
                 </div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Engine:</span> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
+                      <p><span id="gradient-text"> AI Model:</span> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
                     </div>
                   )}
               </div>
               <div className="tag2">
-                <label htmlFor="size" className="tag">Form</label>
+                <label htmlFor="size" className="tag">Form</label> {/* update for brand */}
                 <div className="dropdown-container">
                 <select className="field" 
                   name="size" 
@@ -682,7 +674,7 @@ const Home: NextPage = () => {
                   )}
               </div>
               <div className="tag2">
-                <label htmlFor="quality" className="tag">Grade</label>
+                <label htmlFor="quality" className="tag">Grade</label> {/* update for brand */}
                 <div className="dropdown-container">
                 <select className="field" 
                   name="quality" 
@@ -711,7 +703,7 @@ const Home: NextPage = () => {
                 }`}
                 disabled={isLoading || !connected || !prompt.trim() || userUses === '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
               >
-                <span id="gradient-text">Deploy Vision</span>
+                <span id="gradient-text">Build Idea</span> {/* update for brand */}
               </button>
 
             <button
@@ -732,7 +724,7 @@ const Home: NextPage = () => {
                 (generatedImages.length === 0 && !uploadedImage)
               } // Disable button based on condition
             >
-              <span id='gradient-text'>Forge Artifact: ₳ {(mintingPrice / 1000000).toFixed(2)}</span>
+              <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
               </button>
 
 
@@ -754,8 +746,6 @@ const Home: NextPage = () => {
                     height={50} 
                   />
                 </a>
-
-
 
               <div>
                 <div className="" onClick={toggleInfo}></div>
@@ -793,7 +783,7 @@ const Home: NextPage = () => {
 
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
-                defaultToken="6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73"
+                defaultToken="6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73" //policyID + asset string
                 colors={{"background":"#0E0F12","containers":"#191B23","subText":"#88919E","mainText":"#FFFFFF","buttonText":"#FFFFFF","accent":"#007DFF"}}
                 theme="dark"
                 width="450"

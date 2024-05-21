@@ -44,7 +44,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
       {connected ? (
         <div className="tag5">
           {/* Content to display when wallet is connected */}
-          <span  id="creation-gradient-text">Refuel - Detail vision - Deploy vision</span>
+          <span  id="creation-gradient-text">Refuel - Create Idea - Build Idea</span>
         </div>
       ) : (
         <div className="tag5">
@@ -69,12 +69,12 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
       {connected ? (
         <div className="tag5">
           {/* Content to display when wallet is connected */}
-          <span  id="creation-gradient-text">Aquire Cardania artifacts for enhanced forging parameters...</span>
+          <span  id="creation-gradient-text">Own Catsky AI things for more creation parameters...</span>
         </div>
       ) : (
         <div className="tag5">
           {/* Content to display when wallet is not connected */}
-          <span id="creation-gradient-text">Forge your dreams...</span>
+          <span id="creation-gradient-text">Create Anything...</span>
         </div>
       )}
       <style jsx>{`

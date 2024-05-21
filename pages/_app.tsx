@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <MeshProvider>
       <Head>
-        <link rel="icon" type="image/png"  href= "CardaniaLogo.png"/>
+        <link rel="icon" type="image/png"  href= "Catsky LOGO Small.png"/>
 
       </Head>
       <Component {...pageProps} />

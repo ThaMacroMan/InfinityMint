@@ -10,7 +10,7 @@ const summarizePrompt = async (prompt: string): Promise<string> => {
     });
 
     const response = await openAI.chat.completions.create({
-      model: "gpt-3.5-turbo-0125",
+      model: "gpt-3.5-turbo",
       max_tokens: 50,
       temperature: 0.5,
       messages: [
