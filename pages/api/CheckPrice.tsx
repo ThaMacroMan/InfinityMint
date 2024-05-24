@@ -66,7 +66,7 @@ const TokenPrice: React.FC<TokenPriceProps> = ({
   }, [tokenUnit, onchainID, interval, numIntervals, settokenPerUse]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (error) return <div></div>;
 
   return null; // No need to return any JSX as there's no content specified
 };

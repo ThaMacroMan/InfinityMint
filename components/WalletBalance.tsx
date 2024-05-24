@@ -35,7 +35,7 @@ const WalletBalance: React.FC = () => {
             <span id="gradient-text">$CATSKY</span>
           </div>
           <div className="asset-value">
-            <span className="pixelfont3 text-white">
+            <span>
               {Math.floor((balances.tokenBalance || 0) / 1000).toLocaleString()} K
             </span>
           </div>
@@ -47,7 +47,7 @@ const WalletBalance: React.FC = () => {
             <span id="gradient-text">CatNips</span>
           </div>
           <div className="asset-value">
-            <span className="pixelfont3 text-white">
+            <span>
               {(balances.nft1Balance || 0).toLocaleString()}
             </span>
           </div>
@@ -59,7 +59,7 @@ const WalletBalance: React.FC = () => {
             <span id="gradient-text">OG NFTs</span>
           </div>
           <div className="asset-value">
-            <span className="pixelfont3 text-white">
+            <span>
               {(balances.nft2Balance || 0).toLocaleString()}
             </span>
           </div>
@@ -71,7 +71,7 @@ const WalletBalance: React.FC = () => {
             <span id="gradient-text">Era 1</span>
           </div>
           <div className="asset-value">
-            <span className="pixelfont3 text-white">
+            <span >
               {(balances.nft3balance || 0).toLocaleString()}
             </span>
           </div>

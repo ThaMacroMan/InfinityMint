@@ -14,8 +14,12 @@ import ImageSlideshow from '../components/ImageSlideshow';
 import axios from "axios";
 import TokenPrice from './api/CheckPrice';
 
-import logo from '../pages/styles/infinitymint logo.png'
+import logo from '../pages/styles/new logo.jpg'
+import pwdby from '../pages/styles/OpenAI Green.png'
+import pwdby2 from '../pages/styles/cardano_ada-512.png'
+
 import jpglogo from '../pages/styles/jpglogo.png'
+
 
 
 import aigirl from '../pages/public/images/aigirl.jpg';
@@ -480,30 +484,46 @@ const Home: NextPage = () => {
         <Image 
           src={logo.src} 
           alt="Logo" 
-          width={50}
-          height={50}
+          width={60}
+          height={60}
           style={{ marginRight: '8px' }} 
         />
-        <span id="gradient-text">Infinity Mint V1.69</span>
+        <span id="gradient-text">InfinityMint V2.0</span>
       </a>
-      <div style={{ display: 'flex', justifyContent: 'space-evenly', flex: 1, padding: '0 1rem' }}>
+
+
+
         <a 
           href="https://catsky.io/" 
           target="_blank" 
           rel="noopener noreferrer" 
           style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
         >
-          <span id="gradient-text">Powered by Catsky AI</span>
+          <Image 
+          src={pwdby.src} 
+          alt="Logo" 
+          width={60}
+          height={60}
+          style={{ marginRight: '2px' }} 
+        />
+        <span id="gradient-text">Powered by Catsky AI </span>
+
+        <Image 
+          src={pwdby2.src} 
+          alt="Logo" 
+          width={40}
+          height={40}
+          style={{ marginLeft: '16px' }} 
+        />
         </a>
 
-      </div>
       <a 
         href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
         target="_blank" 
         rel="noopener noreferrer" 
         style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
       >
-        <p style={{ color: 'blue', margin: 0 }}>$CATSKY: ₳ {formattedPrice}</p>
+        <p style={{ color: 'green', fontSize:' .75 rem' }}>$CATSKY: ₳ {formattedPrice}</p>
 
       </a>
     </div>
@@ -511,21 +531,19 @@ const Home: NextPage = () => {
       <div className="wrapper">
         {/* Form Section */}
         <div className="form">
-          <div className="pixelfont" style={{ zIndex: 1000 }}>
-            
-            <div className="flex tag"> 
+
+            <div className=" tag6 "> 
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
               <div>
-                
                 <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
                 {showInfo}
               </div>
-            </div>
+
           </div>
 
           <button
                 onClick={buyUsesTransaction}
-                className={`button2 ${
+                className={`button tag  ${
                   !connected ||
                   isLoading ||
                   (!generatedImages && !uploadedImage) ||
@@ -534,7 +552,9 @@ const Home: NextPage = () => {
                     : ""
                 }`}
               >
+                <div id='gradient-text'>
                 <p> Refuel: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
+                </div>
             </button>
 
             <div className="uses-container">
@@ -578,17 +598,28 @@ const Home: NextPage = () => {
             settokenPerUse={handleSettokenPerUse} // Pass the callback function as prop
             />
             </div>
+            <div className="textarea-container">
+            <textarea
+              className="textarea"
+              name="prompt"
+              id="prompt"
+              value={prompt}
+              rows={3}
+              onChange={(e) => setPrompt(e.target.value)}
+              onInput={autoExpand}
+              placeholder="Your Idea: " // update for brand
+            ></textarea>
+            {generatedImages.length >0 && (
+              <button
+                type="button"
+                onClick={clearGeneratedData}
+                className="overlay-button"
+              >
+                Retry
+              </button>
+            )}
+          </div>
 
-              <textarea
-                className="textarea"
-                name="prompt"
-                id="prompt"
-                value={prompt}
-                rows={5}
-                onChange={(e) => setPrompt(e.target.value)}
-                onInput={autoExpand}
-                placeholder="Your Idea: " //update for brand
-                ></textarea>
               <button
                 className="button"
                 type="button"
@@ -601,7 +632,7 @@ const Home: NextPage = () => {
               <div/>
 
               <div className="tag2">
-              <label htmlFor="model" className="tag">Style</label> {/* update for brand */}
+              <label htmlFor="model">Style</label> {/* update for brand */}
               <div className="dropdown-container">
                 <select 
                 className="field"
@@ -627,7 +658,7 @@ const Home: NextPage = () => {
               </div>
 
               <div className="tag2">
-                <label htmlFor="model" className="tag">AI Model</label> {/* update for brand */}
+                <label htmlFor="model">AI Model</label> {/* update for brand */}
                 <div className="dropdown-container">
                 <select
                   className="field"
@@ -652,7 +683,7 @@ const Home: NextPage = () => {
                   )}
               </div>
               <div className="tag2">
-                <label htmlFor="size" className="tag">Form</label> {/* update for brand */}
+                <label htmlFor="size">Form</label> {/* update for brand */}
                 <div className="dropdown-container">
                 <select className="field" 
                   name="size" 
@@ -674,7 +705,7 @@ const Home: NextPage = () => {
                   )}
               </div>
               <div className="tag2">
-                <label htmlFor="quality" className="tag">Grade</label> {/* update for brand */}
+                <label htmlFor="quality"> Grade</label> {/* update for brand */}
                 <div className="dropdown-container">
                 <select className="field" 
                   name="quality" 
@@ -727,23 +758,19 @@ const Home: NextPage = () => {
               <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
               </button>
 
-
               <a
-                    className={'button animated-gradient2'}
+                    className={'button'}
                     href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items"
-                    target="_blank"
                     rel="noopener noreferrer"
                     style={{ cursor: 'pointer', display: 'flex', alignContent:'center', justifyContent: 'space-around', paddingRight:'1rem', paddingLeft: '1rem' }}
                   >
                     <span id='gradient-text'>Market:  </span>
-                  
                 
                   <Image 
                     src={jpglogo.src} 
                     alt="Logo" 
-                    className="h-9"
                     width={150}
-                    height={50} 
+                    height={15} 
                   />
                 </a>
 
@@ -752,7 +779,6 @@ const Home: NextPage = () => {
                   {showInfo && (
                     <div className="info-popup">
                       <p><span id="gradient-texts"></span> Hold $RAD when minting!</p>
-
                       <p><span id="gradient-text"> 0.5 M = ₳ 1 ADA</span> an 11% Discount</p>
                       <p><span id="gradient-text"> 1.0 M = ₳ 2 ADA</span> an 22% Discount!</p>
                       <p><span id="gradient-text"> 3.0 M = ₳ 3 ADA</span> an 34% Discount!!</p>
@@ -802,7 +828,7 @@ const Home: NextPage = () => {
                     <img
                       src={imageUrl}
                       alt={`Generated Image ${imageIndex + 1}`}
-                      className="mx-auto mt-4 mb-4 imageborder"
+                      className="imageborder"
                       onClick={() => saveImage(imageUrl)}
                       style={{ cursor: 'pointer' }} // Add this line
                     />
@@ -814,15 +840,7 @@ const Home: NextPage = () => {
                 </div>
                 ))}
 
-                  <div className="tag5">
-                    <button
-                      type="button"
-                      onClick={clearGeneratedData}
-                      className="button-animate"
-                    >
-                      <span id=" tag5 gradient-text">ReForge</span>
-                    </button>
-                  </div> 
+                  
                 </div>
 
 
