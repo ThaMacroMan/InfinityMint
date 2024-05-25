@@ -11,7 +11,6 @@ import WalletBalance from '../components/WalletBalance';
 import Spinner from '../components/Spinner'; 
 import APIErrorPopup from '../components/APIErrorPopup';
 import ImageSlideshow from '../components/ImageSlideshow';
-import axios from "axios";
 import TokenPrice from './api/CheckPrice';
 
 import logo from '../pages/styles/new logo.jpg'
@@ -19,8 +18,6 @@ import pwdby from '../pages/styles/OpenAI Green.png'
 import pwdby2 from '../pages/styles/cardano_ada-512.png'
 
 import jpglogo from '../pages/styles/jpglogo.png'
-
-
 
 import aigirl from '../pages/public/images/aigirl.jpg';
 import amazonman from '../pages/public/images/amazonman.jpg';
@@ -53,13 +50,13 @@ const Home: NextPage = () => {
   const [mintingPrice, setMintingPrice] = useState<number>(8690000); // Default to the initial price
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
-  const [userUses, setUserUses] = useState<string>('1');
+  const [userUses, setUserUses] = useState<string>('2');
   const [userAddress, setUserAddress] = useState<string>('none');
   const { projectAssetSummary, hasMinRequiredTokens } = useTokenCheck();
   const tokenBalance = projectAssetSummary["$CATSKY"] || 0; //ENTER
   const nft1Balance = projectAssetSummary["CatNips"] || 0;//ENTER
   const nft2Balance = projectAssetSummary["OG NFT"] || 0;//ENTER
-  const nft3balance = projectAssetSummary["Era I"] || 0;//ENTER
+  const nft3Balance = projectAssetSummary["Era I"] || 0;//ENTER
   const [tokenPerUse, settokenPerUse] = useState<number>(0);
   const [formattedPrice, setFormattedPrice] = useState<string>('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
@@ -67,18 +64,17 @@ const Home: NextPage = () => {
     tokenBalance: 0,
     nft1Balance: 0,
     nft2Balance: 0,
-    nft3balance: 0,
+    nft3Balance: 0,
   });
 
   ///////Load User Data
   useEffect(() => {
     if (connected) {
-      
       const newBalances = {
         tokenBalance: projectAssetSummary["$CATSKY"] || 0,//ENTER
         nft1Balance: projectAssetSummary["CatNips"] || 0,//ENTER
         nft2Balance: projectAssetSummary["OG NFTs"] || 0,//ENTER
-        nft3balance: projectAssetSummary["Era 1"] || 0,//ENTER
+        nft3Balance: projectAssetSummary["Era 1"] || 0,//ENTER
       };
       setBalances(newBalances);
       fetchUserData();
@@ -91,10 +87,20 @@ const Home: NextPage = () => {
       console.log("$CATSKY", newBalances.tokenBalance);
       console.log("CatNips", newBalances.nft1Balance);
       console.log("OG NFTs", newBalances.nft2Balance);
-      console.log("Era 1", newBalances.nft3balance);
+      console.log("Era 1", newBalances.nft3Balance);
     }
     else {
       setMintingPrice(8690000)
+      // Clear balances when disconnected
+      setBalances({
+        tokenBalance: 0,
+        nft1Balance: 0,
+        nft2Balance: 0,
+        nft3Balance: 0,
+      });
+      setUserUses('0');
+      // Clear options when disconnected
+      clearOptions();
     }
   }, [connected, projectAssetSummary, userAddress, userUses, setMintingPrice]);
 
@@ -116,6 +122,9 @@ const Home: NextPage = () => {
     ///////Load User Data
   
   //////////////// Model Options
+ 
+
+
   const updateOptions = useCallback(() => {
     const modelSelect = document.getElementById("model") as HTMLSelectElement;
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
@@ -124,6 +133,7 @@ const Home: NextPage = () => {
     if (!modelSelect || !sizeSelect || !qualitySelect) return;
 
     // Clear existing options
+    console.log("Clearing size and quality options...");
     sizeSelect.innerHTML = "";
     qualitySelect.innerHTML = "";
 
@@ -132,40 +142,81 @@ const Home: NextPage = () => {
     squareOption.value = "1024x1024";
     squareOption.textContent = "Square";
     sizeSelect.appendChild(squareOption);
+    console.log("Added default size option: Square");
 
     const standardQualityOption = document.createElement("option");
     standardQualityOption.value = "standard";
     standardQualityOption.textContent = "Standard";
     qualitySelect.appendChild(standardQualityOption);
+    console.log("Added default quality option: Standard");
+
+    console.log('nft1Balance:', balances.nft1Balance);
+    console.log('nft2Balance:', balances.nft2Balance);
+    console.log('nft3Balance:', balances.nft3Balance);
 
     // Conditional addition of more options based on asset balances
-    if (nft1Balance >= 3 || nft2Balance >= 1 || nft3balance >= 10) {
+    if (balances.nft2Balance >= 1 || balances.nft1Balance >= 3 || balances.nft3Balance >= 10) {
       // Enable additional size options
       const landscapeOption = document.createElement("option");
       landscapeOption.value = "1792x1024";
       landscapeOption.textContent = "Landscape";
       sizeSelect.appendChild(landscapeOption);
+      console.log("Added conditional size option: Landscape");
 
       const portraitOption = document.createElement("option");
       portraitOption.value = "1024x1792";
       portraitOption.textContent = "Portrait";
       sizeSelect.appendChild(portraitOption);
+      console.log("Added conditional size option: Portrait");
 
       // Enable additional quality options
       const hdOption = document.createElement("option");
       hdOption.value = "hd";
       hdOption.textContent = "HD";
       qualitySelect.appendChild(hdOption);
+      console.log("Added conditional quality option: HD");
+    } else {
+      console.log("User does not meet the balance requirements for additional options.");
     }
 
     // Update the selected values to reflect any changes
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
-  }, [nft1Balance, nft2Balance, nft3balance, setSelectedSize, setSelectedQuality]);
+  }, [balances]);
+
+  const clearOptions = useCallback(() => {
+    const sizeSelect = document.getElementById("size") as HTMLSelectElement;
+    const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
+
+
+    if (!sizeSelect || !qualitySelect) return;
+
+    // Clear existing options
+    console.log("Clearing size and quality options...");
+    sizeSelect.innerHTML = "";
+    qualitySelect.innerHTML = "";
+
+    // Reset to default options
+    const squareOption = document.createElement("option");
+    squareOption.value = "1024x1024";
+    squareOption.textContent = "Square";
+    sizeSelect.appendChild(squareOption);
+    console.log("Added default size option: Square");
+
+    const standardQualityOption = document.createElement("option");
+    standardQualityOption.value = "standard";
+    standardQualityOption.textContent = "Standard";
+    qualitySelect.appendChild(standardQualityOption);
+    console.log("Added default quality option: Standard");
+
+    setSelectedSize(sizeSelect.value);
+    setSelectedQuality(qualitySelect.value);
+  }, []);
 
   useEffect(() => {
-    updateOptions();
-  }, [updateOptions]);
+    updateOptions(); // Update options whenever balances change
+  }, [balances, updateOptions]);
+
   //////////////// Model Options
   
   /////////////// GPT-3.5-Turbo Prompt
@@ -241,15 +292,14 @@ const Home: NextPage = () => {
     console.log("User Uses: ", userUses)
   }, []);
 
-///////////////////Generate Image with Dalle 3
   const generateImage = async () => {
     const price = calculateMintingPrice(mintingPrice);
     setMintingPrice(price);
-
+  
     setSlideshowDisabled(true); // Disable the slideshow when generating image
     try {
       setIsLoading(true); // Set loading state to true when generating image
-      console.log(selectedModel,selectedSize,selectedQuality);
+      console.log(selectedModel, selectedSize, selectedQuality);
       const response = await fetch('/api/generateImage', {
         method: 'POST',
         headers: {
@@ -260,11 +310,11 @@ const Home: NextPage = () => {
           size: selectedSize,
           quality: selectedQuality,
           model: selectedModel,
-          style: selectedStyle
+          style: selectedStyle,
         }),
       });
       console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
-
+  
       if (!response.ok) {
         setError('Requests with swears or nudity are rejected. If error continues, notify MacroMan');
         setIsLoading(false);
@@ -286,18 +336,22 @@ const Home: NextPage = () => {
       const chunkedPromptData = chunkData(prompt, 64);
       setChunkedPrompt(chunkedPromptData);
       setIsLoading(false); // Set loading state to false when image generation is complete
-
+  
+      // Determine the number of uses to deduct
+      const usesToDeduct = selectedQuality === 'hd' || selectedSize === '1792x1024' || selectedSize === '1024x1792' ? 2 : 1;
+  
       setUserUses((prevUserUses) => {
-        const newUserUses = String(Number(prevUserUses) - 1);
+        const newUserUses = String(Number(prevUserUses) - usesToDeduct);
         localStorage.setItem(userAddress, newUserUses);
         return newUserUses; // Return the updated count to ensure the state is correctly set
       });
-
+  
     } catch (error) {
       console.error('Failed to generate images:', error);
       setIsLoading(false); // Ensure loading state is reset even on error
     }
   };
+  
 
   // Function to chunk data into specified size
   const chunkData = (data: string, size: number) => {
@@ -404,7 +458,7 @@ const Home: NextPage = () => {
           metadataObj.Prompt.push(...promptInChunk);
         });
         // Add additional metadata properties
-        metadataObj['Era'] = ['V1.0: Wildcat Genesis Era']; // Explicitly define Era as string[]
+        metadataObj['Era'] = ['V2.0: Neolithic Nexus Era']; // Explicitly define Era as string[]
         metadataObj['Text'] = ['Powered by Catsky AI and Sick City']; // Explicitly define Text as string[]
         metadataObj['Settings'] = [selectedModel, selectedSize, selectedQuality]
         metadataObj['Name'] = [promptSummary]
@@ -488,7 +542,7 @@ const Home: NextPage = () => {
           height={60}
           style={{ marginRight: '8px' }} 
         />
-        <span id="gradient-text">InfinityMint V2.0</span>
+        <span id="gradient-text2">InfinityMint V2.0</span>
       </a>
 
 
@@ -531,14 +585,14 @@ const Home: NextPage = () => {
       <div className="wrapper">
         {/* Form Section */}
         <div className="form">
-
-            <div className=" tag6 "> 
+          <div className="tag6">
+            <div style={{ position: 'relative', zIndex: 9999 }}>
               <CardanoWallet isDark={true} {...{className: "wallet"}} />
-              <div>
-                <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
-                {showInfo}
-              </div>
-
+            </div>
+            <div>
+              <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
+              {showInfo}
+            </div>
           </div>
 
           <button
@@ -591,8 +645,8 @@ const Home: NextPage = () => {
             
             <div>
             <TokenPrice
-            tokenUnit="6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73"
-            onchainID="0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.f73964cf9bfdc80b6b1b5a313100dede92dabe681e5fa072debb8a53f798e474"
+            tokenUnit="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" //UPDATE TOKEN: POLICY ID + ASSET NAME HEX
+            onchainID="0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" //UPDATE FROM TAPTOOLS LINK
             interval="1d"
             numIntervals={1}
             settokenPerUse={handleSettokenPerUse} // Pass the callback function as prop
@@ -809,12 +863,12 @@ const Home: NextPage = () => {
 
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
-                defaultToken="6787a47e9f73efe4002d763337140da27afa8eb9a39413d2c39d4286524144546f6b656e73" //policyID + asset string
+                defaultToken="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" //policyID + asset string
                 colors={{"background":"#0E0F12","containers":"#191B23","subText":"#88919E","mainText":"#FFFFFF","buttonText":"#FFFFFF","accent":"#007DFF"}}
                 theme="dark"
                 width="450"
-                partnerCode="cardania2463617264616e6961da39a3ee5e6b4b0d3255bfef95601890afd80709"
-                partnerName="Cardania"
+                partnerCode="catskyai61646472317179766566647937643264396477726e63616e74687772787861656d357a757474636332687839386568717a7672346c786c736330386e753970766630706865386d6778646776757465783678636474787176633868736563616e7164766a307674da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                partnerName="CatskyAI"
                 displayType="WIDGET"
               />
 
