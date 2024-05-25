@@ -13,6 +13,7 @@ import APIErrorPopup from '../components/APIErrorPopup';
 import ImageSlideshow from '../components/ImageSlideshow';
 import TokenPrice from './api/CheckPrice';
 
+import catskylogo from '../pages/styles/logo-icon.png'
 import logo from '../pages/styles/new logo.jpg'
 import pwdby from '../pages/styles/OpenAI Green.png'
 import pwdby2 from '../pages/styles/cardano_ada-512.png'
@@ -27,6 +28,14 @@ import dragon from '../pages/public/images/dragon.jpg';
 import escape from '../pages/public/images/escape.jpg';
 import powergirl from '../pages/public/images/powergirl.jpg';
 import ship from '../pages/public/images/ship.jpg';
+import era2 from '../pages/public/images/era2.png';
+import era21 from '../pages/public/images/era21.png';
+import era22 from '../pages/public/images/era22.png';
+import era23 from '../pages/public/images/era23.png';
+import era24 from '../pages/public/images/era24.png';
+import era25 from '../pages/public/images/era25.png';
+import era26 from '../pages/public/images/era26.png';
+import era27 from '../pages/public/images/era27.png';
 
 
 
@@ -67,14 +76,13 @@ const Home: NextPage = () => {
     nft3Balance: 0,
   });
 
-  ///////Load User Data
   useEffect(() => {
     if (connected) {
       const newBalances = {
-        tokenBalance: projectAssetSummary["$CATSKY"] || 0,//ENTER
-        nft1Balance: projectAssetSummary["CatNips"] || 0,//ENTER
-        nft2Balance: projectAssetSummary["OG NFTs"] || 0,//ENTER
-        nft3Balance: projectAssetSummary["Era 1"] || 0,//ENTER
+        tokenBalance: projectAssetSummary["$CATSKY"] || 0,
+        nft1Balance: projectAssetSummary["CatNips"] || 0,
+        nft2Balance: projectAssetSummary["OG NFTs"] || 0,
+        nft3Balance: projectAssetSummary["Era 1"] || 0,
       };
       setBalances(newBalances);
       fetchUserData();
@@ -91,49 +99,46 @@ const Home: NextPage = () => {
     }
     else {
       setMintingPrice(8690000)
-      // Clear balances when disconnected
-      setBalances({
-        tokenBalance: 0,
-        nft1Balance: 0,
-        nft2Balance: 0,
-        nft3Balance: 0,
-      });
-      setUserUses('0');
-      // Clear options when disconnected
-      clearOptions();
+      clearBalancesAndOptions();
     }
   }, [connected, projectAssetSummary, userAddress, userUses, setMintingPrice]);
+  
+  const clearBalancesAndOptions = () => {
+    setBalances({
+      tokenBalance: 0,
+      nft1Balance: 0,
+      nft2Balance: 0,
+      nft3Balance: 0,
+    });
+    setUserUses('0');
+    clearOptions();
+  };
 
   const fetchUserData = async () => {
     const usedAddresses = await wallet.getUsedAddresses();
-    setUserAddress(usedAddresses[0])
+    setUserAddress(usedAddresses[0]);
 
     if (localStorage.getItem(userAddress) === 'null') {
-      console.log('New User Detected, saving and setting to 1 free use')
+      console.log('New User Detected, saving and setting to 1 free use');
       localStorage.setItem(userAddress, '1');
-
-    }
-    else {
+    } else {
       const storedUses = localStorage.getItem(userAddress) || '0';
-      setUserUses(storedUses); //// FOR TESTING ADD 1
-      console.log('Returning user detected with', userUses)
+      setUserUses(storedUses);
+      console.log('Returning user detected with', userUses);
     }
-  }
-    ///////Load User Data
-  
-  //////////////// Model Options
- 
-
+  };
 
   const updateOptions = useCallback(() => {
-    const modelSelect = document.getElementById("model") as HTMLSelectElement;
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
     const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
 
-    if (!modelSelect || !sizeSelect || !qualitySelect) return;
+    if (!sizeSelect || !qualitySelect) return;
+
+    // Preserve current values
+    const currentSize = sizeSelect.value;
+    const currentQuality = qualitySelect.value;
 
     // Clear existing options
-    console.log("Clearing size and quality options...");
     sizeSelect.innerHTML = "";
     qualitySelect.innerHTML = "";
 
@@ -142,42 +147,32 @@ const Home: NextPage = () => {
     squareOption.value = "1024x1024";
     squareOption.textContent = "Square";
     sizeSelect.appendChild(squareOption);
-    console.log("Added default size option: Square");
 
     const standardQualityOption = document.createElement("option");
     standardQualityOption.value = "standard";
     standardQualityOption.textContent = "Standard";
     qualitySelect.appendChild(standardQualityOption);
-    console.log("Added default quality option: Standard");
 
-    console.log('nft1Balance:', balances.nft1Balance);
-    console.log('nft2Balance:', balances.nft2Balance);
-    console.log('nft3Balance:', balances.nft3Balance);
-
-    // Conditional addition of more options based on asset balances
     if (balances.nft2Balance >= 1 || balances.nft1Balance >= 3 || balances.nft3Balance >= 10) {
-      // Enable additional size options
       const landscapeOption = document.createElement("option");
       landscapeOption.value = "1792x1024";
       landscapeOption.textContent = "Landscape";
       sizeSelect.appendChild(landscapeOption);
-      console.log("Added conditional size option: Landscape");
 
       const portraitOption = document.createElement("option");
       portraitOption.value = "1024x1792";
       portraitOption.textContent = "Portrait";
       sizeSelect.appendChild(portraitOption);
-      console.log("Added conditional size option: Portrait");
 
-      // Enable additional quality options
       const hdOption = document.createElement("option");
       hdOption.value = "hd";
       hdOption.textContent = "HD";
       qualitySelect.appendChild(hdOption);
-      console.log("Added conditional quality option: HD");
-    } else {
-      console.log("User does not meet the balance requirements for additional options.");
     }
+
+    // Set the values to the preserved values or defaults if they don't exist
+    sizeSelect.value = currentSize || "1024x1024";
+    qualitySelect.value = currentQuality || "standard";
 
     // Update the selected values to reflect any changes
     setSelectedSize(sizeSelect.value);
@@ -188,33 +183,27 @@ const Home: NextPage = () => {
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
     const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
 
-
     if (!sizeSelect || !qualitySelect) return;
 
-    // Clear existing options
-    console.log("Clearing size and quality options...");
     sizeSelect.innerHTML = "";
     qualitySelect.innerHTML = "";
 
-    // Reset to default options
     const squareOption = document.createElement("option");
     squareOption.value = "1024x1024";
     squareOption.textContent = "Square";
     sizeSelect.appendChild(squareOption);
-    console.log("Added default size option: Square");
 
     const standardQualityOption = document.createElement("option");
     standardQualityOption.value = "standard";
     standardQualityOption.textContent = "Standard";
     qualitySelect.appendChild(standardQualityOption);
-    console.log("Added default quality option: Standard");
 
     setSelectedSize(sizeSelect.value);
     setSelectedQuality(qualitySelect.value);
   }, []);
 
   useEffect(() => {
-    updateOptions(); // Update options whenever balances change
+    updateOptions(); 
   }, [balances, updateOptions]);
 
   //////////////// Model Options
@@ -542,7 +531,11 @@ const Home: NextPage = () => {
           height={60}
           style={{ marginRight: '8px' }} 
         />
-        <span id="gradient-text2">InfinityMint V2.0</span>
+        
+        <div className="text-wrapper">
+          <span id="gradient-text2">InfinityMint V2.0</span>
+          <span className="subtext">Neolithic Nexus Era</span>
+        </div>
       </a>
 
 
@@ -577,6 +570,13 @@ const Home: NextPage = () => {
         rel="noopener noreferrer" 
         style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
       >
+                <Image 
+          src={catskylogo.src} 
+          alt="Logo" 
+          width={40}
+          height={40}
+          style={{ marginRight: '8px' }} 
+        />
         <p style={{ color: 'green', fontSize:' .75 rem' }}>$CATSKY: ₳ {formattedPrice}</p>
 
       </a>
@@ -642,6 +642,16 @@ const Home: NextPage = () => {
               {connected}
               <WalletBalance />
 
+              <div>
+                <div className="" onClick={toggleInfo}>
+                </div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p> Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options. </p>
+                    </div>
+                  )}
+              </div>
+
             
             <div>
             <TokenPrice
@@ -706,7 +716,7 @@ const Home: NextPage = () => {
                 </div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Style:</span> Select Natural for more natural looking images and vivid for more pop. </p>
+                      <p> Select Natural for more natural looking images and vivid for more pop. </p>
                     </div>
                   )}
               </div>
@@ -732,7 +742,7 @@ const Home: NextPage = () => {
                 </div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> AI Model:</span> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
+                      <p> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
                     </div>
                   )}
               </div>
@@ -775,7 +785,7 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Grade:</span> Dalle 3 has 2 quality options: Standard and HD.</p>
+                      <p> Dalle 3 has 2 quality options: Standard and HD.</p>
                     </div>
                   )}
               </div>
@@ -833,10 +843,10 @@ const Home: NextPage = () => {
                   {showInfo && (
                     <div className="info-popup">
                       <p><span id="gradient-texts"></span> Hold $RAD when minting!</p>
-                      <p><span id="gradient-text"> 0.5 M = ₳ 1 ADA</span> an 11% Discount</p>
-                      <p><span id="gradient-text"> 1.0 M = ₳ 2 ADA</span> an 22% Discount!</p>
-                      <p><span id="gradient-text"> 3.0 M = ₳ 3 ADA</span> an 34% Discount!!</p>
-                      <p><span id="gradient-text"> 5.0 M = ₳ 4 ADA</span> an 46% Discount!!!</p>
+                      <p><span id="gradient-text"> 0.5 B = ₳ 1 ADA</span> an 11% Discount</p>
+                      <p><span id="gradient-text"> 1.0 B = ₳ 2 ADA</span> an 22% Discount!</p>
+                      <p><span id="gradient-text"> 3.0 B = ₳ 3 ADA</span> an 34% Discount!!</p>
+                      <p><span id="gradient-text"> 5.0 B = ₳ 4 ADA</span> an 46% Discount!!!</p>
                     </div>
                   )}
               </div>
@@ -847,9 +857,10 @@ const Home: NextPage = () => {
           <div className="creation-container">
               {!slideshowDisabled && (
                 <ImageSlideshow 
-                  images={[
-                    aigirl, amazonman, citizen, dead, dragon, escape, powergirl, ship
-                  ]}
+                images={[
+                  era2, era21, era22, era23, era24, era25, era26, era27
+                ]}
+          
                   disabled={false} 
                 />
               )}
@@ -893,10 +904,7 @@ const Home: NextPage = () => {
                       </div>
                 </div>
                 ))}
-
-                  
                 </div>
-
 
             )}
             {uploadedImage && (

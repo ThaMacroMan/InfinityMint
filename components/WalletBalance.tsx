@@ -35,9 +35,9 @@ const WalletBalance: React.FC = () => {
             <span id="gradient-text">$CATSKY</span>
           </div>
           <div className="asset-value">
-            <span>
-              {Math.floor((balances.tokenBalance || 0) / 1000).toLocaleString()} K
-            </span>
+          <span style={{ color: 'green' }}>
+            {Math.floor((balances.tokenBalance || 0) / 1000000).toLocaleString()} M
+          </span>
           </div>
         </div>
       </a>
@@ -48,7 +48,7 @@ const WalletBalance: React.FC = () => {
           </div>
           <div className="asset-value">
             <span>
-              {(balances.nft1Balance || 0).toLocaleString()}
+              {(balances.nft1Balance || 0).toLocaleString()}  <span id="gradient-text2">/ 3</span>
             </span>
           </div>
         </div>
@@ -60,7 +60,7 @@ const WalletBalance: React.FC = () => {
           </div>
           <div className="asset-value">
             <span>
-              {(balances.nft2Balance || 0).toLocaleString()}
+              {(balances.nft2Balance || 0).toLocaleString()}  <span id="gradient-text2">/ 1</span>
             </span>
           </div>
         </div>
@@ -72,7 +72,7 @@ const WalletBalance: React.FC = () => {
           </div>
           <div className="asset-value">
             <span >
-              {(balances.nft3balance || 0).toLocaleString()}
+              {(balances.nft3balance || 0).toLocaleString()} <span id="gradient-text2">/ 10</span>
             </span>
           </div>
         </div>
