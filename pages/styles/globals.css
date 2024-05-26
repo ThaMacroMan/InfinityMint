@@ -11,9 +11,13 @@
 
 /* Rajdhani, Exo 2, Saira Condensed */
 
-body {
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
   background-color: #191970; /* dark blue #191970, light blue #0073CF, light grey #a2a7b0 */
   cursor: auto;
+  overflow-x: hidden;
 }
 
 /*Primary Dark Blue: #1B263B
@@ -27,15 +31,46 @@ Light Gray (Secondary Text): #ECF0F1
 .header {
   background-color: black;
   height: 7vh;
-  padding: .5rem;
-  margin-bottom: .5rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
   text-align: center;
   align-items: center;
   font-family: 'Public-Pixel';
-  justify-content: space-evenly;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   font-size: clamp(0.5rem, 2vw, 1.25rem);
   border-bottom: #b87f0d;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.header a {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 1;
+}
+.text-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.text-wrapper2 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.cat-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
 }
 
 .form {
@@ -520,42 +555,64 @@ Light Gray (Secondary Text): #ECF0F1
   .wrapper {
     flex-direction: column;
   }
-  
+  .hide-on-mobile {
+    display: none !important;
+  }
   .form, .creation-container {
     width: 100%;
-    margin: 0.5rem 0;
+    margin:  0;
   }
-
   .form {
     min-height: auto;
     height: auto;
   }
-  
   .creation-container {
-    min-height: 850px;
-    height: auto;
-    width: auto;
+    min-height: 90vh; /* Adjust the height for mobile */
+    height: auto; /* Ensure it adapts to the content */
+    padding: 1rem; /* Adjust padding if necessary */
+    border-radius: 1rem; /* Adjust border radius for a better look on mobile */
   }
-  
   .header {
-    font-size: clamp(0.5rem, 4vw, 2vh);
-    text-align: center;
+    flex-direction: row;
+    font-size: clamp(0.4rem, 3vw, 1rem);
+    padding: 0.25rem;
+    justify-content: space-between;
+    flex-wrap: nowrap;
   }
+  .header a {
+    flex: 1;
+    display: flex;
+    align-items: center;
 
-  #gradient-text {
-    font-size: clamp(0.5rem, 4vw, 2vh);
+  }
+  .header img {
+    width: 40px;
+    height: 40px;
+  }
+  #gradient-text2 {
+    font-size: clamp(0.4rem, 3vw, 1rem);
     display: flex;
     align-items: center;
     justify-content: center;
   }
-
+  .subtext {
+    font-size: clamp(0.3rem, 2vw, 0.75rem);
+  }
+  .text-wrapper {
+    font-size: clamp(0.4rem, 3vw, 1rem); /* Scale text for mobile */
+  }
   .button, .button2, .infobutton, .tag, .tag2, .tag3, .tag4, .tag5 {
     font-size: clamp(0.5rem, 4vw, 2vh);
     padding: .25rem;
   }
-  
   .textarea {
     font-size: clamp(0.5rem, 4vw, 2vh);
+  }
+}
+
+@media screen and (max-width: 450px) {
+ .cat-logo {
+    display: none !important;
   }
 }
 
