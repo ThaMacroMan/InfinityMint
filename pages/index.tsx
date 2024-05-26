@@ -412,7 +412,7 @@ const Home: NextPage = () => {
       creditUser();
 
     } catch (error) {
-      setError('You do not have enough ADA , RAD or Rejected the TX');
+      setError('You do not have enough ADA or Rejected the TX');
       console.error('Error processing transaction:', error);
     }
   };
@@ -866,7 +866,7 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-texts"></span> Hold $RAD when minting!</p>
+                      <p><span id="gradient-texts"></span> Hold $CATSKY when minting!</p>
                       <p><span id="gradient-text"> 0.5 B = ₳ 1 ADA</span> an 11% Discount</p>
                       <p><span id="gradient-text"> 1.0 B = ₳ 2 ADA</span> an 22% Discount!</p>
                       <p><span id="gradient-text"> 3.0 B = ₳ 3 ADA</span> an 34% Discount!!</p>
