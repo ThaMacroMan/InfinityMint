@@ -601,21 +601,23 @@ const Home: NextPage = () => {
       <p style={{ color: 'green', fontSize:'0.75rem' }}>$CATSKY: ₳ {formattedPrice}</p>
     </div>
   </a>
-</div>
+</div>              
 
 
-      <div className="wrapper">
-        {/* Form Section */}
-        <div className="form">
-          <div className="tag6">
-            <div style={{ position: 'relative', zIndex: 9999 }}>
-              <CardanoWallet isDark={true} {...{className: "wallet"}} />
-            </div>
-            <div>
-              <h1 className="infobutton" onClick={toggleInfo}>More Info</h1>
-              {showInfo}
-            </div>
-          </div>
+<div className="wrapper">
+  {/* Form Section */}
+  <div className="form">
+    <div className="tag6" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ position: 'relative', zIndex: 9999, flex: '1' }}>
+      <CardanoWallet isDark={true} {...{className: "wallet"}} />
+      </div>
+      <div style={{ flex: '1' }}>
+        <h1 className="infobutton" onClick={toggleInfo} style={{ width: '95%' }}>More Info</h1>
+        {showInfo}
+      </div>
+    </div>
+
+
 
           <button
                 onClick={buyUsesTransaction}

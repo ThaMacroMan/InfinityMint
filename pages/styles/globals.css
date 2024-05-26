@@ -224,8 +224,9 @@ Light Gray (Secondary Text): #ECF0F1
 
 .infobutton {
   display: flex;
-  padding: .25rem;
+  justify-content: center;
   align-items: center;
+  padding: 0.25rem;
   border-radius: 0.618rem;
   font-size: clamp(0.5rem, 4vw, 2vh);
   cursor: pointer;
@@ -233,9 +234,10 @@ Light Gray (Secondary Text): #ECF0F1
   font-family: Public-Pixel;
   color: #ffffff;
   background-color: #0073CF;
-  height: 65px;
+  height: 63px;
   transition: transform 0.2s;
-
+  width: 100%; /* Make sure the button takes the full width */
+  margin-left: .3rem;
 }
 .infobutton:hover {
   transform: scale(1.05);
