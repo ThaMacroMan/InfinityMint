@@ -66,12 +66,7 @@ Light Gray (Secondary Text): #ECF0F1
   flex-grow: 1;
 }
 
-.cat-logo-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-grow: 1;
-}
+
 
 .form {
   display: flex;

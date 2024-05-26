@@ -517,12 +517,12 @@ const Home: NextPage = () => {
 
   return (
     <>
-  <div className="header">
+  <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1rem' }}>
     <a 
       href="https://catsky.io/" 
       target="_blank" 
       rel="noopener noreferrer" 
-      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 1 }}
+      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', flex: '1' }}
     >
       <Image 
         src={logo.src} 
@@ -536,8 +536,7 @@ const Home: NextPage = () => {
         <span className="subtext">Neolithic Nexus Era</span>
       </div>
     </a>
-
-    <div className="hide-on-mobile" style={{ display: 'flex', alignItems: 'center', flexShrink: 1 }}>
+    <div className="hide-on-mobile" style={{ display: 'flex', alignItems: 'center', flex: '1' }}>
       <a 
         href="https://catsky.io/" 
         target="_blank" 
@@ -551,7 +550,7 @@ const Home: NextPage = () => {
           height={60}
           style={{ marginRight: '2px' }} 
         />
-        <span id="gradient-text">Powered by Catsky AI</span>
+        <span id="gradient-text">Powered by Catsky AI </span>
         <Image 
           src={pwdby2.src} 
           alt="Logo" 
@@ -561,14 +560,14 @@ const Home: NextPage = () => {
         />
       </a>
     </div>
-
     <a 
       href="https://www.taptools.io/charts/token/0be55d262b29f564998ff81efe21bdc0022621c12f15af08d0f2ddb1.76ab3fb1e92b7a58ee94b712d1c1bff0e24146e8e508aa0008443e1db1f2244e" 
       target="_blank" 
       rel="noopener noreferrer" 
-      className="cat-logo-wrapper"
-      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', flexGrow: 1 }}
+      style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', flex: '1', justifyContent: 'flex-end' }}
+      
     >
+              <div className="text-wrapper2">
       <Image 
         src={catskylogo.src} 
         alt="Logo" 
@@ -577,9 +576,10 @@ const Home: NextPage = () => {
         style={{ marginRight: '8px' }} 
         className="cat-logo"
       />
-      <div className="text-wrapper2">
-        <p style={{ color: 'green', fontSize: '0.75rem' }}>$CATSKY: ₳ {formattedPrice}</p>
-      </div>
+      
+
+          <p style={{ color: 'green', fontSize:'0.75rem' }}>$CATSKY: ₳{formattedPrice}</p>
+        </div>
     </a>
   </div>
 
