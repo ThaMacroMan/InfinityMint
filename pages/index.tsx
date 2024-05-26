@@ -20,22 +20,45 @@ import pwdby2 from '../pages/styles/cardano_ada-512.png'
 
 import jpglogo from '../pages/styles/jpglogo.png'
 
-import aigirl from '../pages/public/images/aigirl.jpg';
-import amazonman from '../pages/public/images/amazonman.jpg';
-import citizen from '../pages/public/images/citizen.jpg';
-import dead from '../pages/public/images/dead.jpg';
-import dragon from '../pages/public/images/dragon.jpg';
-import escape from '../pages/public/images/escape.jpg';
-import powergirl from '../pages/public/images/powergirl.jpg';
-import ship from '../pages/public/images/ship.jpg';
+import eight from '../pages/public/images/eight.png';
+import eleven from '../pages/public/images/eleven.png';
 import era2 from '../pages/public/images/era2.png';
 import era21 from '../pages/public/images/era21.png';
 import era22 from '../pages/public/images/era22.png';
 import era23 from '../pages/public/images/era23.png';
 import era24 from '../pages/public/images/era24.png';
 import era25 from '../pages/public/images/era25.png';
-import era26 from '../pages/public/images/era26.png';
 import era27 from '../pages/public/images/era27.png';
+import fifteen from '../pages/public/images/fifteen.png';
+import five from '../pages/public/images/five.png';
+import four from '../pages/public/images/four.png';
+import fourteen from '../pages/public/images/fourteen.png';
+import infinitymintlogo from '../pages/public/images/infinitymint logo.png';
+import list from '../pages/public/images/list.png';
+import logodarkmode from '../pages/public/images/logo-dark-mode.png';
+import logoicon from '../pages/public/images/logo-icon.png';
+import newlogo from '../pages/public/images/new logo.png';
+import nine from '../pages/public/images/nine.png';
+import nineteen from '../pages/public/images/nineteen.png';
+import seven from '../pages/public/images/seven.png';
+import seventeen from '../pages/public/images/seventeen.png';
+import six from '../pages/public/images/six.png';
+import sixteen from '../pages/public/images/sixteen.png';
+import spacey from '../pages/public/images/spacey.png';
+import square from '../pages/public/images/square.png';
+import square2 from '../pages/public/images/square2.png';
+import tall from '../pages/public/images/tall.png';
+import ten from '../pages/public/images/ten.png';
+import thirteen from '../pages/public/images/thirteen.png';
+import three from '../pages/public/images/three.png';
+import twelve from '../pages/public/images/twelve.png';
+import twenty from '../pages/public/images/twenty.png';
+import twentyfive from '../pages/public/images/twentyfive.png';
+import twentyfour from '../pages/public/images/twentyfour.png';
+import twentyone from '../pages/public/images/twentyone.png';
+import twentythree from '../pages/public/images/twentythree.png';
+import twentytwo from '../pages/public/images/twentytwo.png';
+import wide from '../pages/public/images/wide.png';
 
 
 
@@ -857,8 +880,14 @@ const Home: NextPage = () => {
               {!slideshowDisabled && (
                 <ImageSlideshow 
                 images={[
-                  era2, era21, era22, era23, era24, era25, era26, era27
+                  eight, eleven, era2, era21, era22, era23, era24, era25, era27,
+                  fifteen, five, four, fourteen, infinitymintlogo, list,
+                  logodarkmode, logoicon, newlogo, nine, nineteen, seven,
+                  seventeen, six, sixteen, spacey, square, square2, tall,
+                  ten, thirteen, three, twelve, twenty, twentyfive, twentyfour,
+                  twentyone, twentythree, twentytwo, wide
                 ]}
+                
           
                   disabled={false} 
                 />
