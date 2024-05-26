@@ -33,7 +33,7 @@ Light Gray (Secondary Text): #ECF0F1
   height: 7vh;
   width: 100%;
   padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
+
   text-align: center;
   align-items: center;
   font-family: 'Public-Pixel';
@@ -73,11 +73,10 @@ Light Gray (Secondary Text): #ECF0F1
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  min-height: 92vh;
+  height: fit-content;
   width: 400px;
-
-  margin-right: .5rem;
-  margin-left: .5rem;
+  margin-right: .2rem;
+  margin-left: .2rem;
 }
 
 .creation-container {
@@ -86,7 +85,7 @@ Light Gray (Secondary Text): #ECF0F1
   flex-direction: column;
   justify-content: center;
   padding: .5rem; 
-  margin-right: 1rem;
+  margin-right: .1rem;
   border-radius: 6.18rem;
   border-bottom-right-radius: 13rem;
   background-color: black;
@@ -98,7 +97,7 @@ Light Gray (Secondary Text): #ECF0F1
   flex-grow: 1;
   flex-basis: 0;
   overflow: hidden;
-  height: 90vh;
+  height: 93vh;
   min-width: 300px;
 }
 
@@ -583,6 +582,11 @@ Light Gray (Secondary Text): #ECF0F1
   .header img {
     width: 40px;
     height: 40px;
+  }
+
+  img {
+    width: 100px; 
+    height: auto;
   }
   #gradient-text2 {
     font-size: clamp(0.4rem, 3vw, 1rem);

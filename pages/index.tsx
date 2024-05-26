@@ -855,7 +855,7 @@ const Home: NextPage = () => {
                   <Image 
                     src={jpglogo.src} 
                     alt="Logo" 
-                    width={150}
+                    width={125}
                     height={15} 
                   />
                 </a>
