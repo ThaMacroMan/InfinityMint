@@ -69,7 +69,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({ images, disabled, toggl
       {connected ? (
         <div className="tag5">
           {/* Content to display when wallet is connected */}
-          <span  id="creation-gradient-text">Own Catsky AI things for more creation parameters...</span>
+          <span  id="creation-gradient-text">Own Catsky AI NFTs to unlock more creation parameters...</span>
         </div>
       ) : (
         <div className="tag5">
