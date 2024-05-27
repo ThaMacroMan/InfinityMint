@@ -18,7 +18,7 @@ const WalletBalance: React.FC = () => {
         tokenBalance: projectAssetSummary["$CATSKY"] || 0,
         nft1Balance: projectAssetSummary["CatNips"] || 0,
         nft2Balance: projectAssetSummary["OG NFTs"] || 0,
-        nft3balance: projectAssetSummary["Era I"] || 0,
+        nft3balance: projectAssetSummary["Era 1"] || 0,
       });
     }
   }, [connected, projectAssetSummary]);
