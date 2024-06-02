@@ -630,9 +630,9 @@ const Home: NextPage = () => {
                     : ""
                 }`}
               >
-                <div id='gradient-text2'>
-                <p> Refuel: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
-                </div>
+
+                <p> Refuel to Begin: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
+
             </button>
 
             <div className="uses-container">
