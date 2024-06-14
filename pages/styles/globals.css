@@ -75,8 +75,8 @@ Light Gray (Secondary Text): #ECF0F1
   justify-content: space-around;
   height: fit-content;
   width: 400px;
-  margin-right: .2rem;
-  margin-left: .2rem;
+  margin-right: .3rem;
+  margin-left: .3rem;
 }
 
 .creation-container {
@@ -162,7 +162,8 @@ Light Gray (Secondary Text): #ECF0F1
 }
 
 .button {
-  margin-top: .1rem;
+  margin-top: .2rem;
+  margin-bottom: .2rem;
   justify-content: center;
   display: flex;
   width: 97.5%;
@@ -244,9 +245,9 @@ Light Gray (Secondary Text): #ECF0F1
 
 .info-popup {
   font-family: Public-Pixel;
-  font-size: clamp(0.5rem, 4vw, 2vh);
-  margin-left: 2rem;
-  margin-right: 2rem;
+  font-size: clamp(0.3rem, 2vw, 1vh);
+  margin-left: 1rem;
+
   color: #ffffff;
 }
 
@@ -295,7 +296,9 @@ Light Gray (Secondary Text): #ECF0F1
   justify-content: space-between;
   width: 98%;
   padding: .3rem;
-  margin-top: .1rem;
+  padding-left: .7rem;
+  margin-top: .2rem;
+  margin-bottom: .1rem;
   display: flex;
   align-items: center;
   border: 1px solid #000000;

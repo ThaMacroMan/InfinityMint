@@ -618,6 +618,9 @@ const Home: NextPage = () => {
         {showInfo}
       </div>
     </div>
+    
+
+    
 
 
 
@@ -673,7 +676,14 @@ const Home: NextPage = () => {
                 </div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p> Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options. </p>
+                      <p> How to: </p>
+                        
+                      <p> 1. Click refuel and sign 1 ADA Tx to load AI usages</p>
+                      <p> 2. Write your idea or click AutoIdea</p>
+                      <p> 3. Select model options</p>
+                      <p> 4. Click Build Idea</p>
+
+                    
                     </div>
                   )}
               </div>
@@ -709,6 +719,16 @@ const Home: NextPage = () => {
               </button>
             )}
           </div>
+
+          <div>
+                <div className="" onClick={toggleInfo}>
+                </div>
+                  {showInfo && (
+                    <div className="info-popup">
+                      <p> Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options. </p>
+                    </div>
+                  )}
+              </div>
 
               <button
                 className="button"
@@ -772,6 +792,7 @@ const Home: NextPage = () => {
                     </div>
                   )}
               </div>
+
               <div className="tag2">
                 <label htmlFor="size">Form</label> {/* update for brand */}
                 <div className="dropdown-container">
@@ -784,16 +805,18 @@ const Home: NextPage = () => {
                 </select>
                 </div>
               </div>
+              
               <div>
-                <div className="" onClick={toggleInfo}></div>
+                <div  onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-text"> Square = </span> 1024x1024</p>
-                      <p><span id="gradient-text"> Landscape = </span> 1792x1024</p>
-                      <p><span id="gradient-text"> Portrait = </span> 1024x1792</p>
+                      <p><span > Square = </span> 1024x1024</p>
+                      <p><span > Landscape = </span> 1792x1024</p>
+                      <p><span > Portrait = </span> 1024x1792</p>
                     </div>
                   )}
               </div>
+
               <div className="tag2">
                 <label htmlFor="quality"> Grade</label> {/* update for brand */}
                 <div className="dropdown-container">
