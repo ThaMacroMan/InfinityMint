@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const ErrorPopup = ({ message, onClose }: { message: string, onClose: () => void }) => {
+interface ErrorPopupProps {
+  message: string;
+  onClose: () => void;
+}
+
+const ErrorPopup: React.FC<ErrorPopupProps> = ({ message, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000); // 5 seconds
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
   return (
-    <div className="error-popup" onClick={onClose}>
+    <div className="error-popup">
       <p>{message}</p>
+      <div className="sliding-bar"></div>
     </div>
   );
 };

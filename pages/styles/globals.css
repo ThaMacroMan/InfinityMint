@@ -101,18 +101,55 @@ Light Gray (Secondary Text): #ECF0F1
   min-width: 300px;
 }
 
+/* Add this CSS to your stylesheet */
+
 .error-popup {
-  font-family: Public-Pixel;
-  font-size: clamp(0.5rem, 4vh, 1.25rem);
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #ff4c4c;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: aqua;
-  padding: 10px;
-  border: 2px solid blue;
-  border-radius: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
   z-index: 1000;
+  min-width: 200px;
+}
+
+.error-popup p {
+  margin: 0;
+  padding-right: 10px;
+}
+
+.error-popup button {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
+}
+
+.sliding-bar {
+  width: 100%;
+  height: 5px;
+  background: #fff;
+  margin-top: 10px;
+  border-radius: 5px;
+  animation: slide 5s linear forwards;
+}
+
+@keyframes slide {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 #gradient-text {
