@@ -609,6 +609,16 @@ Light Gray (Secondary Text): #ECF0F1
   .textarea {
     font-size: clamp(0.5rem, 4vw, 2vh);
   }
+
+  @media screen and (max-width: 768px) {
+    .imageborder {
+      max-height: 50vh;  /* Adjust max-height for mobile */
+      max-width: 90vw;   /* Adjust max-width for mobile */
+      min-height: 40vh;  /* Ensure minimum height for better visibility */
+      min-width: 90vw;   /* Ensure minimum width for better visibility */
+    }
+  }
+  
 }
 
 @media screen and (max-width: 450px) {

@@ -437,7 +437,9 @@ const Home: NextPage = () => {
 
   //////// NFT Mint Transaction
     const processTransaction = async () => {
+      
       const price = calculateMintingPrice(tokenBalance);
+
       console.log('user address: ', wallet)
       console.log('mint price:', price);
       console.log('Chunked image URL (2):', chunkedMetadata )
@@ -446,7 +448,7 @@ const Home: NextPage = () => {
       .sendLovelace(
         'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
         price.toString()
-      );
+      ); 
         // Define the type of metadataObj
         type MetadataObject = {
           URLs: string[];
