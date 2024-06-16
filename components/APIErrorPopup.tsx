@@ -1,25 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-interface ErrorPopupProps {
+interface APIErrorPopupProps {
   message: string;
   onClose: () => void;
 }
 
-const ErrorPopup: React.FC<ErrorPopupProps> = ({ message, onClose }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
-    }, 5000); // 5 seconds
+const APIErrorPopup: React.FC<APIErrorPopupProps> = ({ message, onClose }) => {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    return () => clearTimeout(timer);
-  }, [onClose]);
+  useEffect(() => {
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // Set a new timer
+    timerRef.current = setTimeout(() => {
+      onClose();
+      timerRef.current = null;
+    }, 5000);
+
+    // Cleanup function to clear the timer
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [message, onClose]);
 
   return (
-    <div className="error-popup">
+    <div className="api-error-popup" onClick={onClose}>
       <p>{message}</p>
-      <div className="sliding-bar"></div>
+      <div className="progress-bar">
+        <div className="progress"></div>
+      </div>
     </div>
   );
 };
 
-export default ErrorPopup;
+export default APIErrorPopup;

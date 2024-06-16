@@ -101,16 +101,14 @@ Light Gray (Secondary Text): #ECF0F1
   min-width: 300px;
 }
 
-/* Add this CSS to your stylesheet */
-
-.error-popup {
+.api-error-popup {
   position: fixed;
   bottom: 20px;
   left: 20px;
   background-color: #ff4c4c;
   color: white;
   padding: 15px;
-  border-radius: 8px;
+  border-radius: 4rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -118,32 +116,33 @@ Light Gray (Secondary Text): #ECF0F1
   justify-content: space-between;
   z-index: 1000;
   min-width: 200px;
+  cursor: pointer; /* Make the whole box clickable */
+  opacity: 1;
+
 }
 
-.error-popup p {
+.api-error-popup p {
   margin: 0;
   padding-right: 10px;
 }
 
-.error-popup button {
-  background: none;
-  border: none;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.sliding-bar {
+.progress-bar {
   width: 100%;
   height: 5px;
-  background: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
   margin-top: 10px;
-  border-radius: 5px;
-  animation: slide 5s linear forwards;
+  overflow: hidden;
+  border-radius: 0 0 8px 8px;
 }
 
-@keyframes slide {
+.progress {
+  height: 100%;
+  background-color: white;
+  width: 0;
+  animation: progressAnimation 5s linear forwards;
+}
+
+@keyframes progressAnimation {
   from {
     width: 100%;
   }
@@ -151,6 +150,9 @@ Light Gray (Secondary Text): #ECF0F1
     width: 0%;
   }
 }
+
+
+
 
 #gradient-text {
   background: rgb(255, 255, 255);
@@ -203,6 +205,7 @@ Light Gray (Secondary Text): #ECF0F1
 .textarea {
   padding-top: .5rem;
   margin: .1rem;
+  margin-top: .5rem;
   border-width: 3px;
   border-radius: 2rem;
   border: solid 2px #b87f0d;
@@ -244,12 +247,32 @@ Light Gray (Secondary Text): #ECF0F1
 }
 
 .info-popup {
-  font-family: Public-Pixel;
-  font-size: clamp(0.3rem, 2vw, 1vh);
-  margin-left: 1rem;
-
+  font-family: Public-Pixel, sans-serif;
+  font-size: .75rem;
+  line-height: 1.5;
   color: #ffffff;
+  background-color: #2a2a2a;
+  border: 2px solid #000000;
+  border-radius: 1rem;
+  padding: .25rem;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: left;
 }
+
+.info-popup p, .info-popup ul {
+  margin: 0.2rem 0;
+}
+
+.info-popup ul {
+  padding-left: 1.5rem;
+}
+
+.info-popup li {
+  margin: 0.2rem 0;
+}
+
+
 
 .button:disabled {
   opacity: 0.3;
@@ -271,7 +294,7 @@ Light Gray (Secondary Text): #ECF0F1
   border: 2px solid #000000;
   font-family: Public-Pixel;
   color: #ffffff;
-  background-color: #0073CF;
+  background-color: #2a2a2a;
   height: 63px;
   transition: transform 0.2s;
   width: 100%; /* Make sure the button takes the full width */

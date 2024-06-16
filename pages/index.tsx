@@ -235,13 +235,12 @@ const Home: NextPage = () => {
   const getRandomPrompt = async () => {
     try {
 
-
       setIsLoading(true); // Set loading state to true
       // Call your internal API endpoint instead of OpenAI's API directly
       const response = await fetch('/api/getRandomPrompt');
   
       if (!response.ok) {
-        setError('Requests with swears or nudity are rejected. If error continues, notify MacroMan');
+        setError('Requests with swears or nudity are rejected by OpenAIs policy here: https://openai.com/policies/usage-policies/');
         setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -328,7 +327,7 @@ const Home: NextPage = () => {
       console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
   
       if (!response.ok) {
-        setError('Requests with swears or nudity are rejected. If error continues, notify MacroMan');
+        setError('Requests with swears or nudity are rejected by OpenAIs policy here: openai.com/policies');
         setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -389,33 +388,44 @@ const Home: NextPage = () => {
     })
   }
   /////////////Purchase AI Uses Transaction
-  const buyUsesTransaction = async () => {
+/////////////Purchase AI Uses Transaction
+const buyUsesTransaction = async () => {
+  try {
 
-    try {
 
-      const tx = new Transaction({ initiator: wallet }).sendLovelace(
-        'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
-        '1000000'
-      );
-  
-      const unsignedTx = await tx.build();
-      setUnsignedTx(unsignedTx); // Save unsignedTx to state
-  
-      if (!unsignedTx) {
-        console.error('Unsigned transaction not available');
-        return;
-      }
-  
-      const signedTx = await wallet.signTx(unsignedTx);
-      const txHash = await wallet.submitTx(signedTx);
-      console.log('Transaction hash:', txHash);
-      creditUser();
+    const tx = new Transaction({ initiator: wallet }).sendLovelace(
+      'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
+      '1000000'
+    );
 
-    } catch (error) {
-      setError('You do not have enough ADA or Rejected the TX');
-      console.error('Error processing transaction:', error);
+    const unsignedTx = await tx.build();
+    setUnsignedTx(unsignedTx); // Save unsignedTx to state
+
+    if (!unsignedTx) {
+      console.error('Unsigned transaction not available');
+      return;
     }
-  };
+
+    const signedTx = await wallet.signTx(unsignedTx);
+    const txHash = await wallet.submitTx(signedTx);
+    console.log('Transaction hash:', txHash);
+    creditUser();
+
+  } catch (error:any) {
+    if (error.message.includes('TypeError: this._initiator.getUsedUTxOs is not a function.')) {
+      setError('Wallet not connected. Connect your wallet!');
+    } else if (error.message.includes('An error occurred during signTx: {"code":2,"info":"user declined sign tx"}.')) {
+      setError('Refuel cancelled');
+    } else if (error.message.includes('Not enough ADA leftover to include non-ADA assets in a change address.')) {
+      setError('Not enough ADA! Load up!');
+    } else {
+      setError('An unexpected error occurred. Please try again.');
+    }
+    console.error('Error processing transaction:', error);
+  }
+};
+/////////////Purchase AI Uses Transaction
+
   /////////////Purchase AI Uses Transaction
   
     /////// Calculate NFT Mint price based on token balance
@@ -494,11 +504,20 @@ const Home: NextPage = () => {
           // Submit transaction
           const txHash = await wallet.submitTx(signedTx);
           console.log('Transaction hash:', txHash);
-      } catch (error) {
-        setError('You do not have enough ADA or Cancelled')
-          console.error('Error processing transaction:', error);
+
+      } catch (error:any) {
+        if (error.message.includes('TypeError: this._initiator.getUsedUTxOs is not a function.')) {
+          setError('Wallet not connected. Connect your wallet!');
+        } else if (error.message.includes('An error occurred during signTx: {"code":2,"info":"user declined sign tx"}.')) {
+          setError('Minting cancelled');
+        } else if (error.message.includes('Not enough ADA leftover to include non-ADA assets in a change address.')) {
+          setError('Not enough ADA! Load up!');
+        } else {
+          setError('An unexpected error occurred. Please try again.');
+        }
+        console.error('Error processing transaction:', error);
       }
-  };
+    };
 
   //////// NFT Mint Transaction
 
@@ -538,6 +557,11 @@ const Home: NextPage = () => {
     top: 0,
     right: 0,
     transform: 'translateY(0)', // Reset any previous translation on the y-axis
+  };
+
+   // Function to handle error closing
+   const handleCloseError = () => {
+    setError(null);
   };
 
   return (
@@ -618,12 +642,6 @@ const Home: NextPage = () => {
         {showInfo}
       </div>
     </div>
-    
-
-    
-
-
-
           <button
                 onClick={buyUsesTransaction}
                 className={`button tag  ${
@@ -672,20 +690,19 @@ const Home: NextPage = () => {
               <WalletBalance />
 
               <div>
-                <div className="" onClick={toggleInfo}>
-                </div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p> How to: </p>
-                        
-                      <p> 1. Click refuel and sign 1 ADA Tx to load AI usages</p>
-                      <p> 2. Write your idea or click AutoIdea</p>
-                      <p> 3. Select model options</p>
-                      <p> 4. Click Build Idea</p>
-
-                    
-                    </div>
-                  )}
+                <div className="" onClick={toggleInfo}></div>
+                {showInfo && (
+                  <div className="info-popup">
+                    <p>How to:</p>
+                    <ul>
+                      <li>1. Click refuel and sign ₳ 1 Transaction</li>
+                      <li>2. Write your idea or click AutoIdea</li>
+                      <li>3. Select model options</li>
+                      <li>4. Click Build Idea</li>
+                      <li>5. Click Mint Creation</li>
+                    </ul>
+                  </div>
+                )}
               </div>
 
             
@@ -721,14 +738,13 @@ const Home: NextPage = () => {
           </div>
 
           <div>
-                <div className="" onClick={toggleInfo}>
+              <div className="" onClick={toggleInfo}></div>
+              {showInfo && (
+                <div className="info-popup">
+                  <p>Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options.</p>
                 </div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p> Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options. </p>
-                    </div>
-                  )}
-              </div>
+              )}
+            </div>
 
               <button
                 className="button"
@@ -805,14 +821,13 @@ const Home: NextPage = () => {
                 </select>
                 </div>
               </div>
-              
+
               <div>
                 <div  onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span > Square = </span> 1024x1024</p>
-                      <p><span > Landscape = </span> 1792x1024</p>
-                      <p><span > Portrait = </span> 1024x1792</p>
+                      <p> Square = 1024x1024, Landscape = 1792x1024, Portrait = 1024x1792 </p>
+
                     </div>
                   )}
               </div>
@@ -873,7 +888,7 @@ const Home: NextPage = () => {
 
               <a
                     className={'button'}
-                    href="https://www.jpg.store/collection/infinitymintwildcatgenesisera?tab=items"
+                    href="https://www.jpg.store/collection/infinitymintneolithicnexusera?tab=items"
                     rel="noopener noreferrer"
                     style={{ cursor: 'pointer', display: 'flex', alignContent:'center', justifyContent: 'space-around', paddingRight:'1rem', paddingLeft: '1rem' }}
                   >
@@ -891,11 +906,11 @@ const Home: NextPage = () => {
                 <div className="" onClick={toggleInfo}></div>
                   {showInfo && (
                     <div className="info-popup">
-                      <p><span id="gradient-texts"></span> Hold $CATSKY when minting!</p>
-                      <p><span id="gradient-text"> 0.5 B = ₳ 1 ADA</span> an 11% Discount</p>
-                      <p><span id="gradient-text"> 1.0 B = ₳ 2 ADA</span> an 22% Discount!</p>
-                      <p><span id="gradient-text"> 3.0 B = ₳ 3 ADA</span> an 34% Discount!!</p>
-                      <p><span id="gradient-text"> 5.0 B = ₳ 4 ADA</span> an 46% Discount!!!</p>
+                      <p><span ></span> Hold $CATSKY when minting!</p>
+                      <p>.5 B = ₳ 1 ADA / 11% Discount</p>
+                      <p>1 B = ₳ 2 ADA / 22% Discount!</p>
+                      <p>3 B = ₳ 3 ADA / 34% Discount!!</p>
+                      <p>5 B = ₳ 4 ADA / 46% Discount!!!</p>
                     </div>
                   )}
               </div>
@@ -920,7 +935,8 @@ const Home: NextPage = () => {
                 />
               )}
 
-              {error && <APIErrorPopup message={error} onClose={() => setError('')} />}
+              {error && <APIErrorPopup message={error} onClose={handleCloseError} />}
+
               {isLoading && (
                 <div className="spinner-container">
                   <Spinner message="Generating your creation..." />
