@@ -82,6 +82,12 @@ const Home: NextPage = () => {
   const [mintingPrice, setMintingPrice] = useState<number>(8690000); // Default to the initial price
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
+
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+
+
+
   const [userUses, setUserUses] = useState<string>('2');
   const [userAddress, setUserAddress] = useState<string>('none');
   const { projectAssetSummary, hasMinRequiredTokens } = useTokenCheck();
@@ -310,21 +316,73 @@ const Home: NextPage = () => {
     setSlideshowDisabled(true); // Disable the slideshow when generating image
     try {
       setIsLoading(true); // Set loading state to true when generating image
+      
       console.log(selectedModel, selectedSize, selectedQuality);
-      const response = await fetch('/api/generateImage', {
+      // Define variables for API endpoint and request body
+      let apiEndpoint = '';
+      let bodyData = {};
+
+      // Destructure the selected size into width and height
+      const [width, height] = selectedSize.split('x').map(Number);
+
+      // Determine the appropriate API endpoint and body data based on the selected model
+      switch (selectedModel) {
+        case 'SDXL-Lightning':
+          apiEndpoint = '/api/replicateSDXL';
+          bodyData = {
+            prompt: `${prompt}`,
+            width: width,
+            height: height,
+            num_outputs: 1,
+            output_format: 'png',
+            negative_prompt: "worst quality, low quality",
+            disable_safety_checker: true
+          };
+          break;
+
+        case 'Stable Diffusion 3':
+          apiEndpoint = '/api/replicateSD3';
+          bodyData = {
+            prompt,
+            width: width,
+            height: height,
+            num_outputs: 1,
+            output_format: 'png',
+          };
+          break;
+
+        case 'dall-e-3':
+          apiEndpoint = '/api/generateImage';
+          bodyData = {
+            prompt: `${prompt}`,
+            width: width,
+            height: height,
+            num_outputs: 1,
+            output_format: 'png',
+            style: selectedStyle
+          };
+          break;
+
+        default:
+          console.error('Unknown model selected:', selectedModel);
+          throw new Error('Unknown model selected');
+      }
+
+      // Log the selected model, size, and quality for debugging
+      console.log(selectedModel, selectedSize, selectedQuality);
+
+      // Make an API request to generate the image
+      const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          prompt: `${prompt}`,
-          size: selectedSize,
-          quality: selectedQuality,
-          model: selectedModel,
-          style: selectedStyle,
-        }),
+        body: JSON.stringify(bodyData),
       });
-      console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
+
+// Log the final parameters for debugging
+console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
+
   
       if (!response.ok) {
         setError('Requests with swears or nudity are rejected by OpenAIs policy here: openai.com/policies');
@@ -333,10 +391,32 @@ const Home: NextPage = () => {
       }
       const data = await response.json();
       const imageUrls = data.imageUrls;
-      setGeneratedImages(imageUrls);
+
+      const base64DataUrl = data.base64DataUrl || '';
+  
+      if (imageUrls.length === 0 && !base64DataUrl) {
+        throw new Error('No image generated');
+      }
+  
+      if (imageUrls.length > 0) {
+        setGeneratedImages((prevImages) => {
+          const newImages = [...prevImages, ...imageUrls];
+          setSelectedImageIndex(newImages.length - 1); // Select the latest image
+          return newImages;
+        });
+      } else if (base64DataUrl) {
+        setGeneratedImages((prevImages) => {
+          const newImages = [...prevImages, base64DataUrl];
+          setSelectedImageIndex(newImages.length - 1); // Select the latest image
+          return newImages;
+        });
+      }
+
       setUploadedImage(null);
       console.log(imageUrls);
       setGeneratedPrompt(prompt);
+
+
       // Get summary for the prompt
       const promptSummary = await summarizePrompt(prompt);
       setPromptSummary(promptSummary);
@@ -346,6 +426,7 @@ const Home: NextPage = () => {
       // Chunking prompt for metadata
       const chunkedPromptData = chunkData(prompt, 64);
       setChunkedPrompt(chunkedPromptData);
+
       setIsLoading(false); // Set loading state to false when image generation is complete
   
       // Determine the number of uses to deduct
@@ -360,6 +441,54 @@ const Home: NextPage = () => {
     } catch (error) {
       console.error('Failed to generate images:', error);
       setIsLoading(false); // Ensure loading state is reset even on error
+    }
+  };
+
+  const upscaleImage = async (imageUrl: string) => {
+    try {
+      setIsLoading(true);
+  
+      const response = await fetch('/api/replicateUpscaler', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageUrl }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      
+  
+      const data = await response.json();
+      const upscaleImageUrl = data.upscaleImageUrl;
+  
+      if (!upscaleImageUrl) {
+        throw new Error('No upscaled image generated');
+      }
+  
+          // Replace the selected image with the upscaled image
+    setGeneratedImages(prevImages => {
+      const newImages = [...prevImages];
+      newImages[selectedImageIndex] = upscaleImageUrl;
+      return newImages;
+    });
+
+    setUserUses((prevUserUses) => {
+      const newUserUses = String(Number(prevUserUses) - 2);
+      localStorage.setItem(userAddress, newUserUses);
+      return newUserUses; // Return the updated count to ensure the state is correctly set
+    });
+
+    
+  
+      setIsLoading(false);
+  
+    } catch (error) {
+      console.error('Failed to upscale image:', error);
+      setIsLoading(false);
     }
   };
   
@@ -382,7 +511,7 @@ const Home: NextPage = () => {
   const creditUser = async()=>{
 
     setUserUses((prevUserUses) => {
-      const newUserUses = String(Number(prevUserUses) + 10);
+      const newUserUses = String(Number(prevUserUses) + 15);
       localStorage.setItem(userAddress, newUserUses);
       return newUserUses; // Return the updated count to ensure the state is correctly set
     })
@@ -395,7 +524,7 @@ const buyUsesTransaction = async () => {
 
     const tx = new Transaction({ initiator: wallet }).sendLovelace(
       'addr1qyvefdy7d2d9dwrncanthwrxxaem5zuttcc2hx98ehqzvr4lxlsc08nu9pvf0phe8mgxdgvutex6xcdtxqvc8hsecanqdvj0vt',
-      '1000000'
+     `1000000`
     );
 
     const unsignedTx = await tx.build();
@@ -456,6 +585,7 @@ const buyUsesTransaction = async () => {
       console.log('Chunked Prompt (2):', chunkedPrompt);
       const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
+        //'addr_test1vqnyw727fxs7ptkdje2pgprhks0ch60w00exfp5nx8r9hzqfhqcx4',
         'addr1vxufv40n45m0x7du3kk305trmsvclgdnw3ly2lxq2gkqxqga696du',
         price.toString()
       ); 
@@ -564,6 +694,26 @@ const buyUsesTransaction = async () => {
     setError(null);
   };
 
+
+
+  ///////// Handle the loading state with a delay to allow for a smooth fade-out
+  useEffect(() => {
+    const creationContainer = document.querySelector('.creation-container') as HTMLElement;
+
+    if (creationContainer) {
+      if (isLoading) {
+        creationContainer.classList.add('glowing');
+      } else {
+        creationContainer.classList.remove('glowing');
+        const timeoutId = setTimeout(() => {
+          creationContainer.style.opacity = '1'; // Ensure it's fully opaque
+        }, 2000); // The delay should match the transition duration in CSS
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [isLoading]);
+
+
   return (
     <>
 <div className="header">
@@ -576,8 +726,8 @@ const buyUsesTransaction = async () => {
     <Image 
       src={logo.src} 
       alt="Logo" 
-      width={40}
-      height={40}
+      width={80}
+      height={80}
       style={{ marginRight: '8px' }} 
     />
     <div className="text-wrapper">
@@ -619,12 +769,12 @@ const buyUsesTransaction = async () => {
     <Image 
       src={catskylogo.src} 
       alt="Logo" 
-      width={40}
-      height={40}
+      width={60}
+      height={60}
       className="cat-logo"
     />
     <div className="text-wrapper2">
-      <p style={{ color: 'green', fontSize:'0.75rem' }}>$CATSKY: ₳ {formattedPrice}</p>
+      <p style={{ color: 'green', fontSize:'2rem', marginLeft: '8px' }}> $CATSKY: ₳ {formattedPrice}</p>
     </div>
   </a>
 </div>              
@@ -654,6 +804,21 @@ const buyUsesTransaction = async () => {
                 }`}
               >
 
+                <p> Refuel 🔋 : ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
+
+            </button>
+            <button
+                onClick={creditUser}
+                className={`button tag  ${
+                  !connected ||
+                  isLoading ||
+                  (!generatedImages && !uploadedImage) ||
+                  (generatedImages.length === 0 && !uploadedImage)
+                    ? "disabled-button"
+                    : ""
+                }`}
+              >
+
                 <p> Refuel to Begin: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
 
             </button>
@@ -661,9 +826,9 @@ const buyUsesTransaction = async () => {
             <div className="uses-container">
               <div className="loading-bar">
                 <div className='loading-block' >
-                <p style={{ color: 'red', margin: 0 }}>E</p>
+                <p style={{ color: 'red', margin: 0 }}>🪫</p>
                 </div>
-                {Array.from({ length: 10 }).map((_, index) => (
+                {Array.from({ length: 15 }).map((_, index) => (
                   <div
                     key={index}
                     className={`loading-block ${
@@ -677,7 +842,7 @@ const buyUsesTransaction = async () => {
                   
                 ))}
                                 <div className='loading-block'>
-                <p style={{ color: 'red', margin: 0 }}>F</p>
+                <p style={{ color: 'red', margin: 0 }}>🔋</p>
                 </div>
               </div>
               
@@ -753,7 +918,7 @@ const buyUsesTransaction = async () => {
                 disabled={isLoading} // Disable the button when loading
                 onClick={() => { getRandomPrompt(); setPrompt(''); }} // Clear prompt area when "Generate Prompt" is clickex
               >
-               <span id="gradient-text"> AutoIdea</span>
+               <span id="gradient-text">🚨 AutoIdea 🚨</span>
               </button>
               <div/>
 
@@ -784,16 +949,18 @@ const buyUsesTransaction = async () => {
               </div>
 
               <div className="tag2">
-                <label htmlFor="model">AI Model</label> {/* update for brand */}
+              <label htmlFor="model" style={{ whiteSpace: 'nowrap' }}>AI Model</label> {/* Prevent wrapping */}
                 <div className="dropdown-container">
                 <select
                   className="field"
                   name="model"
                   id="model"
                   style={{ cursor: 'pointer' }}
-                  onChange={updateOptions}
-                >
-                  <option value="dall-e-3"> dalle 3</option>
+                  onChange={(e) => setSelectedModel(e.target.value)} // Ensure this updates the state
+                  >
+                <option value="dall-e-3">DALLE 3</option>
+                <option value="SDXL-Lightning">SDXL ⚡️</option>
+                <option value="Stable Diffusion 3">SD 3 🌌</option>
 
                 </select>
                 </div>
@@ -886,6 +1053,18 @@ const buyUsesTransaction = async () => {
               <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
               </button>
 
+
+
+            <button
+              type="button"
+              onClick={() => { upscaleImage(generatedImages[selectedImageIndex]); }}
+              className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
+              disabled={isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0}
+            >
+              <span>Upscale 4x</span>
+              <span className="icon mt-1">🛠️</span>
+            </button>
+
               <a
                     className={'button'}
                     href="https://www.jpg.store/collection/infinitymintneolithicnexusera?tab=items"
@@ -918,7 +1097,7 @@ const buyUsesTransaction = async () => {
           </div>
 
           {/* "Your Creation" Section */}
-          <div className="creation-container">
+          <div className={`creation-container ${isLoading ? 'glowing' : ''}`}>
               {!slideshowDisabled && (
                 <ImageSlideshow 
                 images={[
@@ -937,11 +1116,6 @@ const buyUsesTransaction = async () => {
 
               {error && <APIErrorPopup message={error} onClose={handleCloseError} />}
 
-              {isLoading && (
-                <div className="spinner-container">
-                  <Spinner message="Generating your creation..." />
-                </div>
-              )}
 
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
@@ -954,47 +1128,66 @@ const buyUsesTransaction = async () => {
                 displayType="WIDGET"
               />
 
-            {!!generatedImages && generatedImages.length > 0 && (
-              <div>
-              <div className="tag5">
-                <span  id="creation-gradient-text"> {promptSummary}</span>
-                </div>
-                {generatedImages.map((imageUrl, imageIndex) => (
-                  <div key={`generated-image-${imageIndex}`}>
-                    <img
-                      src={imageUrl}
-                      alt={`Generated Image ${imageIndex + 1}`}
-                      className="imageborder"
-                      onClick={() => saveImage(imageUrl)}
-                      style={{ cursor: 'pointer' }} // Add this line
-                    />
-                        {/* Prompt */}
-
+              <div className="selected-image-container">
+                {generatedImages.length > 0 && (
+                  <>
+                    {/* Title/Prompt Summary */}
                     <div className="tag5">
-                    <span  id="creation-gradient-text">Prompt: {generatedPrompt}</span>
-                      </div>
-                </div>
-                ))}
+                      <span>{promptSummary}</span>
+                    </div>
+                    {/* Generated Image */} 
+                    <img
+                      src={generatedImages[selectedImageIndex]}
+                      alt={`Selected Image ${selectedImageIndex + 1}`}
+                      className="selected-image"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => saveImage(generatedImages[selectedImageIndex])}
+                    />
+                    {/* Prompt */}
+                    <div className="tag5">
+                      <span>Prompt: {generatedPrompt}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+                <div className="thumbnails-sidebar">
+                  {!!generatedImages && generatedImages.length > 0 && [...generatedImages].reverse().map((imageUrl, imageIndex) => (
+                    <div
+                      key={`generated-image-${imageIndex}`}
+                      className={`thumbnail ${generatedImages.length - 1 - imageIndex === selectedImageIndex ? 'selected' : ''}`}
+                      onClick={() => setSelectedImageIndex(generatedImages.length - 1 - imageIndex)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={`Generated Image ${imageIndex + 1}`}
+                        className="thumbnail-image"
+                      />
+                    </div>
+                  ))}
                 </div>
 
-            )}
-            {uploadedImage && (
-            <div>
-              <div key={`uploaded-image`}>
-                <Image
-                  src={uploadedImage}
-                  alt={`Uploaded Image`}
-                  width={500}
-                  height={300}
-                  className="mx-auto mt-4 mb-4 imageborder"
-                  onClick={() => saveImage(uploadedImage)}
-                />
-              </div>
+
+
             </div>
-          )}
+
+        {uploadedImage && (
+          <div>
+            <div key={`uploaded-image`}>
+              <img
+                src={uploadedImage}
+                alt={`Uploaded Image`}
+                width={500}
+                height={300}
+                className="mx-auto mt-4 mb-4 imageborder"
+                onClick={() => saveImage(uploadedImage)}
+              />
+            </div>
           </div>
+        )}
       </div>
     </>
-    );
-  }
+  );
+};
+
 export default Home;

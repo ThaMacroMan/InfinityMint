@@ -57,6 +57,7 @@ Light Gray (Secondary Text): #ECF0F1
   flex-direction: column;
   align-items: center;
   white-space: nowrap; /* Prevent text wrapping */
+  font-size: 2rem;
 }
 
 .text-wrapper2 {
@@ -86,20 +87,21 @@ Light Gray (Secondary Text): #ECF0F1
   justify-content: center;
   padding: .5rem; 
   margin-right: .1rem;
-  border-radius: 6.18rem;
-  border-bottom-right-radius: 13rem;
+
+  border-bottom-right-radius: 16rem;
   background-color: black;
   background-image: url('spacebackground.png');
   background-size: cover;
   background-position: bottom right;
   background-repeat: no-repeat;
-  box-shadow: 0 4px 8px rgba(0.5, 0.5, 0.5, 0.5);
+
   flex-grow: 1;
   flex-basis: 0;
   overflow: hidden;
   height: 93vh;
   min-width: 300px;
 }
+
 
 .api-error-popup {
   position: fixed;
@@ -152,13 +154,11 @@ Light Gray (Secondary Text): #ECF0F1
 }
 
 
-
-
 #gradient-text {
   background: rgb(255, 255, 255);
   background-clip: content-box;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white;
   font-size: clamp(0.3rem, 4vw, 2vh);
   text-align: center;
 }
@@ -172,7 +172,7 @@ Light Gray (Secondary Text): #ECF0F1
   border-radius: 5rem;
   padding: .5rem;
   cursor: pointer;
-  color: purple;
+  color: white;
   background-color: black;
   border: 2px solid #b87f0d;
   font-family: Public-Pixel;
@@ -331,6 +331,9 @@ Light Gray (Secondary Text): #ECF0F1
   font-family: 'Public-Pixel', sans-serif;
 }
 
+
+
+
 .tag3 {
   margin-top: 1rem;
   display: flex;
@@ -367,6 +370,7 @@ Light Gray (Secondary Text): #ECF0F1
   flex-direction: column;
   display: flex;
   align-items: center;
+  color: #ffffff;
   justify-content: center;
   border: 2px solid #b87f0d;
   border-radius: 5rem;
@@ -569,15 +573,16 @@ Light Gray (Secondary Text): #ECF0F1
 }
 
 .loading-block {
-  width: 7%;
+  width: 5%;
   height: 3rem;
-  background-color: #ddd;
-  border-radius: 5rem;
+  border-radius: 3rem;
+  background-color: #0000ff;
   transition: background-color 0.3s;
   font-size: clamp(0.5rem, 4vw, 2vh);
   font-family: Public-Pixel;
   text-align: center;
   align-content: center;
+  font-size: 1.2rem;
 }
 
 .loading-block.filled.magenta {
@@ -603,6 +608,7 @@ Light Gray (Secondary Text): #ECF0F1
   color: red;
   background-color: #ddd;
   border-radius: 0.25rem;
+
 }
 
 .token-per-use {
@@ -653,6 +659,7 @@ Light Gray (Secondary Text): #ECF0F1
     width: 100px; 
     height: auto;
   }
+
   #gradient-text2 {
     font-size: clamp(0.4rem, 3vw, 1rem);
     display: flex;
@@ -706,18 +713,13 @@ Light Gray (Secondary Text): #ECF0F1
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 0.7rem;
+  font-size: 1rem;
   vertical-align: sub;
 }
 .subtext {
-  font-size: 0.5em;
+  font-size: 1.2rem;
   color: #cccccc; /* Adjust color as needed */
-  font-size: clamp(0.1rem, 1vw, 1vh);
-}
-.text-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
 }
 
 @keyframes gradient-flow {
@@ -730,4 +732,110 @@ Light Gray (Secondary Text): #ECF0F1
   100% {
     background-position: 0% 50%;
   }
+}
+
+
+/* NEW GASM ADDITIONS */
+
+.thumbnails-sidebar {
+  width: 150px; /* Adjust as necessary */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between thumbnails */
+  overflow-y: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-right: 10px; /* Space from the right edge */
+  background: none; /* Ensure no background to keep the original */
+  max-height: 100%; /* Ensure it stays within the container */
+
+}
+
+.thumbnail {
+  margin-bottom: 10px;
+  
+}
+
+.thumbnail.selected {
+  border: 3px solid #000; /* Highlight selected thumbnail */
+  border-radius: 1rem;
+}
+
+.thumbnail img {
+  width: 100%; /* Adjust as necessary */
+  height: auto;
+  border-radius: 1rem;
+
+}
+
+
+
+.selected-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Ensure no background is set here to keep the original */
+}
+
+.selected-image {
+  max-width: 80%; /* Prevent the image from being too wide */
+  max-height: 80vh; /* Prevent the image from being too tall */
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 1rem;
+}
+
+.glowing {
+  animation: glowing 1.5s infinite, fadeGlow 1.5s infinite; /* Apply both glowing and fadeGlow animations */
+  border-bottom-right-radius: 17rem; /* Add the border radius to the bottom-right corner */
+  position: relative; /* Ensure the ::before pseudo-element positions correctly */
+}
+
+@keyframes glowing {
+  0% {
+    text-shadow: 0 0 5px #4b0082, 0 0 10px #4b0082, 0 0 15px #4b0082, 0 0 20px #8a2be2, 0 0 25px #8a2be2, 0 0 30px #8a2be2, 0 0 35px #8a2be2;
+  }
+  50% {
+    text-shadow: 0 0 10px #4b0082, 0 0 20px #4b0082, 0 0 30px #4b0082, 0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 60px #8a2be2, 0 0 70px #8a2be2;
+  }
+  100% {
+    text-shadow: 0 0 5px #4b0082, 0 0 10px #4b0082, 0 0 15px #4b0082, 0 0 20px #8a2be2, 0 0 25px #8a2be2, 0 0 30px #8a2be2, 0 0 35px #8a2be2;
+  }
+}
+
+/* Keyframes for the inner glow effect */
+@keyframes fadeGlow {
+  0% {
+    box-shadow: inset 0 0 30px 30px rgba(0, 0, 255, 0.6); /* Blue color */
+  }
+  50% {
+    box-shadow: inset 0 0 60px 60px rgba(0, 0, 255, 0.3); /* Blue color */
+  }
+  100% {
+    box-shadow: inset 0 0 30px 30px rgba(0, 0, 255, 0.6); /* Blue color */
+  }
+}
+
+/* Apply the inner glow effect to the creation container when loading */
+.creation-container.glowing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-bottom-right-radius: 17rem; /* Ensure the radius matches the container */
+  animation: fadeGlow 2s infinite;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+/* Add a transition effect for when the glow is removed */
+.creation-container::before {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
 }

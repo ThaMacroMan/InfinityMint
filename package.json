@@ -28,6 +28,7 @@
     "postcss-nesting": "^12.0.2",
     "react": "^18",
     "react-dom": "^18",
+    "replicate": "^0.31.1",
     "tailwind": "^4.0.0",
     "twin.macro": "^3.4.1",
     "uuid": "^9.0.1"
