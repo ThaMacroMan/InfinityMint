@@ -966,9 +966,9 @@ const buyUsesTransaction = async () => {
                   style={{ cursor: 'pointer' }}
                   onChange={(e) => setSelectedModel(e.target.value)} // Ensure this updates the state
                   >
-                <option value="dall-e-3">DALLE 3</option>
                 <option value="SDXL-Lightning">SDXL ⚡️</option>
                 <option value="Stable Diffusion 3">SD 3 🌌</option>
+                <option value="dall-e-3">DALLE 3</option>
 
                 </select>
                 </div>

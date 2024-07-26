@@ -576,7 +576,7 @@ Light Gray (Secondary Text): #ECF0F1
   width: 5%;
   height: 3rem;
   border-radius: 3rem;
-  background-color: #0000ff;
+  background-color: black;
   transition: background-color 0.3s;
   font-size: clamp(0.5rem, 4vw, 2vh);
   font-family: Public-Pixel;
