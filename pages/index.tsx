@@ -72,7 +72,7 @@ const Home: NextPage = () => {
   const [generatedPrompt, setGeneratedPrompt] = useState<string>(''); // State variable to store the generated prompt
   const [error, setError] = useState<string | null>(null);
   const [chunkedMetadata, setChunkedMetadata] = useState<string[]>([]);
-  const [selectedModel, setSelectedModel] = useState("dall-e-3");
+  const [selectedModel, setSelectedModel] = useState("SDXL-Lightning");
   const [selectedSize, setSelectedSize] = useState("1024x1024");
   const [selectedQuality, setSelectedQuality] = useState("standard");
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
@@ -470,20 +470,26 @@ console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle)
       }
   
           // Replace the selected image with the upscaled image
-    setGeneratedImages(prevImages => {
-      const newImages = [...prevImages];
-      newImages[selectedImageIndex] = upscaleImageUrl;
-      return newImages;
-    });
+      setGeneratedImages(prevImages => {
+        const newImages = [...prevImages];
+        newImages[selectedImageIndex] = upscaleImageUrl;
+      
+        const chunkedMetadata = chunkData(newImages.join(','), 64);
+      setChunkedMetadata(chunkedMetadata);
 
-    setUserUses((prevUserUses) => {
-      const newUserUses = String(Number(prevUserUses) - 2);
-      localStorage.setItem(userAddress, newUserUses);
-      return newUserUses; // Return the updated count to ensure the state is correctly set
-    });
+        return newImages;
+        
+      });
 
-    
-  
+      setUserUses((prevUserUses) => {
+        const newUserUses = String(Number(prevUserUses) - 2);
+        localStorage.setItem(userAddress, newUserUses);
+        return newUserUses; // Return the updated count to ensure the state is correctly set
+      });
+
+      
+
+
       setIsLoading(false);
   
     } catch (error) {
@@ -601,6 +607,7 @@ const buyUsesTransaction = async () => {
           URLs: [],
           Prompt: [],
         };
+        
         // Iterate through each chunk of metadata, split it, and extract URLs
         chunkedMetadata.forEach((chunk: string) => {
           let urlsInChunk: string[] = chunk.split(',');
@@ -807,6 +814,7 @@ const buyUsesTransaction = async () => {
                 <p> Refuel 🔋 : ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
 
             </button>
+            {/*}
             <button
                 onClick={creditUser}
                 className={`button tag  ${
@@ -819,10 +827,10 @@ const buyUsesTransaction = async () => {
                 }`}
               >
 
-                <p> Refuel to Begin: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
+                <p> Refuel to Begin: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component *
 
             </button>
-
+                  */}
             <div className="uses-container">
               <div className="loading-bar">
                 <div className='loading-block' >
@@ -886,7 +894,7 @@ const buyUsesTransaction = async () => {
               name="prompt"
               id="prompt"
               value={prompt}
-              rows={3}
+              rows={4}
               onChange={(e) => setPrompt(e.target.value)}
               onInput={autoExpand}
               placeholder="Your Idea: " // update for brand
@@ -1020,22 +1028,36 @@ const buyUsesTransaction = async () => {
                     </div>
                   )}
               </div>
+              <div className="button-container flex justify-between gap-1 w-full">
 
               <button
                 type="button"
                 onClick={generateImage}
-                className={`button animated-gradient ${
-                  isLoading  || !connected || !prompt.trim() || userUses === '0' ? 'disabled-button' : ''
-                }`}
+                className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
+
                 disabled={isLoading || !connected || !prompt.trim() || userUses <= '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
               >
-                <span id="gradient-text">Build Idea</span> {/* update for brand */}
+                <span>Build Idea</span> {/* update for brand */}
+                <span className="icon mt-1">👾</span>
               </button>
+
+              <button
+              type="button"
+              onClick={() => { upscaleImage(generatedImages[selectedImageIndex]); }}
+              className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
+              disabled={isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0}
+            >
+              <span>Upscale 4x</span>
+              <span className="icon mt-1">🛠️</span>
+            </button>
+            </div>
 
             <button
               type="button"
               onClick={processTransaction}
-              className={`button animated-gradient2 ${
+
+
+              className={`button flex flex-col items-center justify-center py-2 ${
                 !connected ||
                 isLoading ||
                 (!generatedImages && !uploadedImage) ||
@@ -1051,20 +1073,10 @@ const buyUsesTransaction = async () => {
               } // Disable button based on condition
             >
               <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
+              <span className="icon mt-1">🎞️⛓️</span>
               </button>
-
-
-
-            <button
-              type="button"
-              onClick={() => { upscaleImage(generatedImages[selectedImageIndex]); }}
-              className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
-              disabled={isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0}
-            >
-              <span>Upscale 4x</span>
-              <span className="icon mt-1">🛠️</span>
-            </button>
-
+              
+              {/*
               <a
                     className={'button'}
                     href="https://www.jpg.store/collection/infinitymintneolithicnexusera?tab=items"
@@ -1080,6 +1092,7 @@ const buyUsesTransaction = async () => {
                     height={15} 
                   />
                 </a>
+            */}
 
               <div>
                 <div className="" onClick={toggleInfo}></div>

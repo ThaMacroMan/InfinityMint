@@ -76,13 +76,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log('Generated Prompt:', randomPrompt);
 
       const response = await openAI.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        max_tokens: 15, // Ensure the response is within 15 tokens
+        model: "gpt-4o-mini",
+        max_tokens: 20, // Ensure the response is within 15 tokens
         temperature: 0.9, // Higher temperature for more randomness
         messages: [
           {
             role: "system",
-            content: "Generate an imaginative and highly random sci-fi prompt based on the following inspiration elements. The prompt should be concise, within 15 tokens, and ensure no text or quotes appear in the image."
+            content: "Generate an imaginative and highly random sci-fi prompt based on the following inspiration elements. Randomly include cats. The prompt should be concise, within 20 tokens, and ensure no text or quotes appear in the image."
           },
           {
             role: "user",

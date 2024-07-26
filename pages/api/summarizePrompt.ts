@@ -10,8 +10,8 @@ const summarizePrompt = async (prompt: string): Promise<string> => {
     });
 
     const response = await openAI.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      max_tokens: 50,
+      model: "gpt-4o-mini",
+      max_tokens: 150,
       temperature: 0.5,
       messages: [
         { "role": "system", "content": "Summarize the given prompt into a short epic name." },
