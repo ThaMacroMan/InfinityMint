@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import type { NextPage } from "next";
 import { useAddress, useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
@@ -8,7 +9,8 @@ import '@dexhunterio/swaps/lib/assets/style.css'
 import Swap from '@dexhunterio/swaps'
 import { useTokenCheck } from '../hooks/TokenCheck'; 
 import WalletBalance from '../components/WalletBalance';
-import Spinner from '../components/Spinner'; 
+
+
 import APIErrorPopup from '../components/APIErrorPopup';
 import ImageSlideshow from '../components/ImageSlideshow';
 import TokenPrice from './api/CheckPrice';
@@ -17,8 +19,6 @@ import catskylogo from '../pages/styles/logo-icon.png'
 import logo from '../pages/styles/new logo.jpg'
 import pwdby from '../pages/styles/OpenAI Green.png'
 import pwdby2 from '../pages/styles/cardano_ada-512.png'
-
-import jpglogo from '../pages/styles/jpglogo.png'
 
 import eight from '../pages/public/images/eight.png';
 import eleven from '../pages/public/images/eleven.png';
@@ -61,6 +61,9 @@ import twentytwo from '../pages/public/images/twentytwo.png';
 import wide from '../pages/public/images/wide.png';
 
 
+// Dynamically import the DeepChat component with correct type
+const DeepChat = dynamic(() => import('deep-chat-react').then(mod => mod.DeepChat), { ssr: false });
+import CustomDeepChat from '../components/CustomDeepChat';
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet(); 
@@ -82,11 +85,10 @@ const Home: NextPage = () => {
   const [mintingPrice, setMintingPrice] = useState<number>(8690000); // Default to the initial price
   const [showInfo, setShowInfo] = useState<boolean>(false);
 
-
-
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
-
+  const [showAssets, setShowAssets] = useState<boolean>(false); // Renamed state
+  const assetsRef = useRef<HTMLDivElement>(null);
 
   const [userUses, setUserUses] = useState<string>('2');
   const [userAddress, setUserAddress] = useState<string>('none');
@@ -104,6 +106,20 @@ const Home: NextPage = () => {
     nft2Balance: 0,
     nft3Balance: 0,
   });
+
+  const toggleAssets = () => {
+    setShowAssets(!showAssets);
+  };
+
+  useEffect(() => {
+    if (assetsRef.current) {
+      if (showAssets) {
+        assetsRef.current.style.maxHeight = `${assetsRef.current.scrollHeight}px`;
+      } else {
+        assetsRef.current.style.maxHeight = '0';
+      }
+    }
+  }, [showAssets]);
 
   useEffect(() => {
     if (connected) {
@@ -487,9 +503,6 @@ console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle)
         return newUserUses; // Return the updated count to ensure the state is correctly set
       });
 
-      
-
-
       setIsLoading(false);
   
     } catch (error) {
@@ -665,17 +678,6 @@ const buyUsesTransaction = async () => {
   };
 
 
-  useEffect(() => {
-    const updateCursor = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', updateCursor);
-
-    return () => {
-      window.removeEventListener('mousemove', updateCursor);
-    };
-  }, []);
-
   const saveImage = async (imageUrl: string) => {
     try {
         // Open the image in a new tab
@@ -700,6 +702,7 @@ const buyUsesTransaction = async () => {
    const handleCloseError = () => {
     setError(null);
   };
+
 
 
 
@@ -787,18 +790,25 @@ const buyUsesTransaction = async () => {
 </div>              
 
 
+
+
 <div className="wrapper">
-  {/* Form Section */}
-  <div className="form">
-    <div className="tag6" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div style={{ position: 'relative', zIndex: 9999, flex: '1' }}>
-      <CardanoWallet isDark={true} {...{className: "wallet"}} />
-      </div>
-      <div style={{ flex: '1' }}>
-        <h1 className="infobutton" onClick={toggleInfo} style={{ width: '95%' }}>More Info</h1>
-        {showInfo}
-      </div>
-    </div>
+        {/* Form Section */}
+        <div className="form">
+          <div className="wallet-assets-container tag" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex:9999 }}>
+            <CardanoWallet isDark={true} {...{ className: "wallet" }} />
+            <button className="infobutton" onClick={toggleAssets}>
+              {showAssets ? 'Hide Assets' : 'Show Assets'}
+            </button>
+          </div>
+          <div 
+            ref={assetsRef} 
+            className="assets-container" 
+            style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden', transition: 'max-height 0.5s ease-out', maxHeight: showAssets ? '500px' : '0' }}
+          >
+            <WalletBalance />
+          </div>
+
           <button
                 onClick={buyUsesTransaction}
                 className={`button tag  ${
@@ -810,7 +820,6 @@ const buyUsesTransaction = async () => {
                     : ""
                 }`}
               >
-
                 <p> Refuel 🔋 : ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component */}
 
             </button>
@@ -826,9 +835,7 @@ const buyUsesTransaction = async () => {
                     : ""
                 }`}
               >
-
                 <p> Refuel to Begin: ₳ 1  </p> {/*{tokenPerUse} calculated in checkPrice component *
-
             </button>
                   */}
             <div className="uses-container">
@@ -841,13 +848,10 @@ const buyUsesTransaction = async () => {
                     key={index}
                     className={`loading-block ${
                       parseInt(userUses) >= 4 ? "magenta" : parseInt(userUses) > 0 ? "orange" : "red"
-
-
                     } ${
                       index < parseInt(userUses) ? "filled" : ""
                     }`}
                   ></div>
-                  
                 ))}
                                 <div className='loading-block'>
                 <p style={{ color: 'red', margin: 0 }}>🔋</p>
@@ -858,9 +862,7 @@ const buyUsesTransaction = async () => {
 
               </div>
             </div>
-
               {connected}
-              <WalletBalance />
 
               <div>
                 <div className="" onClick={toggleInfo}></div>
@@ -878,7 +880,6 @@ const buyUsesTransaction = async () => {
                 )}
               </div>
 
-            
             <div>
             <TokenPrice
             tokenUnit="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" //UPDATE TOKEN: POLICY ID + ASSET NAME HEX
@@ -1028,29 +1029,30 @@ const buyUsesTransaction = async () => {
                     </div>
                   )}
               </div>
-              <div className="button-container flex justify-between gap-1 w-full">
 
-              <button
-                type="button"
-                onClick={generateImage}
-                className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
+              <div className="button-container flex flex-row justify-between gap-1 w-full">
+                <button
+                  type="button"
+                  onClick={generateImage}
+                  className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
+                  disabled={isLoading || !connected || !prompt.trim() || userUses <= '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
+                >
+                  <span>Build Idea</span> {/* update for brand */}
+                  <span className="icon mt-1">👾</span>
+                </button>
 
-                disabled={isLoading || !connected || !prompt.trim() || userUses <= '0'} // Disable the button if loading, balance is insufficient, not connected, no prompt text, or no usage available
-              >
-                <span>Build Idea</span> {/* update for brand */}
-                <span className="icon mt-1">👾</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => { upscaleImage(generatedImages[selectedImageIndex]); }}
+                  className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
+                  disabled={isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0}
+                >
+                  <span>Upscale 4x</span>
+                  <span className="icon mt-1">🛠️</span>
+                </button>
+              </div>
 
-              <button
-              type="button"
-              onClick={() => { upscaleImage(generatedImages[selectedImageIndex]); }}
-              className={`button flex flex-col items-center justify-center py-2 ${isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0 ? 'disabled-button' : ''}`}
-              disabled={isLoading || !connected || !prompt || userUses === '0' || generatedImages.length === 0}
-            >
-              <span>Upscale 4x</span>
-              <span className="icon mt-1">🛠️</span>
-            </button>
-            </div>
+
 
             <button
               type="button"
@@ -1075,24 +1077,6 @@ const buyUsesTransaction = async () => {
               <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
               <span className="icon mt-1">🎞️⛓️</span>
               </button>
-              
-              {/*
-              <a
-                    className={'button'}
-                    href="https://www.jpg.store/collection/infinitymintneolithicnexusera?tab=items"
-                    rel="noopener noreferrer"
-                    style={{ cursor: 'pointer', display: 'flex', alignContent:'center', justifyContent: 'space-around', paddingRight:'1rem', paddingLeft: '1rem' }}
-                  >
-                    <span id='gradient-text'>Market:  </span>
-                
-                  <Image 
-                    src={jpglogo.src} 
-                    alt="Logo" 
-                    width={125}
-                    height={15} 
-                  />
-                </a>
-            */}
 
               <div>
                 <div className="" onClick={toggleInfo}></div>
@@ -1107,10 +1091,13 @@ const buyUsesTransaction = async () => {
                   )}
               </div>
 
+              <CustomDeepChat />
+
           </div>
 
           {/* "Your Creation" Section */}
           <div className={`creation-container ${isLoading ? 'glowing' : ''}`}>
+      
               {!slideshowDisabled && (
                 <ImageSlideshow 
                 images={[
@@ -1122,7 +1109,6 @@ const buyUsesTransaction = async () => {
                   twentyone, twentythree, twentytwo, wide
                 ]}
                 
-          
                   disabled={false} 
                 />
               )}
@@ -1140,6 +1126,8 @@ const buyUsesTransaction = async () => {
                 partnerName="CatskyAI"
                 displayType="WIDGET"
               />
+
+                            
 
               <div className="selected-image-container">
                 {generatedImages.length > 0 && (
@@ -1179,25 +1167,7 @@ const buyUsesTransaction = async () => {
                     </div>
                   ))}
                 </div>
-
-
-
             </div>
-
-        {uploadedImage && (
-          <div>
-            <div key={`uploaded-image`}>
-              <img
-                src={uploadedImage}
-                alt={`Uploaded Image`}
-                width={500}
-                height={300}
-                className="mx-auto mt-4 mb-4 imageborder"
-                onClick={() => saveImage(uploadedImage)}
-              />
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

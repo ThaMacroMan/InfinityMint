@@ -67,8 +67,6 @@ Light Gray (Secondary Text): #ECF0F1
   flex-grow: 1;
 }
 
-
-
 .form {
   display: flex;
   flex-direction: column;
@@ -164,8 +162,8 @@ Light Gray (Secondary Text): #ECF0F1
 }
 
 .button {
-  margin-top: .2rem;
-  margin-bottom: .2rem;
+  margin-top: .25rem;
+  margin-bottom: .25rem;
   justify-content: center;
   display: flex;
   width: 97.5%;
@@ -272,16 +270,12 @@ Light Gray (Secondary Text): #ECF0F1
   margin: 0.2rem 0;
 }
 
-
-
 .button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   background-color: black;
   border-color: #b87f0d;
 }
-
-
 
 .infobutton {
   display: flex;
@@ -309,7 +303,8 @@ Light Gray (Secondary Text): #ECF0F1
   align-items: center;
   justify-content: center;
   font-size: clamp(0.5rem, 4vw, 2vh);
-  margin: .25rem;
+
+  margin-top: .5rem;
   padding: .25rem;
   color: #ffffff;
   font-family: 'Public-Pixel', sans-serif;
@@ -471,7 +466,8 @@ Light Gray (Secondary Text): #ECF0F1
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.25rem;
+  gap: 0.3rem;
+
   width: 100%;
 }
 
@@ -479,9 +475,8 @@ Light Gray (Secondary Text): #ECF0F1
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   border: 2px solid #b87f0d;
-  border-radius: 6.618rem;
+  border-radius: 1.618rem;
   padding: 0.25rem;
   background-color: black;
   box-sizing: border-box;
@@ -489,6 +484,9 @@ Light Gray (Secondary Text): #ECF0F1
   height: 100%;
   cursor: pointer;
   transition: transform 0.2s;
+}
+.assets-container.show {
+  max-height: 500px; /* Adjust based on your content's height */
 }
 
 .asset-container:hover {
@@ -499,7 +497,6 @@ Light Gray (Secondary Text): #ECF0F1
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   font-size: clamp(0.5rem, 4vw, 2vh);
 }
 
@@ -838,4 +835,11 @@ Light Gray (Secondary Text): #ECF0F1
 .creation-container::before {
   opacity: 0;
   transition: opacity 0.5s ease-out;
+}
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.25rem; /* Tailwind's gap-1 equivalent */
+  width: 100%;
 }

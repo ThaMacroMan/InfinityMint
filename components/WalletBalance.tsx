@@ -35,9 +35,9 @@ const WalletBalance: React.FC = () => {
             <span id="gradient-text">$CATSKY</span>
           </div>
           <div className="asset-value">
-          <span style={{ color: 'green' }}>
-            {Math.floor((balances.tokenBalance || 0) / 1000000).toLocaleString()} M
-          </span>
+            <span style={{ color: 'green' }}>
+              {Math.floor((balances.tokenBalance || 0) / 1000000).toLocaleString()} M
+            </span>
           </div>
         </div>
       </a>

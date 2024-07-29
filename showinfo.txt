@@ -1,0 +1,27 @@
+How To Use
+Click refuel and sign ₳ 1 Transaction
+Write your idea or click AutoIdea
+Select model options
+Click Build Idea
+Click Mint Creation
+Style Information
+Select Natural for more natural-looking images.
+Select Vivid for more vibrant and colorful images.
+AI Model Information
+Dalle 3 is OpenAI's latest image generation model.
+Form Information
+Square: 1024x1024
+Landscape: 1792x1024
+Portrait: 1024x1792
+Grade Information
+Standard: Default quality.
+HD: Higher quality images.
+Discount Information
+Hold $CATSKY when minting for discounts:
+
+0.5B $CATSKY = ₳ 1 ADA / 11% Discount
+1B $CATSKY = ₳ 2 ADA / 22% Discount
+3B $CATSKY = ₳ 3 ADA / 34% Discount
+5B $CATSKY = ₳ 4 ADA / 46% Discount
+Unlock Information
+Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options.

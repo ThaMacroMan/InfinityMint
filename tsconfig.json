@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/api/dalle3_api.pi",
-    "types"
+    "types",
+    "./types"
   ],
   "exclude": [
     "node_modules"
