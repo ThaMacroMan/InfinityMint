@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenAI } from 'openai';
 
 interface ChatRequestBody {
-  messages: { role: string; text: string, name: string }[];
+  messages: { role: 'system' | 'user' | 'assistant' | 'function'; text: string, name: string; content:string }[];
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -85,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const content = chunk.choices[0]?.delta?.content;
         if (content) {
           res.write(`data: ${JSON.stringify({ text: content })}\n\n`);
-          res.flush(); // ensure the data is sent immediately
+          res.flushHeaders(); // ensure the data is sent immediately
         }
       }
 
@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.end();
     } catch (error) {
       console.error('Error handling chat request:', error); // Detailed error logging
-      res.write(`data: ${JSON.stringify({ error: 'Error handling chat request', details: error.message })}\n\n`);
+      res.write(`data: ${JSON.stringify({ error: 'Error handling chat request', details: (error as Error).message })}\n\n`);
       res.end();
     }
   } else {
