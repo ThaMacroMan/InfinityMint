@@ -20,20 +20,11 @@ html, body {
   overflow-x: hidden;
 }
 
-/*Primary Dark Blue: #1B263B
-White (Text): #FFFFFF
-Teal (Accent): #1ABC9C
-Orange (Accent): #E67E22
-Light Gray (Secondary Background): #F2F2F2
-Light Gray (Secondary Text): #ECF0F1
-*/
-
 .header {
   background-color: black;
   height: 7vh;
   width: 100%;
   padding: 0.5rem 1rem;
-
   text-align: center;
   align-items: center;
   font-family: 'Public-Pixel';
@@ -88,7 +79,7 @@ Light Gray (Secondary Text): #ECF0F1
 
   border-bottom-right-radius: 16rem;
   background-color: black;
-  background-image: url('spacebackground.png');
+  background-image: url('spacebackground.jpg');
   background-size: cover;
   background-position: bottom right;
   background-repeat: no-repeat;
@@ -99,7 +90,6 @@ Light Gray (Secondary Text): #ECF0F1
   height: 93vh;
   min-width: 300px;
 }
-
 
 .api-error-popup {
   position: fixed;
@@ -118,7 +108,6 @@ Light Gray (Secondary Text): #ECF0F1
   min-width: 200px;
   cursor: pointer; /* Make the whole box clickable */
   opacity: 1;
-
 }
 
 .api-error-popup p {
@@ -150,7 +139,6 @@ Light Gray (Secondary Text): #ECF0F1
     width: 0%;
   }
 }
-
 
 #gradient-text {
   background: rgb(255, 255, 255);
@@ -244,31 +232,6 @@ Light Gray (Secondary Text): #ECF0F1
   transform: scale(1.05);
 }
 
-.info-popup {
-  font-family: Public-Pixel, sans-serif;
-  font-size: .75rem;
-  line-height: 1.5;
-  color: #ffffff;
-  background-color: #2a2a2a;
-  border: 2px solid #000000;
-  border-radius: 1rem;
-  padding: .25rem;
-
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: left;
-}
-
-.info-popup p, .info-popup ul {
-  margin: 0.2rem 0;
-}
-
-.info-popup ul {
-  padding-left: 1.5rem;
-}
-
-.info-popup li {
-  margin: 0.2rem 0;
-}
 
 .button:disabled {
   opacity: 0.3;
@@ -288,7 +251,8 @@ Light Gray (Secondary Text): #ECF0F1
   border: 2px solid #000000;
   font-family: Public-Pixel;
   color: #ffffff;
-  background-color: #2a2a2a;
+  background-color: #000000;
+  border: 2px solid #b87f0d;
   height: 63px;
   transition: transform 0.2s;
   width: 100%; /* Make sure the button takes the full width */
@@ -303,7 +267,6 @@ Light Gray (Secondary Text): #ECF0F1
   align-items: center;
   justify-content: center;
   font-size: clamp(0.5rem, 4vw, 2vh);
-
   margin-top: .5rem;
   padding: .25rem;
   color: #ffffff;
@@ -325,9 +288,6 @@ Light Gray (Secondary Text): #ECF0F1
   color: #ffffff;
   font-family: 'Public-Pixel', sans-serif;
 }
-
-
-
 
 .tag3 {
   margin-top: 1rem;
@@ -388,8 +348,6 @@ Light Gray (Secondary Text): #ECF0F1
   text-align: center;
   padding: .3rem;
   font-family: 'Public-Pixel', sans-serif;
-
-
 }
 
 .field {
@@ -404,46 +362,11 @@ Light Gray (Secondary Text): #ECF0F1
   padding: .3rem;
   transition: transform 0.2s;
 }
+
 .field:hover {
   transform: scale(1.05);
 }
 
-.spinner-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.spinner-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border-radius: 5.618rem;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: large;
-  font-family: Public-Pixel;
-  background: linear-gradient(to left, #ff00f7, #0000ff, #c50303, #ff00f7, #0000ff);
-  background-size: 400% auto;
-  animation: flow 2.618s linear infinite;
-  min-width: 20vw;
-  min-height: 20vh;
-  font-size: clamp(0.5rem, 4vw, 2vh);
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 .adalogo {
   width: 40rem;
@@ -695,12 +618,11 @@ Light Gray (Secondary Text): #ECF0F1
 }
 
 #gradient-text2 {
-  background: linear-gradient(270deg, #8a2be2, #4b0082, #8a2be2, #4b0082);
+  background: #8a2be2;
   background-size: 200% 200%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-flow 5s infinite;
   display: inline-block;
   color: #ffffff; /* Ensure this is not affecting visibility */
 }
@@ -730,7 +652,6 @@ Light Gray (Secondary Text): #ECF0F1
     background-position: 0% 50%;
   }
 }
-
 
 /* NEW GASM ADDITIONS */
 
@@ -768,14 +689,10 @@ Light Gray (Secondary Text): #ECF0F1
 
 }
 
-
-
 .selected-image-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  /* Ensure no background is set here to keep the original */
 }
 
 .selected-image {

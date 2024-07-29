@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
-  res.flushHeaders(); // flush the headers to establish SSE
+  (res as any).flushHeaders(); // flush the headers to establish SSE
 
   if (process.env.OPENAI_API_KEY) {
     try {
@@ -85,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const content = chunk.choices[0]?.delta?.content;
         if (content) {
           res.write(`data: ${JSON.stringify({ text: content })}\n\n`);
-          res.flushHeaders(); // ensure the data is sent immediately
+          (res as any).flush(); // ensure the data is sent immediately
         }
       }
 

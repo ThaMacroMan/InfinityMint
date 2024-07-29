@@ -6,20 +6,19 @@ import { useAddress, useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
-import Swap from '@dexhunterio/swaps'
+
 import { useTokenCheck } from '../hooks/TokenCheck'; 
-import WalletBalance from '../components/WalletBalance';
 
-
-import APIErrorPopup from '../components/APIErrorPopup';
-import ImageSlideshow from '../components/ImageSlideshow';
-import TokenPrice from './api/CheckPrice';
+const WalletBalance = dynamic(() => import('../components/WalletBalance'), { ssr: false });
+const APIErrorPopup = dynamic(() => import('../components/APIErrorPopup'), { ssr: false });
+const ImageSlideshow = dynamic(() => import('../components/ImageSlideshow'), { ssr: false });
+const TokenPrice = dynamic(() => import('./api/CheckPrice'), { ssr: false });
+const Swap = dynamic(() => import('@dexhunterio/swaps'), { ssr: false });
 
 import catskylogo from '../pages/styles/logo-icon.png'
 import logo from '../pages/styles/new logo.jpg'
 import pwdby from '../pages/styles/OpenAI Green.png'
 import pwdby2 from '../pages/styles/cardano_ada-512.png'
-
 import eight from '../pages/public/images/eight.png';
 import eleven from '../pages/public/images/eleven.png';
 import era2 from '../pages/public/images/era2.png';
@@ -76,8 +75,8 @@ const Home: NextPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [chunkedMetadata, setChunkedMetadata] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState("SDXL-Lightning");
-  const [selectedSize, setSelectedSize] = useState("1024x1024");
-  const [selectedQuality, setSelectedQuality] = useState("standard");
+  const [selectedSize, setSelectedSize] = useState([1024,1024]);
+  const [selectedQuality, setSelectedQuality] = useState(100);
   const [isLoading, setIsLoading] = useState(false); // State to manage loading state
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [selectedStyle, setSelectedStyle] = useState<string>(''); // State to store the selected style
@@ -179,51 +178,30 @@ const Home: NextPage = () => {
 
     if (!sizeSelect || !qualitySelect) return;
 
-    // Preserve current values
     const currentSize = sizeSelect.value;
     const currentQuality = qualitySelect.value;
 
-    // Clear existing options
     sizeSelect.innerHTML = "";
     qualitySelect.innerHTML = "";
 
-    // Default options are always available
-    const squareOption = document.createElement("option");
-    squareOption.value = "1024x1024";
-    squareOption.textContent = "Square";
-    sizeSelect.appendChild(squareOption);
+    const smallOption = document.createElement("option");
+    smallOption.value = [1024,1024].toString();;
+    smallOption.textContent = "Square 🟧";
+    sizeSelect.appendChild(smallOption);
 
-    const standardQualityOption = document.createElement("option");
-    standardQualityOption.value = "standard";
-    standardQualityOption.textContent = "Standard";
-    qualitySelect.appendChild(standardQualityOption);
+    const mediumOption = document.createElement("option");
+    mediumOption.value = [1080,1920].toString();
+    mediumOption.textContent = "Portrait ꟾ";
+    sizeSelect.appendChild(mediumOption);
 
-    if (balances.nft2Balance >= 1 || balances.nft1Balance >= 3 || balances.nft3Balance >= 10) {
-      const landscapeOption = document.createElement("option");
-      landscapeOption.value = "1792x1024";
-      landscapeOption.textContent = "Landscape";
-      sizeSelect.appendChild(landscapeOption);
+    const largeOption = document.createElement("option");
+    largeOption.value = "1920,1080";
+    largeOption.textContent = "Landscape ⟺";
+    sizeSelect.appendChild(largeOption);
 
-      const portraitOption = document.createElement("option");
-      portraitOption.value = "1024x1792";
-      portraitOption.textContent = "Portrait";
-      sizeSelect.appendChild(portraitOption);
-
-      const hdOption = document.createElement("option");
-      hdOption.value = "hd";
-      hdOption.textContent = "HD";
-      qualitySelect.appendChild(hdOption);
-    }
-
-    // Set the values to the preserved values or defaults if they don't exist
-    sizeSelect.value = currentSize || "1024x1024";
-    qualitySelect.value = currentQuality || "standard";
-
-    // Update the selected values to reflect any changes
-    setSelectedSize(sizeSelect.value);
-    setSelectedQuality(qualitySelect.value);
-  }, [balances]);
-
+    setSelectedSize(sizeSelect.value.split(',').map(Number));
+    setSelectedQuality(Number(qualitySelect.value));
+  }, []);
   const clearOptions = useCallback(() => {
     const sizeSelect = document.getElementById("size") as HTMLSelectElement;
     const qualitySelect = document.getElementById("quality") as HTMLSelectElement;
@@ -243,8 +221,8 @@ const Home: NextPage = () => {
     standardQualityOption.textContent = "Standard";
     qualitySelect.appendChild(standardQualityOption);
 
-    setSelectedSize(sizeSelect.value);
-    setSelectedQuality(qualitySelect.value);
+    setSelectedSize(sizeSelect.value.split(',').map(Number));
+    setSelectedQuality(Number(qualitySelect.value));
   }, []);
 
   useEffect(() => {
@@ -337,9 +315,8 @@ const Home: NextPage = () => {
       // Define variables for API endpoint and request body
       let apiEndpoint = '';
       let bodyData = {};
+      const [width, height] = selectedSize; // Use the array directly
 
-      // Destructure the selected size into width and height
-      const [width, height] = selectedSize.split('x').map(Number);
 
       // Determine the appropriate API endpoint and body data based on the selected model
       switch (selectedModel) {
@@ -446,8 +423,8 @@ console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle)
       setIsLoading(false); // Set loading state to false when image generation is complete
   
       // Determine the number of uses to deduct
-      const usesToDeduct = selectedQuality === 'hd' || selectedSize === '1792x1024' || selectedSize === '1024x1792' ? 2 : 1;
-  
+      const usesToDeduct = selectedQuality === 100 ? 1 : 2;
+
       setUserUses((prevUserUses) => {
         const newUserUses = String(Number(prevUserUses) - usesToDeduct);
         localStorage.setItem(userAddress, newUserUses);
@@ -476,8 +453,6 @@ console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle)
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      
-  
       const data = await response.json();
       const upscaleImageUrl = data.upscaleImageUrl;
   
@@ -503,7 +478,9 @@ console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle)
         return newUserUses; // Return the updated count to ensure the state is correctly set
       });
 
-      setIsLoading(false);
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 5300);
   
     } catch (error) {
       console.error('Failed to upscale image:', error);
@@ -634,8 +611,8 @@ const buyUsesTransaction = async () => {
         // Add additional metadata properties
         metadataObj['Era'] = ['V2.0: Neolithic Nexus Era']; // Explicitly define Era as string[]
         metadataObj['Text'] = ['Powered by Catsky AI and Sick City']; // Explicitly define Text as string[]
-        metadataObj['Settings'] = [selectedModel, selectedSize, selectedQuality]
-        metadataObj['Name'] = [promptSummary]
+        metadataObj['Settings'] = [selectedModel, selectedSize.toString()];
+        metadataObj['Name'] = [promptSummary];
         // Set metadata with aggregated URLs, prompt, and additional metadata strings
         tx.setMetadata(metadataKey, metadataObj);
       try {
@@ -676,17 +653,6 @@ const buyUsesTransaction = async () => {
     textarea.style.height = 'inherit'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
   };
-
-
-  const saveImage = async (imageUrl: string) => {
-    try {
-        // Open the image in a new tab
-        window.open(imageUrl, '_blank');
-    } catch (error) {
-        console.error('Error opening image:', error);
-    }
-  };  
-
    // Function to toggle the info pop-up
    const toggleInfo = () => setShowInfo(!showInfo);
  //API IS ON CLIENT SIDE - FIX IN FUTURE
@@ -702,9 +668,6 @@ const buyUsesTransaction = async () => {
    const handleCloseError = () => {
     setError(null);
   };
-
-
-
 
   ///////// Handle the loading state with a delay to allow for a smooth fade-out
   useEffect(() => {
@@ -789,9 +752,6 @@ const buyUsesTransaction = async () => {
   </a>
 </div>              
 
-
-
-
 <div className="wrapper">
         {/* Form Section */}
         <div className="form">
@@ -853,7 +813,7 @@ const buyUsesTransaction = async () => {
                     }`}
                   ></div>
                 ))}
-                                <div className='loading-block'>
+              <div className='loading-block'>
                 <p style={{ color: 'red', margin: 0 }}>🔋</p>
                 </div>
               </div>
@@ -863,22 +823,6 @@ const buyUsesTransaction = async () => {
               </div>
             </div>
               {connected}
-
-              <div>
-                <div className="" onClick={toggleInfo}></div>
-                {showInfo && (
-                  <div className="info-popup">
-                    <p>How to:</p>
-                    <ul>
-                      <li>1. Click refuel and sign ₳ 1 Transaction</li>
-                      <li>2. Write your idea or click AutoIdea</li>
-                      <li>3. Select model options</li>
-                      <li>4. Click Build Idea</li>
-                      <li>5. Click Mint Creation</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
 
             <div>
             <TokenPrice
@@ -899,26 +843,20 @@ const buyUsesTransaction = async () => {
               onChange={(e) => setPrompt(e.target.value)}
               onInput={autoExpand}
               placeholder="Your Idea: " // update for brand
-            ></textarea>
+            ></textarea>\
+            {/*}
             {generatedImages.length >0 && (
               <button
                 type="button"
                 onClick={clearGeneratedData}
                 className="overlay-button"
               >
-                Retry
+                Clear
               </button>
             )}
+          */}
           </div>
 
-          <div>
-              <div className="" onClick={toggleInfo}></div>
-              {showInfo && (
-                <div className="info-popup">
-                  <p>Hold 3 CatNips or 1 OG NFT or 10 Era 1 NFTs to unlock landscape, portrait, and HD options.</p>
-                </div>
-              )}
-            </div>
 
               <button
                 className="button"
@@ -930,32 +868,6 @@ const buyUsesTransaction = async () => {
                <span id="gradient-text">🚨 AutoIdea 🚨</span>
               </button>
               <div/>
-
-              <div className="tag2">
-              <label htmlFor="model">Style</label> {/* update for brand */}
-              <div className="dropdown-container">
-                <select 
-                className="field"
-                name="style"
-                id="style" 
-                style={{ cursor: 'pointer' }}
-                onChange={(e) => handleStyleSelection(e.target.value)}>
-                <option value="">Select</option>
-                  <option value="natural">Natural</option>
-                  <option value="vivid">Vivid</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-                <div className="" onClick={toggleInfo}>
-                </div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p> Select Natural for more natural looking images and vivid for more pop. </p>
-                    </div>
-                  )}
-              </div>
 
               <div className="tag2">
               <label htmlFor="model" style={{ whiteSpace: 'nowrap' }}>AI Model</label> {/* Prevent wrapping */}
@@ -975,59 +887,32 @@ const buyUsesTransaction = async () => {
                 </div>
             </div> 
 
-              <div>
-                <div className="" onClick={toggleInfo}>
-                </div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p> Dalle 3 is OpenAI&apos;s latest image generation model.</p>
-                    </div>
-                  )}
-              </div>
-
-              <div className="tag2">
-                <label htmlFor="size">Form</label> {/* update for brand */}
-                <div className="dropdown-container">
-                <select className="field" 
-                  name="size" 
-                  id="size"
-                  style={{ cursor: 'pointer' }}
-                  onChange={(e) => setSelectedSize(e.target.value)} 
-                  >
+            <div className="tag2">
+              <label htmlFor="model">Style</label> {/* update for brand */}
+              <div className="dropdown-container">
+                <select 
+                className="field"
+                name="style"
+                id="style" 
+                style={{ cursor: 'pointer' }}
+                onChange={(e) => handleStyleSelection(e.target.value)}>
+                <option value="">Select</option>
+                  <option value="natural">Natural</option>
+                  <option value="vivid">Vivid</option>
                 </select>
-                </div>
               </div>
+            </div>
 
-              <div>
-                <div  onClick={toggleInfo}></div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p> Square = 1024x1024, Landscape = 1792x1024, Portrait = 1024x1792 </p>
 
-                    </div>
-                  )}
-              </div>
-
-              <div className="tag2">
-                <label htmlFor="quality"> Grade</label> {/* update for brand */}
+            <div className="tag2">
+                <label htmlFor="size">Size</label>
                 <div className="dropdown-container">
-                <select className="field" 
-                  name="quality" 
-                  id="quality"
-                  style={{ cursor: 'pointer' }}
-                  onChange={(e) => setSelectedQuality(e.target.value)}>
-                  <option value="standard">Standard</option>
-                  <option value="hd">HD</option>
-                </select>
+                <select className="field" name="size" id="size" style={{ cursor: 'pointer' }} onChange={(e) => setSelectedSize(e.target.value.split('x').map(Number))}>
+                    <option value="1024x1024">Square 🟧</option>
+                    <option value="1024x1920">Portrait ꟾ</option>
+                    <option value="1920x1024">Landscape ⟺</option>
+                  </select>
                 </div>
-              </div>
-              <div>
-                <div className="" onClick={toggleInfo}></div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p> Dalle 3 has 2 quality options: Standard and HD.</p>
-                    </div>
-                  )}
               </div>
 
               <div className="button-container flex flex-row justify-between gap-1 w-full">
@@ -1051,8 +936,6 @@ const buyUsesTransaction = async () => {
                   <span className="icon mt-1">🛠️</span>
                 </button>
               </div>
-
-
 
             <button
               type="button"
@@ -1078,26 +961,12 @@ const buyUsesTransaction = async () => {
               <span className="icon mt-1">🎞️⛓️</span>
               </button>
 
-              <div>
-                <div className="" onClick={toggleInfo}></div>
-                  {showInfo && (
-                    <div className="info-popup">
-                      <p><span ></span> Hold $CATSKY when minting!</p>
-                      <p>.5 B = ₳ 1 ADA / 11% Discount</p>
-                      <p>1 B = ₳ 2 ADA / 22% Discount!</p>
-                      <p>3 B = ₳ 3 ADA / 34% Discount!!</p>
-                      <p>5 B = ₳ 4 ADA / 46% Discount!!!</p>
-                    </div>
-                  )}
-              </div>
-
               <CustomDeepChat />
-
           </div>
 
           {/* "Your Creation" Section */}
           <div className={`creation-container ${isLoading ? 'glowing' : ''}`}>
-      
+      {/*}
               {!slideshowDisabled && (
                 <ImageSlideshow 
                 images={[
@@ -1111,10 +980,9 @@ const buyUsesTransaction = async () => {
                 
                   disabled={false} 
                 />
-              )}
+              )} */}
 
               {error && <APIErrorPopup message={error} onClose={handleCloseError} />}
-
 
               <Swap
                 orderTypes={["SWAP","LIMIT"]}
@@ -1126,8 +994,6 @@ const buyUsesTransaction = async () => {
                 partnerName="CatskyAI"
                 displayType="WIDGET"
               />
-
-                            
 
               <div className="selected-image-container">
                 {generatedImages.length > 0 && (
@@ -1142,7 +1008,6 @@ const buyUsesTransaction = async () => {
                       alt={`Selected Image ${selectedImageIndex + 1}`}
                       className="selected-image"
                       style={{ cursor: 'pointer' }}
-                      onClick={() => saveImage(generatedImages[selectedImageIndex])}
                     />
                     {/* Prompt */}
                     <div className="tag5">
