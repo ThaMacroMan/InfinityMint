@@ -1,17 +1,9 @@
 import React, { useState, useRef, ChangeEvent, useEffect, useCallback } from 'react';
 
 const songs = [
-  { name: "Blo'Gasm (Your Welcome Daddy)", path: '/audio/BloGasm.mp3' },
-  { name: "Go'Gasm (Thank you Daddy)", path: '/audio/GoGasm.mp3' },
-  { name: "Gro'Gasm (Your Welcome Daddy)", path: '/audio/GroGasm.mp3' },
-  { name: "Ho'Gasm (Thank you Daddy)", path: '/audio/HoGasm.mp3' },
-  { name: "Io'Gasm (Dont Stop Daddy)", path: '/audio/IoGasm.mp3' },
-  { name: "Mo'Gasm (Thank you Daddy)", path: '/audio/MoGasm.mp3' },
-  { name: "Po'Gasm (Dont Stop Daddy)", path: '/audio/PoGasm.mp3' },
-  { name: "ShadowGasm (Thank you Daddy)", path: '/audio/ShadowGasm.mp3' },
-  { name: "Sho'Gasm (Your Welcome Daddy)", path: '/audio/ShoGasm.mp3' },
-  { name: "So'Gasm (Thank you Daddy)", path: '/audio/SoGasm.mp3' },
-  { name: "Wo'Gasm (Dont Stop Daddy)", path: '/audio/WoGasm.mp3' }
+  { name: "Cats and AI", path: '/audio/Cats and AI.mp3' },
+  { name: "Cats and AI Remix", path: '/audio/Cats and AI_2.mp3' },
+
 ];
 
 const getRandomSong = () => songs[Math.floor(Math.random() * songs.length)].path;
@@ -90,7 +82,6 @@ const Radio: React.FC = () => {
         onChange={handleSongChange}
         className="songSelector"
       >
-        <option value="">Select a song</option>
         {songs.map((song, index) => (
           <option key={index} value={song.path}>{song.name}</option>
         ))}
@@ -113,7 +104,7 @@ const Radio: React.FC = () => {
         className="volumeSlider"
       />
 
-      <audio ref={audioRef} className="audioElement" controls />
+      <audio ref={audioRef} className="audioElement" controls style={{ display: 'none' }} />
     </div>
   );
 };

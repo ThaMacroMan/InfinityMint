@@ -13,7 +13,7 @@ declare module 'deep-chat-react' {
           temperature?: number;
           top_p?: number;
           messages: string;
-          connect: string;
+          directConnection?: boolean;
         };
       };
     };

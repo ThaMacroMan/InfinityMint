@@ -12,6 +12,7 @@ import { useTokenCheck } from '../hooks/TokenCheck';
 const WalletBalance = dynamic(() => import('../components/WalletBalance'), { ssr: false });
 const APIErrorPopup = dynamic(() => import('../components/APIErrorPopup'), { ssr: false });
 const ImageSlideshow = dynamic(() => import('../components/ImageSlideshow'), { ssr: false });
+const Radio = dynamic(() => import('../components/Radio'), {ssr: false})
 const TokenPrice = dynamic(() => import('./api/CheckPrice'), { ssr: false });
 const Swap = dynamic(() => import('@dexhunterio/swaps'), { ssr: false });
 
@@ -19,49 +20,7 @@ import catskylogo from '../pages/styles/logo-icon.png'
 import logo from '../pages/styles/new logo.jpg'
 import pwdby from '../pages/styles/OpenAI Green.png'
 import pwdby2 from '../pages/styles/cardano_ada-512.png'
-import eight from '../pages/public/images/eight.png';
-import eleven from '../pages/public/images/eleven.png';
-import era2 from '../pages/public/images/era2.png';
-import era21 from '../pages/public/images/era21.png';
-import era22 from '../pages/public/images/era22.png';
-import era23 from '../pages/public/images/era23.png';
-import era24 from '../pages/public/images/era24.png';
-import era25 from '../pages/public/images/era25.png';
-import era27 from '../pages/public/images/era27.png';
-import fifteen from '../pages/public/images/fifteen.png';
-import five from '../pages/public/images/five.png';
-import four from '../pages/public/images/four.png';
-import fourteen from '../pages/public/images/fourteen.png';
-import infinitymintlogo from '../pages/public/images/infinitymint logo.png';
-import list from '../pages/public/images/list.png';
-import logodarkmode from '../pages/public/images/logo-dark-mode.png';
-import logoicon from '../pages/public/images/logo-icon.png';
-import newlogo from '../pages/public/images/new logo.png';
-import nine from '../pages/public/images/nine.png';
-import nineteen from '../pages/public/images/nineteen.png';
-import seven from '../pages/public/images/seven.png';
-import seventeen from '../pages/public/images/seventeen.png';
-import six from '../pages/public/images/six.png';
-import sixteen from '../pages/public/images/sixteen.png';
-import spacey from '../pages/public/images/spacey.png';
-import square from '../pages/public/images/square.png';
-import square2 from '../pages/public/images/square2.png';
-import tall from '../pages/public/images/tall.png';
-import ten from '../pages/public/images/ten.png';
-import thirteen from '../pages/public/images/thirteen.png';
-import three from '../pages/public/images/three.png';
-import twelve from '../pages/public/images/twelve.png';
-import twenty from '../pages/public/images/twenty.png';
-import twentyfive from '../pages/public/images/twentyfive.png';
-import twentyfour from '../pages/public/images/twentyfour.png';
-import twentyone from '../pages/public/images/twentyone.png';
-import twentythree from '../pages/public/images/twentythree.png';
-import twentytwo from '../pages/public/images/twentytwo.png';
-import wide from '../pages/public/images/wide.png';
 
-
-// Dynamically import the DeepChat component with correct type
-const DeepChat = dynamic(() => import('deep-chat-react').then(mod => mod.DeepChat), { ssr: false });
 import CustomDeepChat from '../components/CustomDeepChat';
 
 const Home: NextPage = () => {
@@ -109,6 +68,12 @@ const Home: NextPage = () => {
   const toggleAssets = () => {
     setShowAssets(!showAssets);
   };
+
+  const autoExpand = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = event.target;
+    textarea.style.height = 'inherit';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, []);
 
   useEffect(() => {
     if (assetsRef.current) {
@@ -647,23 +612,6 @@ const buyUsesTransaction = async () => {
     };
 
   //////// NFT Mint Transaction
-
-  const autoExpand = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = event.target;
-    textarea.style.height = 'inherit'; // Reset the height
-    textarea.style.height = `${textarea.scrollHeight}px`; // Set to scrollHeight
-  };
-   // Function to toggle the info pop-up
-   const toggleInfo = () => setShowInfo(!showInfo);
- //API IS ON CLIENT SIDE - FIX IN FUTURE
-
-  const widgetStyle = {
-    position: 'fixed',
-    top: 0,
-    right: 0,
-    transform: 'translateY(0)', // Reset any previous translation on the y-axis
-  };
-
    // Function to handle error closing
    const handleCloseError = () => {
     setError(null);
@@ -755,7 +703,7 @@ const buyUsesTransaction = async () => {
 <div className="wrapper">
         {/* Form Section */}
         <div className="form">
-          <div className="wallet-assets-container tag" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex:9999 }}>
+          <div className="wallet-assets-container tag" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex:1000 }}>
             <CardanoWallet isDark={true} {...{ className: "wallet" }} />
             <button className="infobutton" onClick={toggleAssets}>
               {showAssets ? 'Hide Assets' : 'Show Assets'}
@@ -823,6 +771,7 @@ const buyUsesTransaction = async () => {
               </div>
             </div>
               {connected}
+              
 
             <div>
             <TokenPrice
@@ -940,8 +889,6 @@ const buyUsesTransaction = async () => {
             <button
               type="button"
               onClick={processTransaction}
-
-
               className={`button flex flex-col items-center justify-center py-2 ${
                 !connected ||
                 isLoading ||
@@ -960,12 +907,14 @@ const buyUsesTransaction = async () => {
               <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
               <span className="icon mt-1">🎞️⛓️</span>
               </button>
+              <Radio/>
 
               <CustomDeepChat />
           </div>
 
           {/* "Your Creation" Section */}
           <div className={`creation-container ${isLoading ? 'glowing' : ''}`}>
+          
       {/*}
               {!slideshowDisabled && (
                 <ImageSlideshow 

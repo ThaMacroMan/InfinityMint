@@ -21,8 +21,11 @@ html, body {
 }
 
 .header {
+  position: fixed;
+  top:0;
+  z-index:9999;
   background-color: black;
-  height: 7vh;
+  height: 5rem;
   width: 100%;
   padding: 0.5rem 1rem;
   text-align: center;
@@ -59,6 +62,7 @@ html, body {
 }
 
 .form {
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,24 +74,24 @@ html, body {
 }
 
 .creation-container {
+
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: .5rem; 
   margin-right: .1rem;
-
-  border-bottom-right-radius: 16rem;
   background-color: black;
   background-image: url('spacebackground.jpg');
   background-size: cover;
   background-position: bottom right;
   background-repeat: no-repeat;
-
+  border-bottom-left-radius: 1rem;
+  border-top-left-radius: 1rem;
   flex-grow: 1;
   flex-basis: 0;
   overflow: hidden;
-  height: 93vh;
+  height: 91vh;
   min-width: 300px;
 }
 
@@ -168,6 +172,7 @@ html, body {
 }
 
 .wrapper {
+  padding-top: 5rem; /* Ensure content starts below header */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -246,7 +251,7 @@ html, body {
   align-items: center;
   padding: 0.25rem;
   border-radius: 0.618rem;
-  font-size: clamp(0.5rem, 4vw, 2vh);
+  font-size: clamp(0.5rem, 2vw, 1.5vh);
   cursor: pointer;
   border: 2px solid #000000;
   font-family: Public-Pixel;
@@ -552,7 +557,7 @@ html, body {
     height: auto;
   }
   .creation-container {
-    min-height: 90vh; /* Adjust the height for mobile */
+    min-height: 89vh; /* Adjust the height for mobile */
     height: auto; /* Ensure it adapts to the content */
     padding: 1rem; /* Adjust padding if necessary */
     border-radius: 1rem; /* Adjust border radius for a better look on mobile */
@@ -742,7 +747,7 @@ html, body {
   left: 0;
   right: 0;
   bottom: 0;
-  border-bottom-right-radius: 17rem; /* Ensure the radius matches the container */
+
   animation: fadeGlow 2s infinite;
   opacity: 1;
   transition: opacity 0.5s ease-out;
@@ -758,5 +763,105 @@ html, body {
   flex-direction: row;
   justify-content: space-between;
   gap: 0.25rem; /* Tailwind's gap-1 equivalent */
+  width: 100%;
+}
+
+
+.chat-widget {
+  font-family: 'Public-Pixel';
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #b87f0d;
+  cursor: move; /* Change cursor to indicate draggable element */
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #b87f0d; /* Ensures the border is gold */
+
+}
+
+.chat-widget-toggle {
+
+  position: fixed;
+  bottom: 20px;
+  left: 430px;
+  width: 70px;
+  height: 70px;
+  background: blue; /* Customize the color */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 36px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.chat-widget .deep-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  cursor: default; /* Allow text input cursor */
+}
+
+.resize-handle {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: #000;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 10;
+}
+
+.audioPlayer {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background: black;
+  border: 2px solid #b87f0d;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+  width: 390px;
+}
+
+.songSelector {
+  font-family: 'Public-Pixel';
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.playPauseButton {
+  font-family: 'Public-Pixel';
+  background-color: #4caf50;
+  color: white;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.playPauseButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.volumeSlider {
+  width: 100%;
+}
+
+.audioElement {
   width: 100%;
 }
