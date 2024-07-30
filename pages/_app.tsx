@@ -6,6 +6,7 @@ import './styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
+    
     <MeshProvider>
       <Head>
         <link rel="icon" type="image/png"  href= "Catsky LOGO Small.png"/>

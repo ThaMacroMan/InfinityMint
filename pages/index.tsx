@@ -907,29 +907,15 @@ const buyUsesTransaction = async () => {
               <span id='gradient-text'>Mint Creation: ₳ {(mintingPrice / 1000000).toFixed(2)}</span> {/* update for brand */}
               <span className="icon mt-1">🎞️⛓️</span>
               </button>
-              <Radio/>
 
-              <CustomDeepChat />
+              <Radio/>
+              <CustomDeepChat/>
+
           </div>
 
           {/* "Your Creation" Section */}
           <div className={`creation-container ${isLoading ? 'glowing' : ''}`}>
           
-      {/*}
-              {!slideshowDisabled && (
-                <ImageSlideshow 
-                images={[
-                  eight, eleven, era2, era21, era22, era23, era24, era25, era27,
-                  fifteen, five, four, fourteen, infinitymintlogo, list,
-                  logodarkmode, logoicon, newlogo, nine, nineteen, seven,
-                  seventeen, six, sixteen, spacey, square, square2, tall,
-                  ten, thirteen, three, twelve, twenty, twentyfive, twentyfour,
-                  twentyone, twentythree, twentytwo, wide
-                ]}
-                
-                  disabled={false} 
-                />
-              )} */}
 
               {error && <APIErrorPopup message={error} onClose={handleCloseError} />}
 

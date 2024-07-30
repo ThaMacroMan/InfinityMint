@@ -179,9 +179,9 @@ html, body {
 }
 
 .imageborder {
-  max-height: 65vh;
+  max-height: 60vh;
   min-height: 30vw;
-  max-width: 65vw;
+  max-width: 60vw;
   min-width: 30vw;
   transition: transform 0.5s;
   display: flex;

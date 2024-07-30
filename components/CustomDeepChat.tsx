@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import dynamic from 'next/dynamic';
 
 // Define the DeepChatProps type as any to avoid type errors
@@ -10,15 +10,16 @@ const CustomDeepChat: React.FC = () => {
   const chatWidgetRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [position, setPosition] = useState({ top:100, left: 430 });
+  const [position, setPosition] = useState({ top: 100, left: 430 });
   const [size, setSize] = useState({ width: 400, height: 400 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const messagesRef = useRef<any[]>([]); // Store messages in a ref
 
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleChat = useCallback(() => {
+    setIsOpen(prevIsOpen => !prevIsOpen);
+  }, []);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     const chatWidget = chatWidgetRef.current;
     if (chatWidget && e.target === chatWidget) {
       const offsetX = e.clientX - chatWidget.getBoundingClientRect().left;
@@ -26,12 +27,12 @@ const CustomDeepChat: React.FC = () => {
       setOffset({ x: offsetX, y: offsetY });
       setIsDragging(true);
     }
-  };
+  }, []);
 
-  const handleResizeMouseDown = (e: React.MouseEvent) => {
+  const handleResizeMouseDown = useCallback((e: React.MouseEvent) => {
     setIsResizing(true);
     e.stopPropagation(); // Prevent triggering drag
-  };
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -54,14 +55,32 @@ const CustomDeepChat: React.FC = () => {
       setIsResizing(false);
     };
 
+    const handleWindowResize = () => {
+      // Adjust chat widget position or size if necessary
+      const chatWidget = chatWidgetRef.current;
+      if (chatWidget) {
+        const boundingRect = chatWidget.getBoundingClientRect();
+        setPosition(prevPosition => ({
+          top: Math.min(prevPosition.top, window.innerHeight - boundingRect.height),
+          left: Math.min(prevPosition.left, window.innerWidth - boundingRect.width),
+        }));
+      }
+    };
+
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('resize', handleWindowResize);
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('resize', handleWindowResize);
     };
   }, [isDragging, isResizing, offset]);
+
+  const handleNewMessage = useCallback((newMessage: any) => {
+    messagesRef.current = [...messagesRef.current, newMessage];
+  }, []);
 
   return (
     <>
@@ -119,6 +138,8 @@ const CustomDeepChat: React.FC = () => {
                   },
                 },
               },
+              messages: messagesRef.current, // Pass the messages from the ref
+              onMessage: handleNewMessage, // Update messages when a new message arrives
             } as DeepChatProps}
           />
           <div className="resize-handle" onMouseDown={handleResizeMouseDown} />
@@ -128,4 +149,4 @@ const CustomDeepChat: React.FC = () => {
   );
 };
 
-export default CustomDeepChat;
+export default memo(CustomDeepChat);
