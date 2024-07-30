@@ -710,7 +710,6 @@ html, body {
 
 .glowing {
   animation: glowing 1.5s infinite, fadeGlow 1.5s infinite; /* Apply both glowing and fadeGlow animations */
-  border-bottom-right-radius: 17rem; /* Add the border radius to the bottom-right corner */
   position: relative; /* Ensure the ::before pseudo-element positions correctly */
 }
 

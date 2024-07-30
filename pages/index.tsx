@@ -792,7 +792,7 @@ const buyUsesTransaction = async () => {
               onChange={(e) => setPrompt(e.target.value)}
               onInput={autoExpand}
               placeholder="Your Idea: " // update for brand
-            ></textarea>\
+            ></textarea>
             {/*}
             {generatedImages.length >0 && (
               <button
@@ -818,6 +818,8 @@ const buyUsesTransaction = async () => {
               </button>
               <div/>
 
+              
+              
               <div className="tag2">
               <label htmlFor="model" style={{ whiteSpace: 'nowrap' }}>AI Model</label> {/* Prevent wrapping */}
                 <div className="dropdown-container">
@@ -836,8 +838,9 @@ const buyUsesTransaction = async () => {
                 </div>
             </div> 
 
+            {/*}
             <div className="tag2">
-              <label htmlFor="model">Style</label> {/* update for brand */}
+              <label htmlFor="model">Style</label> 
               <div className="dropdown-container">
                 <select 
                 className="field"
@@ -851,7 +854,7 @@ const buyUsesTransaction = async () => {
                 </select>
               </div>
             </div>
-
+            */}
 
             <div className="tag2">
                 <label htmlFor="size">Size</label>
