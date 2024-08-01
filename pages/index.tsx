@@ -5,6 +5,8 @@ import type { NextPage } from "next";
 import { useAddress, useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
+
+
 import '@dexhunterio/swaps/lib/assets/style.css'
 
 import { useTokenCheck } from '../hooks/TokenCheck'; 
@@ -14,6 +16,7 @@ const APIErrorPopup = dynamic(() => import('../components/APIErrorPopup'), { ssr
 const ImageSlideshow = dynamic(() => import('../components/ImageSlideshow'), { ssr: false });
 const Radio = dynamic(() => import('../components/Radio'), {ssr: false})
 const TokenPrice = dynamic(() => import('./api/CheckPrice'), { ssr: false });
+
 const Swap = dynamic(() => import('@dexhunterio/swaps'), { ssr: false });
 
 import catskylogo from '../pages/styles/logo-icon.png'
@@ -919,19 +922,21 @@ const buyUsesTransaction = async () => {
           {/* "Your Creation" Section */}
           <div className={`creation-container ${isLoading ? 'glowing' : ''}`}>
           
-
               {error && <APIErrorPopup message={error} onClose={handleCloseError} />}
-
-              <Swap
-                orderTypes={["SWAP","LIMIT"]}
-                defaultToken="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59" //policyID + asset string
-                colors={{"background":"#0E0F12","containers":"#191B23","subText":"#88919E","mainText":"#FFFFFF","buttonText":"#FFFFFF","accent":"#007DFF"}}
+              
+              
+              <div className="swap-widget-container">
+                <Swap
+                orderTypes={["SWAP", "LIMIT"]}
+                defaultToken="9b426921a21f54600711da0be1a12b026703a9bd8eb9848d08c9d921434154534b59"
+                colors={{ background: "#0E0F12", containers: "#191B23", subText: "#88919E", mainText: "#FFFFFF", buttonText: "#FFFFFF", accent: "#007DFF" }}
                 theme="dark"
                 width="450"
                 partnerCode="catskyai61646472317179766566647937643264396477726e63616e74687772787861656d357a757474636332687839386568717a7672346c786c736330386e753970766630706865386d6778646776757465783678636474787176633868736563616e7164766a307674da39a3ee5e6b4b0d3255bfef95601890afd80709"
                 partnerName="CatskyAI"
                 displayType="WIDGET"
-              />
+                />
+              </div>
 
               <div className="selected-image-container">
                 {generatedImages.length > 0 && (

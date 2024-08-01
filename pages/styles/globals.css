@@ -864,3 +864,14 @@ html, body {
 .audioElement {
   width: 100%;
 }
+
+/* styles.css */
+
+.swap-widget-container {
+  position: fixed; /* or absolute, relative depending on your needs */
+  bottom: 20px; /* adjust as needed */
+  right: 20px; /* adjust as needed */
+  width: 450px; /* adjust as needed */
+  z-index: 1000; /* ensure it appears above other content */
+
+}
