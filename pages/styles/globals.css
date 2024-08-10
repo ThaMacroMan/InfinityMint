@@ -607,10 +607,10 @@ html, body {
 
   @media screen and (max-width: 768px) {
     .imageborder {
-      max-height: 50vh;  /* Adjust max-height for mobile */
-      max-width: 90vw;   /* Adjust max-width for mobile */
-      min-height: 40vh;  /* Ensure minimum height for better visibility */
-      min-width: 90vw;   /* Ensure minimum width for better visibility */
+      max-height: 70vh;  /* Adjust max-height for mobile */
+      max-width: 85vw;   /* Adjust max-width for mobile */
+      min-height: 70vh;  /* Ensure minimum height for better visibility */
+      min-width: 85vw;   /* Ensure minimum width for better visibility */
     }
   }
   

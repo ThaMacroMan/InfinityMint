@@ -10,6 +10,9 @@ import { Transaction } from '@meshsdk/core';
 import '@dexhunterio/swaps/lib/assets/style.css'
 
 import { useTokenCheck } from '../hooks/TokenCheck'; 
+import ShareOnTwitter from '../components/ShareonTwitter'; 
+import ShareButton from '../components/ShareButton';
+
 
 const WalletBalance = dynamic(() => import('../components/WalletBalance'), { ssr: false });
 const APIErrorPopup = dynamic(() => import('../components/APIErrorPopup'), { ssr: false });
@@ -341,8 +344,8 @@ const Home: NextPage = () => {
         body: JSON.stringify(bodyData),
       });
 
-// Log the final parameters for debugging
-console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
+      // Log the final parameters for debugging
+      console.log(prompt, selectedSize, selectedQuality, selectedModel, selectedStyle);
 
   
       if (!response.ok) {
@@ -938,6 +941,58 @@ const buyUsesTransaction = async () => {
                 />
               </div>
 
+                    {/* Share on Twitter Button */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '20px' }}>
+                <ShareButton 
+                  socialMedia="Twitter"
+                  shareText="Check out this amazing creation: "
+                  iconProperties={{
+                    color: "#1DA1F2",
+                    size: 24,
+                    gap: 8,
+                  }}
+                  backgroundType="Solid"
+                  title="Share on X"
+                  tint="#ffffff"
+                  style={{ 
+                    padding: "10px", 
+                    borderRadius: "5px", 
+                    border: "none", 
+                    position: 'fixed', 
+                    bottom: '10px', 
+                    left: '50%', 
+                    transform: 'translateX(-50%)', 
+                    zIndex: 1000 
+                  }}
+                  font={{
+                    size: 14,
+                    weight: "bold",
+                    color: "#000000",
+                    fontFace: "Arial",
+                  }}
+                  borderWidth={0} // Set to 0 to remove border
+                  borderColor="transparent" // Set to transparent to remove border color
+                  shareCurrentUrl={false}
+                  urlToShare={generatedImages[selectedImageIndex]}
+                  backgroundImage=""
+                  linear={undefined}
+                  radius={5}
+                  topLeftRadius={5}
+                  topRightRadius={5}
+                  bottomRightRadius={5}
+                  bottomLeftRadius={5}
+                  isMixedRadius={false}
+                  stylePadding={10}
+                  topPadding={10}
+                  rightPadding={10}
+                  bottomPadding={10}
+                  leftPadding={10}
+                  isMixedPadding={false}
+                  image={generatedImages[selectedImageIndex]} // Base64 image data
+                />
+              </div>
+              
+
               <div className="selected-image-container">
                 {generatedImages.length > 0 && (
                   <>
@@ -952,6 +1007,7 @@ const buyUsesTransaction = async () => {
                       className="selected-image"
                       style={{ cursor: 'pointer' }}
                     />
+
                     {/* Prompt */}
                     <div className="tag5">
                       <span>Prompt: {generatedPrompt}</span>
@@ -959,6 +1015,8 @@ const buyUsesTransaction = async () => {
                   </>
                 )}
               </div>
+
+              
                 <div className="thumbnails-sidebar">
                   {!!generatedImages && generatedImages.length > 0 && [...generatedImages].reverse().map((imageUrl, imageIndex) => (
                     <div
@@ -973,8 +1031,12 @@ const buyUsesTransaction = async () => {
                         className="thumbnail-image"
                       />
                     </div>
+
+                    
                   ))}
                 </div>
+                {/* Share on Twitter Button */}
+             
             </div>
       </div>
     </>
