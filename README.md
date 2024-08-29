@@ -1,4 +1,10 @@
-[Watch the InfinityMint demo video](./InfinityMint.mp4)
+# InfinityMint
+
+Check out the demo video:
+
+[![InfinityMint](./infinitymint.png)](https://youtu.be/oulcRH6oDqE)
+
+Or you can directly [watch the InfinityMint demo video on YouTube](https://youtu.be/oulcRH6oDqE).
 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
